@@ -78,7 +78,7 @@
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="10" y="0" width="350" height="300"/>
+              <AbsoluteConstraints x="10" y="0" width="350" height="310"/>
             </Constraint>
           </Constraints>
 
@@ -88,52 +88,63 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="totemjRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="exchangejRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="keyMappingjRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="sapphireExchangejRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="unockFlowerCraftjRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="gardenExpandjRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="divinationExchangeInfojRadioButton" min="-2" max="-2" attributes="0"/>
-                          <Component id="virtualCurrencyjRadioButton" min="-2" max="-2" attributes="0"/>
-                          <Component id="festivalActivityjRadioButton" min="-2" max="-2" attributes="0"/>
-                          <Component id="jRadioButton1" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="floralSculptureCommonjRadioButton1" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="rewardMachinejRadioButton" min="-2" max="-2" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <Component id="flowerCraftUnlockActivityjRadioButton" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="partyActivityjRadioButton" min="-2" max="-2" attributes="0"/>
+                          </Group>
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="upgradeBuildingjRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="tigerItemInfojRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="adsGeneralizejRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="flowerCraftjRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="totemjRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="exchangejRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="keyMappingjRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="sapphireExchangejRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="unockFlowerCraftjRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="gardenExpandjRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="divinationExchangeInfojRadioButton" min="-2" max="-2" attributes="0"/>
+                                  <Component id="virtualCurrencyjRadioButton" min="-2" max="-2" attributes="0"/>
+                                  <Component id="festivalActivityjRadioButton" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jRadioButton1" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="floralSculptureCommonjRadioButton1" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="floralBenchUpgradejRadioButton" min="-2" max="-2" attributes="0"/>
-                                  <Component id="fsGeneralizejRadioButton" min="-2" max="-2" attributes="0"/>
-                                  <Component id="flowerlandSpinjRadioButton" min="-2" max="-2" attributes="0"/>
-                                  <Component id="bigPackjRadioButton" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="floralBenchGroupjRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="divinationInfojRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="slotInfojRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="itemjRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="logPopContentjRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="floralSculptureMakeListjRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="floralSculpturejRadioButton" min="-2" max="-2" attributes="0"/>
-                                  <Component id="popWindowOptjRadioButton" min="-2" max="-2" attributes="0"/>
-                                  <Component id="simplyTaskjRadioButton" min="-2" max="-2" attributes="0"/>
-                                  <Component id="divinationCommonInfojRadioButton" min="-2" max="-2" attributes="0"/>
-                                  <Component id="itemExtendjRadioButton" min="-2" max="-2" attributes="0"/>
-                                  <Component id="floralBenchGroupMakeListjRadioButton" min="-2" max="-2" attributes="0"/>
+                                  <Group type="102" attributes="0">
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="upgradeBuildingjRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Component id="tigerItemInfojRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Component id="adsGeneralizejRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Component id="flowerCraftjRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="floralBenchUpgradejRadioButton" min="-2" max="-2" attributes="0"/>
+                                          <Component id="fsGeneralizejRadioButton" min="-2" max="-2" attributes="0"/>
+                                          <Component id="flowerlandSpinjRadioButton" min="-2" max="-2" attributes="0"/>
+                                          <Component id="bigPackjRadioButton" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                  </Group>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="floralBenchGroupjRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Component id="divinationInfojRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Component id="slotInfojRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Component id="itemjRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Component id="logPopContentjRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Component id="floralSculptureMakeListjRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Component id="rewardMachinejRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="collectActivityjRadioButton" min="-2" max="-2" attributes="0"/>
+                                          <Component id="floralSculpturejRadioButton" min="-2" max="-2" attributes="0"/>
+                                          <Component id="popWindowOptjRadioButton" min="-2" max="-2" attributes="0"/>
+                                          <Component id="simplyTaskjRadioButton" min="-2" max="-2" attributes="0"/>
+                                          <Component id="divinationCommonInfojRadioButton" min="-2" max="-2" attributes="0"/>
+                                          <Component id="itemExtendjRadioButton" min="-2" max="-2" attributes="0"/>
+                                          <Component id="floralBenchGroupMakeListjRadioButton" min="-2" max="-2" attributes="0"/>
+                                          <Component id="floralSculptureConvertjRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                  </Group>
                               </Group>
                           </Group>
                       </Group>
@@ -222,8 +233,15 @@
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="rewardMachinejRadioButton" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="floralSculptureCommonjRadioButton1" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="collectActivityjRadioButton" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="0" pref="17" max="32767" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="flowerCraftUnlockActivityjRadioButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="partyActivityjRadioButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="floralSculptureConvertjRadioButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -600,7 +618,7 @@
                   <ComponentRef name="funcbuttonGroup"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="&#x514d;&#x8d39;&#x9001;&#x673a;&#x5668;"/>
-                <Property name="actionCommand" type="java.lang.String" value="FLORALSCULPTURE"/>
+                <Property name="actionCommand" type="java.lang.String" value="REWARD_MACHINE"/>
               </Properties>
               <Events>
                 <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="rewardMachinejRadioButtonMouseClicked"/>
@@ -616,6 +634,54 @@
               </Properties>
               <Events>
                 <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="floralSculptureCommonjRadioButton1MouseClicked"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JRadioButton" name="collectActivityjRadioButton">
+              <Properties>
+                <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+                  <ComponentRef name="funcbuttonGroup"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="&#x6536;&#x96c6;&#x6d3b;&#x52a8;"/>
+                <Property name="actionCommand" type="java.lang.String" value="COLLECT_ACTIVITY"/>
+              </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="collectActivityjRadioButtonMouseClicked"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JRadioButton" name="flowerCraftUnlockActivityjRadioButton">
+              <Properties>
+                <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+                  <ComponentRef name="funcbuttonGroup"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="&#x82b1;&#x827a;&#x89e3;&#x9501;&#x6d3b;&#x52a8;"/>
+                <Property name="actionCommand" type="java.lang.String" value="FLOWER_CRAFT_UNLOCK_ACTIVITY"/>
+              </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="flowerCraftUnlockActivityjRadioButtonMouseClicked"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JRadioButton" name="partyActivityjRadioButton">
+              <Properties>
+                <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+                  <ComponentRef name="funcbuttonGroup"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="party&#x6d3b;&#x52a8;"/>
+                <Property name="actionCommand" type="java.lang.String" value="PARTY_ACTIVITY"/>
+              </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="partyActivityjRadioButtonMouseClicked"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JRadioButton" name="floralSculptureConvertjRadioButton">
+              <Properties>
+                <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+                  <ComponentRef name="funcbuttonGroup"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="&#x82b1;&#x96d5;&#x5151;&#x6362;&#x6d3b;&#x52a8;"/>
+                <Property name="actionCommand" type="java.lang.String" value="FLORAL_SCULPTURE_CONVERT"/>
+              </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="floralSculptureConvertjRadioButtonMouseClicked"/>
               </Events>
             </Component>
           </SubComponents>

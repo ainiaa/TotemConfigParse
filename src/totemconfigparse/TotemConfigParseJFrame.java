@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -94,6 +95,10 @@ public class TotemConfigParseJFrame extends javax.swing.JFrame {
         floralSculpturejRadioButton = new javax.swing.JRadioButton();
         rewardMachinejRadioButton = new javax.swing.JRadioButton();
         floralSculptureCommonjRadioButton1 = new javax.swing.JRadioButton();
+        collectActivityjRadioButton = new javax.swing.JRadioButton();
+        flowerCraftUnlockActivityjRadioButton = new javax.swing.JRadioButton();
+        partyActivityjRadioButton = new javax.swing.JRadioButton();
+        floralSculptureConvertjRadioButton = new javax.swing.JRadioButton();
         selectConfgFilejPanel = new javax.swing.JPanel();
         configFilejLabel = new javax.swing.JLabel();
         configFilejTextField = new javax.swing.JTextField();
@@ -392,7 +397,7 @@ public class TotemConfigParseJFrame extends javax.swing.JFrame {
 
         funcbuttonGroup.add(rewardMachinejRadioButton);
         rewardMachinejRadioButton.setText("免费送机器");
-        rewardMachinejRadioButton.setActionCommand("FLORALSCULPTURE");
+        rewardMachinejRadioButton.setActionCommand("REWARD_MACHINE");
         rewardMachinejRadioButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 rewardMachinejRadioButtonMouseClicked(evt);
@@ -408,6 +413,42 @@ public class TotemConfigParseJFrame extends javax.swing.JFrame {
             }
         });
 
+        funcbuttonGroup.add(collectActivityjRadioButton);
+        collectActivityjRadioButton.setText("收集活动");
+        collectActivityjRadioButton.setActionCommand("COLLECT_ACTIVITY");
+        collectActivityjRadioButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                collectActivityjRadioButtonMouseClicked(evt);
+            }
+        });
+
+        funcbuttonGroup.add(flowerCraftUnlockActivityjRadioButton);
+        flowerCraftUnlockActivityjRadioButton.setText("花艺解锁活动");
+        flowerCraftUnlockActivityjRadioButton.setActionCommand("FLOWER_CRAFT_UNLOCK_ACTIVITY");
+        flowerCraftUnlockActivityjRadioButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                flowerCraftUnlockActivityjRadioButtonMouseClicked(evt);
+            }
+        });
+
+        funcbuttonGroup.add(partyActivityjRadioButton);
+        partyActivityjRadioButton.setText("party活动");
+        partyActivityjRadioButton.setActionCommand("PARTY_ACTIVITY");
+        partyActivityjRadioButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                partyActivityjRadioButtonMouseClicked(evt);
+            }
+        });
+
+        funcbuttonGroup.add(floralSculptureConvertjRadioButton);
+        floralSculptureConvertjRadioButton.setText("花雕兑换活动");
+        floralSculptureConvertjRadioButton.setActionCommand("FLORAL_SCULPTURE_CONVERT");
+        floralSculptureConvertjRadioButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                floralSculptureConvertjRadioButtonMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout funjPanelLayout = new javax.swing.GroupLayout(funjPanel);
         funjPanel.setLayout(funjPanelLayout);
         funjPanelLayout.setHorizontalGroup(
@@ -415,47 +456,55 @@ public class TotemConfigParseJFrame extends javax.swing.JFrame {
             .addGroup(funjPanelLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
                 .addGroup(funjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(totemjRadioButton)
-                    .addComponent(exchangejRadioButton)
-                    .addComponent(keyMappingjRadioButton)
-                    .addComponent(sapphireExchangejRadioButton)
-                    .addComponent(unockFlowerCraftjRadioButton)
-                    .addComponent(gardenExpandjRadioButton)
-                    .addComponent(divinationExchangeInfojRadioButton)
-                    .addComponent(virtualCurrencyjRadioButton)
-                    .addComponent(festivalActivityjRadioButton)
-                    .addComponent(jRadioButton1)
-                    .addComponent(floralSculptureCommonjRadioButton1))
-                .addGroup(funjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(rewardMachinejRadioButton)
+                    .addGroup(funjPanelLayout.createSequentialGroup()
+                        .addComponent(flowerCraftUnlockActivityjRadioButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(partyActivityjRadioButton))
                     .addGroup(funjPanelLayout.createSequentialGroup()
                         .addGroup(funjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(upgradeBuildingjRadioButton)
-                            .addComponent(tigerItemInfojRadioButton)
-                            .addComponent(adsGeneralizejRadioButton)
-                            .addComponent(flowerCraftjRadioButton))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(totemjRadioButton)
+                            .addComponent(exchangejRadioButton)
+                            .addComponent(keyMappingjRadioButton)
+                            .addComponent(sapphireExchangejRadioButton)
+                            .addComponent(unockFlowerCraftjRadioButton)
+                            .addComponent(gardenExpandjRadioButton)
+                            .addComponent(divinationExchangeInfojRadioButton)
+                            .addComponent(virtualCurrencyjRadioButton)
+                            .addComponent(festivalActivityjRadioButton)
+                            .addComponent(jRadioButton1)
+                            .addComponent(floralSculptureCommonjRadioButton1))
                         .addGroup(funjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(floralBenchUpgradejRadioButton)
-                            .addComponent(fsGeneralizejRadioButton)
-                            .addComponent(flowerlandSpinjRadioButton)
-                            .addComponent(bigPackjRadioButton)))
-                    .addGroup(funjPanelLayout.createSequentialGroup()
-                        .addGroup(funjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(floralBenchGroupjRadioButton)
-                            .addComponent(divinationInfojRadioButton)
-                            .addComponent(slotInfojRadioButton)
-                            .addComponent(itemjRadioButton)
-                            .addComponent(logPopContentjRadioButton)
-                            .addComponent(floralSculptureMakeListjRadioButton))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(funjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(floralSculpturejRadioButton)
-                            .addComponent(popWindowOptjRadioButton)
-                            .addComponent(simplyTaskjRadioButton)
-                            .addComponent(divinationCommonInfojRadioButton)
-                            .addComponent(itemExtendjRadioButton)
-                            .addComponent(floralBenchGroupMakeListjRadioButton))))
+                            .addGroup(funjPanelLayout.createSequentialGroup()
+                                .addGroup(funjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(upgradeBuildingjRadioButton)
+                                    .addComponent(tigerItemInfojRadioButton)
+                                    .addComponent(adsGeneralizejRadioButton)
+                                    .addComponent(flowerCraftjRadioButton))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(funjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(floralBenchUpgradejRadioButton)
+                                    .addComponent(fsGeneralizejRadioButton)
+                                    .addComponent(flowerlandSpinjRadioButton)
+                                    .addComponent(bigPackjRadioButton)))
+                            .addGroup(funjPanelLayout.createSequentialGroup()
+                                .addGroup(funjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(floralBenchGroupjRadioButton)
+                                    .addComponent(divinationInfojRadioButton)
+                                    .addComponent(slotInfojRadioButton)
+                                    .addComponent(itemjRadioButton)
+                                    .addComponent(logPopContentjRadioButton)
+                                    .addComponent(floralSculptureMakeListjRadioButton)
+                                    .addComponent(rewardMachinejRadioButton))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(funjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(collectActivityjRadioButton)
+                                    .addComponent(floralSculpturejRadioButton)
+                                    .addComponent(popWindowOptjRadioButton)
+                                    .addComponent(simplyTaskjRadioButton)
+                                    .addComponent(divinationCommonInfojRadioButton)
+                                    .addComponent(itemExtendjRadioButton)
+                                    .addComponent(floralBenchGroupMakeListjRadioButton)
+                                    .addComponent(floralSculptureConvertjRadioButton))))))
                 .addContainerGap(23, Short.MAX_VALUE))
         );
         funjPanelLayout.setVerticalGroup(
@@ -522,12 +571,18 @@ public class TotemConfigParseJFrame extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(funjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(rewardMachinejRadioButton)
-                    .addComponent(floralSculptureCommonjRadioButton1))
-                .addGap(0, 17, Short.MAX_VALUE))
+                    .addComponent(floralSculptureCommonjRadioButton1)
+                    .addComponent(collectActivityjRadioButton))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(funjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(flowerCraftUnlockActivityjRadioButton)
+                    .addComponent(partyActivityjRadioButton)
+                    .addComponent(floralSculptureConvertjRadioButton))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         jLayeredPane.add(funjPanel);
-        funjPanel.setBounds(10, 0, 350, 300);
+        funjPanel.setBounds(10, 0, 350, 310);
 
         selectConfgFilejPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("选择配置文件"));
 
@@ -761,12 +816,30 @@ public class TotemConfigParseJFrame extends javax.swing.JFrame {
                 transformRewardMachineConfig(configFilePath, func, outputPath);
             } else if ("FLORALSCULPTURECOMMON".equals(func)) {//花雕产品
                 transformFloralSculptureCommonConfig(configFilePath, func, outputPath);
+            } else if ("COLLECT_ACTIVITY".equals(func)) {//收集活动
+                transformCollectActivity(configFilePath, func, outputPath);
+            } else if ("FLOWER_CRAFT_UNLOCK_ACTIVITY".equals(func)) {//花艺解锁活动
+                transformFlowerCraftUnlockActivity(configFilePath, func, outputPath);
+            } else if ("PARTY_ACTIVITY".equals(func)) {//party活动
+                transformPartyActivity(configFilePath, func, outputPath);
+            } else if ("FLORAL_SCULPTURE_CONVERT".equals(func)) {//花雕兑换活动
+                transformFloralSculptureConvertActivity(configFilePath, func, outputPath);
             }
         }
         JOptionPane.showMessageDialog(null, "转换成功");
         this.dispose();
 
     }//GEN-LAST:event_parsejButtonMouseClicked
+
+    public String[] arrayPop(String[] oldArrayContent) {
+        int rows = oldArrayContent.length;
+        String[] cleanupedArrayContent = new String[rows - 1];
+        for (int row = 0; row < rows - 1; row++) {
+            cleanupedArrayContent[row] = oldArrayContent[row + 1];
+        }
+
+        return cleanupedArrayContent;
+    }
 
     public String[][] arrayPop(String[][] oldArrayContent) {
         int rows = oldArrayContent.length;
@@ -914,6 +987,7 @@ public class TotemConfigParseJFrame extends javax.swing.JFrame {
     public static String[][] itemLangInfoCfg;
     public static String[][] itemBaseInfoCfg;
     public static HashMap<String, HashMap<String, String>> itemIdAndItemName;
+    public static HashMap<String, HashMap<String, String>> collectActivityCommonConf;
 
     public String getItemName(String itemId, String lang) {
         String itemName = "";
@@ -943,11 +1017,26 @@ public class TotemConfigParseJFrame extends javax.swing.JFrame {
         return hashMap;
     }
 
+    public String[] arrayTrim(String[] oldArrayContent) {
+        int cols = oldArrayContent.length;
+        ArrayList<String> tmpData = new ArrayList<String>();
+        for (String tmpContent : oldArrayContent) {
+            String trimedContent = tmpContent.trim();
+            if (!trimedContent.isEmpty()) {
+                tmpData.add(trimedContent);
+            }
+        }
+        return (String[]) tmpData.toArray(new String[tmpData.size()]); // TODO (String[]) tmpData.toArray(); 会报类型转换异常
+    }
+
     public String[][] itemLangInfoCfg(String configFilePath) {
         try {
             int langSheetIndex = getSheetIndexBySheetName(configFilePath, "itemLang");
             itemLangInfoCfg = parseXls(configFilePath, langSheetIndex, true);
-        } catch (Exception e) {
+        } catch (IOException e) {
+            itemLangInfoCfg = new String[0][0];
+            showMessageDialogMessage(e);
+        } catch (BiffException e) {
             itemLangInfoCfg = new String[0][0];
             showMessageDialogMessage(e);
         }
@@ -1334,6 +1423,689 @@ public class TotemConfigParseJFrame extends javax.swing.JFrame {
     }
 
     /**
+     * 收集活动
+     *
+     * @param festivalActivityCfg
+     * @param awardItemListCfg
+     * @return
+     */
+    public String buildFinalCollectActivityStringFromStringArray(String[][] festivalActivityCfg, String[][] awardItemListCfg) {
+///##############################
+        //###########################
+        String festivalActivityCfgStr;
+        int rowCount = festivalActivityCfg.length;
+        festivalActivityCfgStr = "//##################################################################################################################\r\n"
+                + "//收集活动\r\n"
+                + "define ('USER_CASH', 4001);\r\n"
+                + "define ('USER_GOLD', 4002);\r\n"
+                + "define ('USER_EXP', 4003);\r\n"
+                + "define ('MATERIAL_WITH_STORAGE', 4004);\r\n"
+                + "define ('MATERIAL_WITHOUT_STORAGE', 4005);\r\n"
+                + "$J7CONFIG['festivalActivity'] = array(\r\n";
+        String festivalActivityCfgStrFormat = "    //@todo 只是掉多期%s =>        array(\r\n"
+                + "                'condition'           => array(\r\n"
+                + "                        'userMinLevel' => %s, //玩家最小等级\r\n"
+                + "                        'startTime'    => strtotime('%s'), //活动开始时间\r\n"
+                + "                        'endTime'      => strtotime('%s'), //结束开始时间\r\n"
+                + "                ),\r\n"
+                + "                'playMethod'          => array(\r\n"
+                + "                        'scoreId' => %s, //积分id （隶属于某一个节日活动的物品id）\r\n"
+                + "                        'items'   => array(\r\n"
+                + "%s"
+                + "                        ),\r\n"
+                + "                        'output'  => '%s', //第一个为奖励ID，第二个为显示ID\r\n"
+                + "                ),\r\n"
+                + "            //兑换奖品掉落需要种植的花，这些花在收获的时候会掉落scoreId出配置的物品id，1的是低概率，2的是高概率\r\n"
+                + "                'exchangeCascadeItem' => '%s',\r\n"
+                + "        //@todo 只是掉多期),\r\n";
+        String itemsStrFormat = "                                %s => array(\r\n"
+                + "                                        'score'        => %s, //需要活动物品个数\r\n"
+                + "                                        'currencyNum'  => %s, //购买所属的货币 数量\r\n"
+                + "                                        'currencyType' => '%s', //购买货币类型\r\n"
+                + "                                ),\r\n";
+        collectActivityCommonConf = new HashMap();
+        for (int row = 1; row < rowCount; row++) {
+            String periodId = festivalActivityCfg[row][0];
+            if (!periodId.isEmpty()) {//不是空行
+                String userMinLevel = festivalActivityCfg[row][1];
+                String startTime = festivalActivityCfg[row][2];
+                String endTime = festivalActivityCfg[row][3];
+                String scoreId = festivalActivityCfg[row][4];
+                String output = festivalActivityCfg[row][6];
+                String exchangeCascadeItem = festivalActivityCfg[row][7];
+                String items = festivalActivityCfg[row][5];
+                String playMethodItems = "";
+                HashMap<String, String> commonConf = new HashMap<String, String>();
+                commonConf.put("startTime", startTime);
+                commonConf.put("endTime", endTime);
+                commonConf.put("scoreId", scoreId);
+                collectActivityCommonConf.put(periodId, commonConf);
+
+                String[][] currentAwardItemListCfg = getStringArrayByField(awardItemListCfg, periodId, 0);
+                for (String[] currentAwardItemCfg : currentAwardItemListCfg) {
+                    playMethodItems += String.format(itemsStrFormat, currentAwardItemCfg[1], currentAwardItemCfg[2], currentAwardItemCfg[3], currentAwardItemCfg[4]);
+                }
+
+                festivalActivityCfgStr += String.format(festivalActivityCfgStrFormat, periodId, userMinLevel,
+                        startTime, endTime, scoreId, playMethodItems, output, exchangeCascadeItem);
+            } else {//遇到一个空行直接返回了。。。
+                break;
+            }
+        }
+        festivalActivityCfgStr += ");\r\n"
+                + "//##################################################################################################################\r\n";
+        return festivalActivityCfgStr;
+
+        //######################
+        /*###########################
+         String buildedContent = "";
+         buildedContent += "<?php\r\n"
+         + "$J7CONFIG['slotInfo'] = array(\r\n";
+
+         int collectAcitivtyPeriodCount = festivalActivityCfg.length;
+         for (int index = 0; index < collectAcitivtyPeriodCount; index++) {
+         String[] currentPeriodCollectActivityCommon = festivalActivityCfg[index];
+         String periodId = currentPeriodCollectActivityCommon[0];
+         String[][] currentCollectActivityCommonInfo = getStringArrayByField(festivalActivityCfg, periodId, 0);
+
+         /////////////////////////////////////// old  code 
+         String[] currentSlotPeriod = awardItemListCfg[index];
+         String slotId = currentSlotPeriod[0];
+         String[][] currentSlotCashCfg = getStringArrayByField(festivalActivityCfg, slotId, 0);
+         String currentCashStr = buildFinalSlotKeyInfoStringFromStringArray(currentSlotCashCfg, "cash");
+         buildedContent += "    " + slotId + " => array(\r\n"
+         + "        'id'        => '" + slotId + "',\r\n"
+         + "        'startTime'   => strtotime('" + currentSlotPeriod[1] + "'),\r\n"
+         + "        'endTime'   => strtotime('" + currentSlotPeriod[2] + "'),\r\n";
+         buildedContent += currentCashStr;
+         buildedContent += "    ),\r\n";
+         }
+
+         buildedContent += ");";
+        
+         return buildedContent;*/
+    }
+
+    /**
+     * 花艺解锁 ChistmarsBoardCommon相关配置
+     *
+     * @param content
+     * @return
+     */
+    public String buildFinalFlowerCraftUnlockActivityBoardStringDisplayFromStringArray(String[][] content) {
+        String buildedContent = "";
+        buildedContent += "<?php\r\n"
+                + "//******************************************************************************************************************\r\n"
+                + "//花艺解锁 ChistmarsBoardCommon相关配置\r\n"
+                + "$J7CONFIG['ChistmarsBoardCommon'] = array(\r\n";
+        String[] finalData = content[1];//只有一期
+        String buildedContentFormat = "        'scoreItemId'   => '%s',//圣诞袜子的id\r\n"
+                + "        'extraItemId'   => '%s',//额外奖励的id\r\n"
+                + "        'sendMachineId' => '%s',//活动送的机器id\r\n"
+                + "        'topMissionId'  => '%s',//当期限时任务主Id\r\n"
+                + "        1               => array(//第一期\r\n"
+                + "                'startTime' => strtotime('%s'),//开始时间\r\n"
+                + "                'endTime'   => strtotime('%s'),//结束时间\r\n"
+                + "                'condition' => array('unlock' => '%s'),//领奖条件--需要解锁的花艺品\r\n"
+                + "                'award'     => '%s',//奖品ID\r\n"
+                + "                'itemList'  => array(//关系到的物品\r\n"
+                + "%s"
+                + "                ),\r\n"
+                + "        ),\r\n"
+                + "        2               => array(//第二期\r\n"
+                + "                'startTime' => strtotime('%s'),//开始时间\r\n"
+                + "                'endTime'   => strtotime('%s'),//结束时间\r\n"
+                + "                'condition' => array('unlock' => '%s'),//领奖条件--需要解锁的花艺品\r\n"
+                + "                'award'     => '%s',//奖品ID\r\n"
+                + "                'itemList'  => array(//关系到的物品\r\n"
+                + "%s"
+                + "                ),\r\n"
+                + "        ),\r\n";
+
+        String itemListFormat = "                        %s => array('itemId' => %s, 'displayOrder' => %d,),//itemId:物品ID displayOrder:显示顺序\r\n";
+        String[] firstPeriodItemList = finalData[8].split(",");
+        String firstPeriodItemListStr = "";
+        int index = 1;
+        if (firstPeriodItemList.length == 4) {
+            for (String itemId : firstPeriodItemList) {
+                firstPeriodItemListStr += String.format(itemListFormat, itemId, itemId, index++);
+            }
+        } else {//数量由问题 这个是写死的
+            showErrorMsg("firstPeriodItemList 配置错误，必须包含4个 现在的值为：" + finalData[13], "内容错误");
+        }
+
+        String[] secondPeriodItemList = finalData[13].split(",");
+        String secondPeriodItemListStr = "";
+        if (secondPeriodItemList.length == 4) {
+            index = 1;
+            for (String itemId : secondPeriodItemList) {
+                secondPeriodItemListStr += String.format(itemListFormat, itemId, itemId, index++);
+            }
+        } else {//数量由问题 这个是写死的
+            showErrorMsg("secondPeriodItemList 配置错误，必须包含4个 现在的值为：" + finalData[13], "内容错误");
+        }
+
+        buildedContent += String.format(buildedContentFormat, finalData[0], finalData[1], finalData[2], finalData[3], finalData[4],
+                finalData[5], finalData[6], finalData[7], firstPeriodItemListStr, finalData[9], finalData[10], finalData[11], finalData[12], secondPeriodItemListStr);
+        buildedContent += ");\r\n";
+        return buildedContent;
+    }
+
+    public static void showErrorMsg(String msg, String title) {
+        JOptionPane.showMessageDialog(null, msg, title, JOptionPane.ERROR_MESSAGE, null);
+        System.exit(0);
+    }
+
+    public static void writeToFile(String contents, String descFile, String encoding) throws FileNotFoundException, IOException {
+        File fileOutput = new File(descFile);
+        writeToFile(contents, fileOutput, "UTF-8");
+    }
+
+    /**
+     * 完善过的 简易任务语言项
+     *
+     * @param lotteryCfg
+     * @param outputPath
+     * @return
+     */
+    public String transformSimplyTaskDisplayInfoStringFromStringArray(String[][] lotteryCfg, String outputPath, String activityName) {
+        String[] perModel = getStringArrayBySingleIndex(lotteryCfg, 0);
+        String[] lotteryCfgModel = arrayTrim(perModel);
+        String[] cleanupedLotteryCfgModel = arrayPop(lotteryCfgModel);
+        for (int colNum = 2; colNum < lotteryCfg[0].length; colNum++) {
+            String lang = lotteryCfg[0][colNum];
+            String[] perSimplyTaskLangInfo = getStringArrayBySingleIndex(lotteryCfg, colNum);
+            String[] simplyTaskLangInfo = arrayPop(perSimplyTaskLangInfo);
+            String simplyTaskLangInfoStr = "<?php\r\n$J7CONFIG['SimplyTaskLang'] = array(\r\n";
+            String simplyTaskLangInfoStrFormat = "	'%s' => '%s',\r\n";
+            for (int index = 0; index < cleanupedLotteryCfgModel.length; index++) {
+                simplyTaskLangInfoStr += String.format(simplyTaskLangInfoStrFormat, cleanupedLotteryCfgModel[index].trim(), simplyTaskLangInfo[index].trim());
+            }
+            simplyTaskLangInfoStr += ");";
+            try {
+                writeToFile(simplyTaskLangInfoStr, outputPath + "/SimplyTask/" + lang + activityName + ".php", "UTF-8");
+            } catch (IOException ex) {
+                Logger.getLogger(TotemConfigParseJFrame.class.getName()).log(Level.SEVERE, null, ex);
+                showErrorMsg(ex.toString(), "转换出错");
+            }
+        }
+        return "";
+    }
+
+    public String buildFinalFlowerCraftUnlockActivitySimplyTaskCommonInfoStringFromStringArray(String[][] simplyTaskCommonInfoCfg) {
+        simplyTaskCommonInfoCfg = arrayPop(simplyTaskCommonInfoCfg);
+        String SimplyTaskCommonInfoStr;
+        String SimplyTaskCommonInfoStrFormat = "        %s => array(\r\n"
+                + "                'aliasId'    => '%s',\r\n"
+                + "                'rewards'    => array(\r\n"
+                + "%s"
+                + "                ),\r\n"
+                + "                'trigger'    => '%s',\r\n"
+                + "                'autoAccept' => %s,\r\n"
+                + "        ),\r\n";
+        SimplyTaskCommonInfoStr = "\r\n//##################################################################################################################\r\n"
+                + "//简易任务\r\n"
+                + "$J7CONFIG['SimplyTaskCommon'] = array(\r\n";
+        String awardStrFormat = "                        array(\r\n"
+                + "                                %s, //当前奖励类型\r\n"
+                + "                                %s, //当前物品ID\r\n"
+                + "                                %s, //下一级物品ID\r\n"
+                + "                                array( //奖励条件\r\n"
+                + "                                        %s"
+                + "                                ),\r\n"
+                + "                                array( //奖励\r\n"
+                + "                                        %s"
+                + "                                ),\r\n"
+                + "                        ),\r\n";
+        int rowCount = simplyTaskCommonInfoCfg.length;
+        Map<String, String> typeMap = getTypeMap();
+        for (int row = 0; row < rowCount; row++) {
+            String simplyTaskId = simplyTaskCommonInfoCfg[row][0];
+            String rewards = "";
+            if (!simplyTaskId.isEmpty()) {
+                String trigger = simplyTaskCommonInfoCfg[row][2];
+                String autoAccept = simplyTaskCommonInfoCfg[row][3];
+
+                String simplyTaskReward = simplyTaskCommonInfoCfg[row][1];
+                String[] tmpRewardInfoArr = simplyTaskReward.split("\\|");
+                for (String tmpRewardInfoArr1 : tmpRewardInfoArr) {
+                    String[] tmpInfo = tmpRewardInfoArr1.split(",");
+                    String type = tmpInfo[0];
+                    if (!type.isEmpty()) {
+                        if (type.equals("4008")) {//升级物品
+                            //eg tmpInfo为 4008,4844,4845,4012:3*24*60*60@4001:2068:1 意思是将物品4844升级为4845，如果再3*24*60*60s内完成升级，还将额外送物品2068
+                            String currentItemId = tmpInfo[1];//4844
+                            String nextLvItemId = tmpInfo[2];//4845
+                            String conditionInfo = tmpInfo[3];//4012:3*24*60*60@4001:2068:1
+                            String[] conditionInfoArr = conditionInfo.split("@");//[4012:3*24*60*60, 4001:2068:1] 
+                            String condition = conditionInfoArr[0];//4012:3*24*60*60
+                            String conditionAwards = conditionInfoArr[1];//4001:2068:1
+                            String[] conditionArr = condition.split(":");//[4012,3*24*60*60]
+                            String[] conditionAwardsArr = conditionAwards.split(":");//[4001,2068,1]
+                            String conditionStr = "";
+                            String conditionAwardsStr = "";
+                            conditionStr = "array(" + typeMap.get(conditionArr[0]) + ",";
+                            for (int i = 1; i < conditionArr.length; i++) {
+                                conditionStr += conditionArr[i] + ",";
+                            }
+                            conditionStr += "),\r\n";
+
+                            conditionAwardsStr = "array(" + typeMap.get(conditionAwardsArr[0]) + ",";
+                            for (int i = 1; i < conditionAwardsArr.length; i++) {
+                                conditionAwardsStr += conditionAwardsArr[i] + ",";
+                            }
+                            conditionAwardsStr += "),\r\n";
+
+                            rewards += String.format(awardStrFormat, type, currentItemId, nextLvItemId,
+                                    conditionStr, conditionAwardsStr);
+                        } else {//其他奖励 
+                            rewards += "                        array(" + tmpRewardInfoArr1 + "),\r\n";
+                        }
+                    }
+                }
+
+                SimplyTaskCommonInfoStr += String.format(SimplyTaskCommonInfoStrFormat, simplyTaskId,
+                        simplyTaskId, rewards, trigger, autoAccept);
+            } else {//simplyTaskId为empty说明是空行，直接无视后面所有的内容（如果还有的话。。）
+                break;
+            }
+        }
+        return SimplyTaskCommonInfoStr;
+    }
+
+    /**
+     * 花雕兑换功能 ———— 花雕兑换使用到了简易任务和FloralSculpture/convertMedal.php 这个文件
+     *
+     * @param configFilePath
+     * @param func
+     * @param outputPath
+     */
+    public void transformFloralSculptureConvertActivity(String configFilePath, String func, String outputPath) {
+        try {
+            //######### 简易任务
+            int sheetIndex = getSheetIndexBySheetName(configFilePath, "SimplyTaskCommon");
+            String[][] SimplyTaskCommonCfg = parseXls(configFilePath, sheetIndex, true);
+            String simplyTaskCommonCfgString = buildStringFromStringArray("UPGRADE_ITEM_SIMPLY_TASK", sheetIndex, SimplyTaskCommonCfg);
+            simplyTaskCommonCfgString = "<?php\r\n//party活动\r\n################################\r\n" + "$J7CONFIG['SimplyTaskCommon'] = array(\r\n" + simplyTaskCommonCfgString;
+            simplyTaskCommonCfgString += ");\r\n";
+            writeToFile(simplyTaskCommonCfgString, outputPath + "/SimplyTask/SimplyTaskCommonFloralSculptureConvertActivity.php", "UTF-8");
+
+            //################ 简易任务-----步骤
+            sheetIndex = getSheetIndexBySheetName(configFilePath, "SimplyTaskSingle");
+            String[][] singleCfg = parseXls(configFilePath, sheetIndex, true);
+            String singleCfgString = buildFinalSimplyTaskSingleInfoStringFromStringArray("SIMPLY_TASK_SINGLE", sheetIndex, singleCfg);
+            writeToFile(singleCfgString, outputPath + "/SimplyTask/singleFloralSculptureConvertActivity.php", "UTF-8");
+
+            //################ 简易任务-----语言项 相关
+            sheetIndex = getSheetIndexBySheetName(configFilePath, "SimplyTaskLang");
+            String[][] simplyTaskLang = parseXls(configFilePath, sheetIndex, true);
+            transformSimplyTaskDisplayInfoStringFromStringArray(simplyTaskLang, outputPath, "FloralSculptureConvertActivity");
+
+            //勋章兑换分组相关配置
+            sheetIndex = getSheetIndexBySheetName(configFilePath, "convertMedal");
+            String[][] convertMedalCfg = parseXls(configFilePath, sheetIndex, true);
+            String convertMedalCfgString = buildStringFromStringArray("CONVER_MEDAL", sheetIndex, convertMedalCfg);
+            writeToFile(convertMedalCfgString, outputPath + "/FloralSculpture/convertMedal.php", "UTF-8");
+
+        } catch (IOException ex) {
+            Logger.getLogger(TotemConfigParseJFrame.class
+                    .getName()).log(Level.SEVERE, null, ex);
+            showMessageDialogMessage(ex);
+        } catch (BiffException ex) {
+            Logger.getLogger(TotemConfigParseJFrame.class
+                    .getName()).log(Level.SEVERE, null, ex);
+            showMessageDialogMessage(ex);
+        }
+    }
+
+    /**
+     * party活动
+     *
+     * @param configFilePath
+     * @param func
+     * @param outputPath
+     */
+    public void transformPartyActivity(String configFilePath, String func, String outputPath) {
+        try {
+            //######### 简易任务
+            int sheetIndex = getSheetIndexBySheetName(configFilePath, "SimplyTaskCommon");
+            String[][] SimplyTaskCommonCfg = parseXls(configFilePath, sheetIndex, true);
+            String simplyTaskCommonCfgString = buildStringFromStringArray("UPGRADE_ITEM_SIMPLY_TASK", sheetIndex, SimplyTaskCommonCfg);
+            simplyTaskCommonCfgString = "<?php\r\n//party活动\r\n################################\r\n" + "$J7CONFIG['SimplyTaskCommon'] = array(\r\n" + simplyTaskCommonCfgString;
+            simplyTaskCommonCfgString += ");\r\n";
+            writeToFile(simplyTaskCommonCfgString, outputPath + "/SimplyTask/SimplyTaskCommonPartyActivity.php", "UTF-8");
+
+            //################ 简易任务-步骤
+            sheetIndex = getSheetIndexBySheetName(configFilePath, "SimplyTaskSingle");
+            String[][] singleCfg = parseXls(configFilePath, sheetIndex, true);
+            String singleCfgString = buildFinalSimplyTaskSingleInfoStringFromStringArray("SIMPLY_TASK_SINGLE", sheetIndex, singleCfg);
+            writeToFile(singleCfgString, outputPath + "/SimplyTask/singlePartyActivity.php", "UTF-8");
+
+            //################ 简易任务-语言项 相关
+            sheetIndex = getSheetIndexBySheetName(configFilePath, "SimplyTaskLang");
+            String[][] simplyTaskLang = parseXls(configFilePath, sheetIndex, true);
+            transformSimplyTaskDisplayInfoStringFromStringArray(simplyTaskLang, outputPath, "PartyActivity");
+        } catch (IOException ex) {
+            Logger.getLogger(TotemConfigParseJFrame.class
+                    .getName()).log(Level.SEVERE, null, ex);
+            showMessageDialogMessage(ex);
+        } catch (BiffException ex) {
+            Logger.getLogger(TotemConfigParseJFrame.class
+                    .getName()).log(Level.SEVERE, null, ex);
+            showMessageDialogMessage(ex);
+        }
+    }
+
+    /**
+     * 花艺解锁活动
+     *
+     * @param configFilePath
+     * @param func
+     * @param outputPath
+     */
+    public void transformFlowerCraftUnlockActivity(String configFilePath, String func, String outputPath) {
+        try {
+            //生成 Chistmars/ChistmarsBoard.php 相关配置
+            int sheetMainIndex = getSheetIndexBySheetName(configFilePath, "flowerCraftUnlockActivityCommon");
+            String[][] flowerCraftUnlockActivityCfg = parseXls(configFilePath, sheetMainIndex, true);
+            String flowerCraftUnlockActivityCfgStr = buildFinalFlowerCraftUnlockActivityBoardStringDisplayFromStringArray(flowerCraftUnlockActivityCfg);
+            writeToFile(flowerCraftUnlockActivityCfgStr, outputPath + "/Chistmars/ChistmarsBoard.php", "UTF-8");
+
+            //简易任务相关    
+            //######### 简易任务
+            int sheetIndex = getSheetIndexBySheetName(configFilePath, "SimplyTaskCommon");
+            String[][] SimplyTaskCommonCfg = parseXls(configFilePath, sheetIndex, true);
+            String simplyTaskCommonCfgString = buildFinalFlowerCraftUnlockActivitySimplyTaskCommonInfoStringFromStringArray(SimplyTaskCommonCfg);
+            simplyTaskCommonCfgString = "<?php\r\n" + simplyTaskCommonCfgString;
+            simplyTaskCommonCfgString += ");\r\n";
+            writeToFile(simplyTaskCommonCfgString, outputPath + "/SimplyTask/SimplyTaskCommonFlowerCraftUnlockActivity.php", "UTF-8");
+
+            //################ 简易任务-步骤
+            sheetIndex = getSheetIndexBySheetName(configFilePath, "SimplyTaskSingle");
+            String[][] singleCfg = parseXls(configFilePath, sheetIndex, true);
+            String singleCfgString = buildFinalSimplyTaskSingleInfoStringFromStringArray("SIMPLY_TASK_SINGLE", sheetIndex, singleCfg);
+            writeToFile(singleCfgString, outputPath + "/SimplyTask/singleFlowerCraftUnlockActivity.php", "UTF-8");
+
+            //################ 简易任务-语言项 相关
+            sheetIndex = getSheetIndexBySheetName(configFilePath, "SimplyTaskLang");
+            String[][] simplyTaskLang = parseXls(configFilePath, sheetIndex, true);
+            transformSimplyTaskDisplayInfoStringFromStringArray(simplyTaskLang, outputPath, "FlowerCraftUnlockActivity");
+        } catch (IOException ex) {
+            Logger.getLogger(TotemConfigParseJFrame.class
+                    .getName()).log(Level.SEVERE, null, ex);
+            showMessageDialogMessage(ex);
+        } catch (BiffException ex) {
+            Logger.getLogger(TotemConfigParseJFrame.class
+                    .getName()).log(Level.SEVERE, null, ex);
+            showMessageDialogMessage(ex);
+        }
+    }
+
+    /**
+     * 收集活动
+     *
+     * @param configFilePath
+     * @param func
+     * @param outputPath
+     */
+    public void transformCollectActivity(String configFilePath, String func, String outputPath) {
+        try {
+            //生成收集活动主配置festivalActivity.php
+            int sheetMainIndex = getSheetIndexBySheetName(configFilePath, "festivalActivity");
+            String[][] festivalActivityCfg = parseXls(configFilePath, sheetMainIndex, true);
+
+            //奖励物品列表
+            int sheetAwardItemListIndex = getSheetIndexBySheetName(configFilePath, "awardItemList");
+            String[][] awardItemListCfg = parseXls(configFilePath, sheetAwardItemListIndex, true);
+
+            String collectActivityStr = buildFinalCollectActivityStringFromStringArray(festivalActivityCfg, awardItemListCfg);
+            collectActivityStr = "<?php\r\n" + collectActivityStr;
+            File fileOutput = new File(outputPath + "/festival/festivalActivity.php");
+            writeToFile(collectActivityStr, fileOutput, "UTF-8");
+
+            //生成收集活动相关物品表的扩展表
+            transformCollectActivityItemExtendConfig(configFilePath, "COLLECT_ACTIVITY_ITEM_EXTEND", outputPath);
+
+            //生成收集活动语言相关配置
+            int sheetLangIndex = getSheetIndexBySheetName(configFilePath, "lang");
+            String[][] festivalActivityLangCfg = parseXls(configFilePath, sheetLangIndex, true);
+            String[] festivalFieldArray = getStringArrayBySingleIndex(festivalActivityLangCfg, 0);
+
+            String[] cleanupedFestivalFieldArray = arrayPop(festivalFieldArray);
+            HashMap<String, HashMap<String, String>> buildCollectActivityLangModel = buildCollectActivityLangModel(cleanupedFestivalFieldArray);
+            File tmpFileOutput;
+            for (int colNum = 2; colNum < festivalActivityLangCfg[0].length; colNum++) {
+                Iterator it = buildCollectActivityLangModel.keySet().iterator();
+                String lang = festivalActivityLangCfg[0][colNum];
+                String[][] cleanupedFestivalActivityLangCfg = arrayPop(festivalActivityLangCfg);
+                String[] festivalFieldValueArray = getStringArrayBySingleIndex(cleanupedFestivalActivityLangCfg, colNum);
+                String currentPeriodFestivalActivityStr = "<?php\r\n/**\r\n"
+                        + " * upload    : \r\n"
+                        + " * uploadFileName    : 收集活动\r\n"
+                        + " * generate At: " + getCurrentTimeString() + "\r\n"
+                        + " */\r\n"
+                        + "$J7CONFIG['festivalActivityLang'] = array(\r\n";
+                while (it.hasNext()) {
+                    String period;
+                    HashMap<String, String> festivalField;
+                    period = it.next().toString();
+                    festivalField = buildCollectActivityLangModel.get(period);
+                    int firstIndex = Integer.parseInt(festivalField.get("firstIndex"));
+                    int lastIndex = Integer.parseInt(festivalField.get("lastIndex"));
+                    System.out.println(period + "--" + festivalField);
+                    String[] currentPeriodFestivalActivityData = arraySlice(festivalFieldValueArray, firstIndex, lastIndex - firstIndex + 1);
+                    currentPeriodFestivalActivityStr += buildFinalSingleFestivalDisplayInfoStringFromStringArray(currentPeriodFestivalActivityData);
+                }
+                currentPeriodFestivalActivityStr += ");\r\n"
+                        + "\r\n"
+                        + "//##################################################################################################################\r\n";
+
+                tmpFileOutput = new File(outputPath + "/festival/" + lang + ".php");
+                writeToFile(currentPeriodFestivalActivityStr, tmpFileOutput, "UTF-8");
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(TotemConfigParseJFrame.class
+                    .getName()).log(Level.SEVERE, null, ex);
+            showMessageDialogMessage(ex);
+        } catch (BiffException ex) {
+            Logger.getLogger(TotemConfigParseJFrame.class
+                    .getName()).log(Level.SEVERE, null, ex);
+            showMessageDialogMessage(ex);
+        }
+    }
+
+    /**
+     * 收集活动 -- 不支持多期
+     *
+     * @param configFilePath
+     * @param func
+     * @param outputPath
+     */
+    public void transformCollectActivityOld(String configFilePath, String func, String outputPath) {
+        try {
+            //生成收集活动主配置festivalActivity.php
+            int sheetMainIndex = getSheetIndexBySheetName(configFilePath, "festivalActivity");
+            String[][] festivalActivityCfg = parseXls(configFilePath, sheetMainIndex, true);
+            String festivalActivityCfgString = buildStringFromStringArray(func, sheetMainIndex, festivalActivityCfg);
+            festivalActivityCfgString = "<?php\r\n" + festivalActivityCfgString;
+
+//            //奖励物品列表
+//            int sheetAwardItemListIndex = getSheetIndexBySheetName(configFilePath, "awardItemList");
+//            String[][] awardItemListCfg = parseXls(configFilePath, sheetAwardItemListIndex, true);
+//            String awardItemListCfgString = buildStringFromStringArray(func, sheetMainIndex, awardItemListCfg);
+            File fileOutput = new File(outputPath + "/festival/festivalActivity.php");
+            writeToFile(festivalActivityCfgString, fileOutput, "UTF-8");
+
+            //生成收集活动相关物品表的扩展表
+            transformCollectActivityItemExtendConfig(configFilePath, "COLLECT_ACTIVITY_ITEM_EXTEND", outputPath);
+
+            //生成收集活动语言相关配置
+            int sheetLangIndex = getSheetIndexBySheetName(configFilePath, "lang");
+            String[][] festivalActivityLangCfg = parseXls(configFilePath, sheetLangIndex, true);
+            String[] festivalFieldArray = getStringArrayBySingleIndex(festivalActivityLangCfg, 0);
+
+            String[] cleanupedFestivalFieldArray = arrayPop(festivalFieldArray);
+            HashMap<String, HashMap<String, String>> buildCollectActivityLangModel = buildCollectActivityLangModel(cleanupedFestivalFieldArray);
+            File tmpFileOutput;
+            for (int colNum = 2; colNum < festivalActivityLangCfg[0].length; colNum++) {
+                Iterator it = buildCollectActivityLangModel.keySet().iterator();
+                String lang = festivalActivityLangCfg[0][colNum];
+                String[][] cleanupedFestivalActivityLangCfg = arrayPop(festivalActivityLangCfg);
+                String[] festivalFieldValueArray = getStringArrayBySingleIndex(cleanupedFestivalActivityLangCfg, colNum);
+                String currentPeriodFestivalActivityStr = "<?php\r\n/**\r\n"
+                        + " * upload    : \r\n"
+                        + " * uploadFileName    : 收集活动\r\n"
+                        + " * generate At: " + getCurrentTimeString() + "\r\n"
+                        + " */\r\n"
+                        + "$J7CONFIG['festivalActivityLang'] = array(\r\n";
+                while (it.hasNext()) {
+                    String period;
+                    HashMap<String, String> festivalField;
+                    period = it.next().toString();
+                    festivalField = buildCollectActivityLangModel.get(period);
+                    int firstIndex = Integer.parseInt(festivalField.get("firstIndex"));
+                    int lastIndex = Integer.parseInt(festivalField.get("lastIndex"));
+//                    System.out.println(period + "--" + festivalField);
+//                    String[] currentPeriodFestivalActivityData = new String[lastIndex - firstIndex + 1];
+//                    for (int index = firstIndex, currentIndex = 0; index < lastIndex; index++, currentIndex++) {
+//                        currentPeriodFestivalActivityData[currentIndex] = festivalFieldArray[index];
+//                    }
+                    String[] currentPeriodFestivalActivityData = arraySlice(festivalFieldValueArray, firstIndex, lastIndex - firstIndex + 1);
+                    currentPeriodFestivalActivityStr += buildFinalSingleFestivalDisplayInfoStringFromStringArray(currentPeriodFestivalActivityData);
+                }
+                currentPeriodFestivalActivityStr += ");\r\n"
+                        + "\r\n"
+                        + "//##################################################################################################################\r\n";
+
+                tmpFileOutput = new File(outputPath + "/festival/" + lang + ".php");
+                writeToFile(currentPeriodFestivalActivityStr, tmpFileOutput, "UTF-8");
+            }
+
+//            String[] displayLangs = new String[]{"zh_tw", "en_us", "nl_nl", "nl_se", "de_de", "de_se", "fr_fr", "fr_se", "ja_jp"};
+//            for (String lang : displayLangs) {
+//                int sheetIndex = getSheetIndexBySheetName(configFilePath, lang);
+//                String[][] displayInfoCfg = parseXls(configFilePath, sheetIndex, true);
+//                String[][] cleanupedDisplayInfoCfg = arrayPop(displayInfoCfg);
+//                String tmplangDisplayInfoCfg;
+//                File tmpFileOutput;
+//                tmplangDisplayInfoCfg = buildFinalFestivalDisplayInfoStringFromStringArray(cleanupedDisplayInfoCfg);
+//                tmpFileOutput = new File(outputPath + "/festival/" + lang + ".php");
+//                writeToFile(tmplangDisplayInfoCfg, tmpFileOutput, "UTF-8");
+//
+//            }
+        } catch (IOException ex) {
+            Logger.getLogger(TotemConfigParseJFrame.class
+                    .getName()).log(Level.SEVERE, null, ex);
+            showMessageDialogMessage(ex);
+        } catch (BiffException ex) {
+            Logger.getLogger(TotemConfigParseJFrame.class
+                    .getName()).log(Level.SEVERE, null, ex);
+            showMessageDialogMessage(ex);
+        }
+    }
+
+    /**
+     * 物品扩展信息
+     *
+     * @param func
+     * @param sheetNum
+     * @param content
+     * @return
+     */
+    public String buildFinalCollectActivityAwardItemListStringFromStringArray(String func, int sheetNum, String[][] content) {
+        int rows = content.length;
+        int cols = content[0].length < itemExtendModel.length ? content[0].length : itemExtendModel.length;
+        String buildedContent = "";
+        buildedContent += "//******************************************************************************************************************\r\n"
+                + "//物品扩展信息相关配置\r\n";
+
+        ArrayList itemIdList = new ArrayList();
+        for (int rowNum = 1; rowNum < rows; rowNum++) {
+            String[] rowInfo = content[rowNum];
+            String itemId = rowInfo[0];
+            if (itemIdList.contains(itemId)) {
+                JOptionPane.showMessageDialog(null, " 第 " + (sheetNum + 1) + " 个sheet " + " 第 " + (rowNum + 1) + "行 物品ID " + itemId + "重复", "转换错误-物品ID重复", JOptionPane.ERROR_MESSAGE, null);
+                System.exit(0);
+            } else {
+                itemIdList.add(itemId);
+            }
+        }
+
+        buildedContent += "$J7CONFIG['itemExtend'] = array(\r\n";
+        for (int rowNum = 1; rowNum < rows; rowNum++) {
+            for (int colNum = 0; colNum < cols; colNum++) {
+                if (0 == colNum) {
+                    buildedContent += "    '" + content[rowNum][colNum] + "' => array(\r\n";
+                } else if (itemExtendModel[colNum].endsWith("Time")) {
+                    if (!content[rowNum][colNum].isEmpty()) {
+                        buildedContent += "        '" + itemExtendModel[colNum] + "' => strtotime('" + content[rowNum][colNum] + "'),\r\n";
+                    }
+                } else if (itemExtendModel[colNum].endsWith("iExtraOutput")) {//进行特殊处理
+
+                    if (!content[rowNum][colNum].trim().isEmpty()) {
+                        String[] iExtraOutputArray = content[rowNum][colNum].split("\\|");
+                        int iExtraOutputArrayLength = iExtraOutputArray.length;
+                        buildedContent += "        '" + itemExtendModel[colNum] + "' => array(\r\n";
+                        for (int i = 0; i < iExtraOutputArrayLength; i++) {
+                            String[] iExtraOutputInfo = iExtraOutputArray[i].split(",");
+                            buildedContent += "            '" + iExtraOutputInfo[0] + "' => array(\r\n";
+                            buildedContent += "                'iActiveStartTime' =>  strtotime('" + iExtraOutputInfo[1] + "'),\r\n";
+                            buildedContent += "                'iActiveEndTime' =>  strtotime('" + iExtraOutputInfo[2] + "'),\r\n";
+                            buildedContent += "                'iRate' =>  " + iExtraOutputInfo[3] + ",\r\n";
+                            buildedContent += "                'iOutputNum' =>  " + iExtraOutputInfo[4] + ",\r\n";
+                            buildedContent += "            ),\r\n";
+                        }
+                        buildedContent += "        ),\r\n";
+                    }
+                } else {
+                    if (!content[rowNum][colNum].isEmpty()) {
+                        buildedContent += "        '" + itemExtendModel[colNum] + "' => '" + content[rowNum][colNum] + "',\r\n";
+                    }
+                }
+            }
+            buildedContent += "    ),\r\n";
+        }
+        buildedContent += ");";
+        return buildedContent;
+    }
+
+    public HashMap<String, HashMap<String, String>> buildCollectActivityLangModel(String[] originArray) {
+        HashMap<String, HashMap<String, String>> collectActivityPeriod = new HashMap<String, HashMap<String, String>>();
+        String firstField = "period";
+        int len = originArray.length;
+        int period = 1;
+        for (int index = 0; index < len; index++) {
+            String fieldValue = originArray[index];
+            if (fieldValue.equals(firstField)) {
+                if (index == 0) {//第一次循环
+                    HashMap<String, String> tmp = new HashMap<String, String>();
+                    tmp.put("firstIndex", String.valueOf(index));
+                    collectActivityPeriod.put(String.valueOf(period), tmp);
+                } else {//
+                    //设置上一期 最后一个
+                    HashMap<String, String> tmp = (HashMap) collectActivityPeriod.get(String.valueOf(period));
+                    tmp.put("lastIndex", String.valueOf(index - 1));
+                    collectActivityPeriod.put(String.valueOf(period++), tmp);
+
+                    //设置本期 第一个
+                    tmp.clear();
+
+                    tmp.put("firstIndex", String.valueOf(index));
+                    collectActivityPeriod.put(String.valueOf(period), tmp);
+                }
+            }
+
+            if (index == len - 1) { //设置最后一期 最后一个字段
+                HashMap tmp = (HashMap) collectActivityPeriod.get(String.valueOf(period));
+                tmp.put("lastIndex", String.valueOf(index));
+                collectActivityPeriod.put(String.valueOf(period), tmp);
+            }
+        }
+
+        return collectActivityPeriod;
+    }
+
+    /**
      * 节日活动
      *
      * @param configFilePath
@@ -1519,17 +2291,7 @@ public class TotemConfigParseJFrame extends javax.swing.JFrame {
                 tmplangDisplayInfoCfg = buildFinalSimplyTaskDisplayInfoStringFromStringArray(cleanupedDisplayInfoCfg);
                 tmpFileOutput = new File(outputPath + "/SimplyTask/" + lang + ".php");
                 writeToFile(tmplangDisplayInfoCfg, tmpFileOutput, "UTF-8");
-
             }
-
-//            int sheetNumber = getSheetNumber(configFilePath);
-//            for (sheetIndex = 2; sheetIndex < sheetNumber; sheetIndex++) {
-//                String sheetName = getSheetNameBySheetIndex(configFilePath, sheetIndex);
-//                String itemExtendLangCfg[][] = parseXls(configFilePath, sheetIndex, true);
-//                String itemExtendLangCfgString = "<?php\r\n" + buildStringFromStringArray("SIMPETASKLANG", sheetIndex, itemExtendLangCfg);
-//                File flowercraftLangCfgFileOutput = new File(outputPath + "/SimplyTask/" + sheetName + ".php");
-//                writeToFile(itemExtendLangCfgString, flowercraftLangCfgFileOutput, "UTF-8");
-//            }
             //#############
         } catch (IOException ex) {
             Logger.getLogger(TotemConfigParseJFrame.class
@@ -1613,6 +2375,58 @@ public class TotemConfigParseJFrame extends javax.swing.JFrame {
             File fileOutput = new File(outputPath + "/FloralSculpture/floralSculptureCommon.php");
             writeToFile(floralSculptureCommonCfgString, fileOutput, "UTF-8");
 
+        } catch (IOException ex) {
+            Logger.getLogger(TotemConfigParseJFrame.class
+                    .getName()).log(Level.SEVERE, null, ex);
+            showMessageDialogMessage(ex);
+        } catch (BiffException ex) {
+            Logger.getLogger(TotemConfigParseJFrame.class
+                    .getName()).log(Level.SEVERE, null, ex);
+            showMessageDialogMessage(ex);
+        }
+    }
+
+    /**
+     * 收集活动 奖励列表
+     *
+     * @param configFilePath
+     * @param func
+     * @param outputPath
+     */
+    public void transformCollectActivityAwardItemListConfig(String configFilePath, String func, String outputPath) {
+        try {
+            int sheetIndex = getSheetIndexBySheetName(configFilePath, "itemExtend");
+            String[][] itemExtendCfg = parseXls(configFilePath, sheetIndex, true);
+            String itemExtendCfgString = buildStringFromStringArray(func, sheetIndex, itemExtendCfg);
+            itemExtendCfgString = "<?php\r\n" + itemExtendCfgString;
+            File fileOutput = new File(outputPath + "/items/collectActivityItemExtend.php");
+            writeToFile(itemExtendCfgString, fileOutput, "UTF-8");
+        } catch (IOException ex) {
+            Logger.getLogger(TotemConfigParseJFrame.class
+                    .getName()).log(Level.SEVERE, null, ex);
+            showMessageDialogMessage(ex);
+        } catch (BiffException ex) {
+            Logger.getLogger(TotemConfigParseJFrame.class
+                    .getName()).log(Level.SEVERE, null, ex);
+            showMessageDialogMessage(ex);
+        }
+    }
+
+    /**
+     * 物品扩展信息——收集活动相关
+     *
+     * @param configFilePath
+     * @param func
+     * @param outputPath
+     */
+    public void transformCollectActivityItemExtendConfig(String configFilePath, String func, String outputPath) {
+        try {
+            int sheetIndex = getSheetIndexBySheetName(configFilePath, "itemExtend");
+            String[][] itemExtendCfg = parseXls(configFilePath, sheetIndex, true);
+            String itemExtendCfgString = buildStringFromStringArray(func, sheetIndex, itemExtendCfg);
+            itemExtendCfgString = "<?php\r\n" + itemExtendCfgString;
+            File fileOutput = new File(outputPath + "/items/collectActivityItemExtend.php");
+            writeToFile(itemExtendCfgString, fileOutput, "UTF-8");
         } catch (IOException ex) {
             Logger.getLogger(TotemConfigParseJFrame.class
                     .getName()).log(Level.SEVERE, null, ex);
@@ -2323,6 +3137,22 @@ public class TotemConfigParseJFrame extends javax.swing.JFrame {
         ChangeConfigFilejTextField();
     }//GEN-LAST:event_floralSculptureCommonjRadioButton1MouseClicked
 
+    private void collectActivityjRadioButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_collectActivityjRadioButtonMouseClicked
+        ChangeConfigFilejTextField();
+    }//GEN-LAST:event_collectActivityjRadioButtonMouseClicked
+
+    private void flowerCraftUnlockActivityjRadioButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_flowerCraftUnlockActivityjRadioButtonMouseClicked
+        ChangeConfigFilejTextField();
+    }//GEN-LAST:event_flowerCraftUnlockActivityjRadioButtonMouseClicked
+
+    private void partyActivityjRadioButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_partyActivityjRadioButtonMouseClicked
+        ChangeConfigFilejTextField();
+    }//GEN-LAST:event_partyActivityjRadioButtonMouseClicked
+
+    private void floralSculptureConvertjRadioButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_floralSculptureConvertjRadioButtonMouseClicked
+        ChangeConfigFilejTextField();
+    }//GEN-LAST:event_floralSculptureConvertjRadioButtonMouseClicked
+
     private void ChangeConfigFilejTextField() {
         String key;
         if (funcbuttonGroup.getSelection() != null) {
@@ -2477,7 +3307,6 @@ public class TotemConfigParseJFrame extends javax.swing.JFrame {
         sb = new StringBuilder();
 
         if (withFirstLetter) {
-//            System.out.println("s.charAt(0):" + s.charAt(0));
             sb.append(s.charAt(0));
         }
 
@@ -2488,6 +3317,80 @@ public class TotemConfigParseJFrame extends javax.swing.JFrame {
             }
         }
         return sb.toString();
+    }
+
+    /**
+     * 收集活动
+     *
+     * @param func
+     * @param sheetNum
+     * @param festivalActivityCfg
+     * @return
+     */
+    public String buildFinalCollectActivityFromStringArray(String func, int sheetNum, String[][] festivalActivityCfg) {
+        String festivalActivityCfgStr;
+        int rowCount = festivalActivityCfg.length;
+        festivalActivityCfgStr = "//##################################################################################################################\r\n"
+                + "//收集活动\r\n"
+                + "define ('USER_CASH', 4001);\r\n"
+                + "define ('USER_GOLD', 4002);\r\n"
+                + "define ('USER_EXP', 4003);\r\n"
+                + "define ('MATERIAL_WITH_STORAGE', 4004);\r\n"
+                + "define ('MATERIAL_WITHOUT_STORAGE', 4005);\r\n"
+                + "$J7CONFIG['festivalActivity'] = array(\r\n";
+        String festivalActivityCfgStrFormat = "    //@todo 只是掉多期%s =>        array(\r\n"
+                + "                'condition'           => array(\r\n"
+                + "                        'userMinLevel' => %s, //玩家最小等级\r\n"
+                + "                        'startTime'    => strtotime('%s'), //活动开始时间\r\n"
+                + "                        'endTime'      => strtotime('%s'), //结束开始时间\r\n"
+                + "                ),\r\n"
+                + "                'playMethod'          => array(\r\n"
+                + "                        'scoreId' => %s, //积分id （隶属于某一个节日活动的物品id）\r\n"
+                + "                        'items'   => array(\r\n"
+                + "%s"
+                + "                        ),\r\n"
+                + "                        'output'  => '%s', //第一个为奖励ID，第二个为显示ID\r\n"
+                + "                ),\r\n"
+                + "            //兑换奖品掉落需要种植的花，这些花在收获的时候会掉落scoreId出配置的物品id，1的是低概率，2的是高概率\r\n"
+                + "                'exchangeCascadeItem' => '%s',\r\n"
+                + "        //@todo 只是掉多期),\r\n";
+        String itemsStrFormat = "                                %s => array(\r\n"
+                + "                                        'score'        => %s, //需要活动物品个数\r\n"
+                + "                                        'currencyNum'  => %s, //购买所属的货币 数量\r\n"
+                + "                                        'currencyType' => '%s', //购买货币类型\r\n"
+                + "                                ),\r\n";
+        collectActivityCommonConf = new HashMap();
+        for (int row = 1; row < rowCount; row++) {
+            String period = festivalActivityCfg[row][0];
+            if (!period.isEmpty()) {//不是空行
+                String userMinLevel = festivalActivityCfg[row][1];
+                String startTime = festivalActivityCfg[row][2];
+                String endTime = festivalActivityCfg[row][3];
+                String scoreId = festivalActivityCfg[row][4];
+                String output = festivalActivityCfg[row][6];
+                String exchangeCascadeItem = festivalActivityCfg[row][7];
+                String items = festivalActivityCfg[row][5];
+                String[] playMethodItemsArr = items.split(",");
+                String playMethodItems = "";
+                HashMap<String, String> commonConf = new HashMap<String, String>();
+                commonConf.put("startTime", startTime);
+                commonConf.put("endTime", endTime);
+                commonConf.put("scoreId", scoreId);
+                collectActivityCommonConf.put(period, commonConf);
+                for (String playMethodItemsInfoStr : playMethodItemsArr) {
+                    String[] playMethodSingleItemArr = playMethodItemsInfoStr.split("\\|");
+                    playMethodItems += String.format(itemsStrFormat, playMethodSingleItemArr[0], playMethodSingleItemArr[1], playMethodSingleItemArr[2], playMethodSingleItemArr[3]);
+                }
+
+                festivalActivityCfgStr += String.format(festivalActivityCfgStrFormat, period, userMinLevel,
+                        startTime, endTime, scoreId, playMethodItems, output, exchangeCascadeItem);
+            } else {//遇到一个空行直接返回了。。。
+                break;
+            }
+        }
+        festivalActivityCfgStr += ");\r\n"
+                + "//##################################################################################################################\r\n";
+        return festivalActivityCfgStr;
     }
 
     public String buildFinalFestivalActivityFromStringArray(String func, int sheetNum, String[][] festivalActivityCfg) {
@@ -2961,6 +3864,15 @@ public class TotemConfigParseJFrame extends javax.swing.JFrame {
         return commonContentStr;
     }
 
+    public String[] getStringArrayBySingleIndex(String[][] content, int arrayIndex) {
+        int rowCount = content.length;
+        String[] stringArray = new String[rowCount];
+        for (int rowNum = 0; rowNum < rowCount; rowNum++) {
+            stringArray[rowNum] = content[rowNum][arrayIndex];
+        }
+        return stringArray;
+    }
+
     public String[][] getStringArrayByIndex(String[][] content, int[] arrayIndex) {
         int rowCount = content.length;
         int colCount = content[0].length;
@@ -3173,6 +4085,64 @@ public class TotemConfigParseJFrame extends javax.swing.JFrame {
         return displayContentStr;
     }
 
+    /**
+     *
+     * @param festivalActivityLangCfg
+     * @return
+     */
+    public String buildFinalSingleFestivalDisplayInfoStringFromStringArray(String[] festivalActivityLangCfg) {
+        String displayContentStr = "";
+        String displayContentStrFormat = "//@todo 屏蔽多期    %s => array(\r\n"
+                + "        'activityTitle' => '%s',\r\n"
+                + "        'clickTips'     => '%s',\r\n"
+                + "        'materialTips'  => array(%s),\r\n"
+                + "        'guide'         => array("
+                + "\r\n%s"
+                + "        ),\r\n"
+                + "        'share'         => array(\r\n"
+                + "                'title'      => '%s',\r\n"
+                + "                'desc'       => '%s',\r\n"
+                + "                'actionName' => '%s',\r\n"
+                + "        ),\r\n"
+                + "        'exchange'      => array(\r\n"
+                + "                'title'                     => '%s',\r\n"
+                + "                'desc'                      => '%s',\r\n"
+                + "                'tips'                      => '%s',\r\n"
+                + "                'actionName'                => '%s',\r\n"
+                + "                'feedActionName'            => '%s',\r\n"
+                + "                'drawFinalRewardActionName' => '%s'\r\n"
+                + "        ),\r\n"
+                + "    //@todo暂时屏蔽多期),\r\n";
+        int colCount = festivalActivityLangCfg.length;
+
+        String guideStr = "";
+        int guideCount = 0;
+        String materialTipsStr = "";
+        String[] materialTipsArr = festivalActivityLangCfg[3].split("\\|");
+
+        for (String tmpMaterialTipsStr : materialTipsArr) {
+            String[] tmpSingleMaterialTipsArr = tmpMaterialTipsStr.split("\\:");
+            if (tmpSingleMaterialTipsArr.length == 2) {
+                materialTipsStr += " " + tmpSingleMaterialTipsArr[0] + " => '" + tmpSingleMaterialTipsArr[1] + "', ";
+            }
+        }
+
+        String guideStrFormat = "            %s => array( //第%d步\r\n"
+                + "                'guideTitle'      => '%s', //活动名称\r\n"
+                + "                'guideDesc'       => '%s', //活动描述\r\n"
+                + "                'guideActionName' => '%s', //活动按钮名称\r\n"
+                + "            ),\r\n";
+        for (int col = 13; col < colCount; col += 3) {
+            guideStr += String.format(guideStrFormat, guideCount++, guideCount, festivalActivityLangCfg[col], festivalActivityLangCfg[col + 1], festivalActivityLangCfg[col + 2]);
+        }
+
+        displayContentStr += String.format(displayContentStrFormat, festivalActivityLangCfg[0], festivalActivityLangCfg[1], festivalActivityLangCfg[2],
+                materialTipsStr, guideStr, festivalActivityLangCfg[4], festivalActivityLangCfg[5], festivalActivityLangCfg[6],
+                festivalActivityLangCfg[7], festivalActivityLangCfg[8], festivalActivityLangCfg[9], festivalActivityLangCfg[10],
+                festivalActivityLangCfg[11], festivalActivityLangCfg[12]);
+        return displayContentStr;
+    }
+
     public String buildFinalFestivalDisplayInfoStringFromStringArray(String[][] festivalActivityLangCfg) {
         String displayContentStr;
         String displayContentStrFormat = "//@todo 屏蔽多期    %s => array(\r\n"
@@ -3339,7 +4309,7 @@ public class TotemConfigParseJFrame extends javax.swing.JFrame {
 
     /**
      *
-     * @param divinationCommonCfg
+     * @param divinationCashCfg
      * @param divinationLotteryCfg
      * @param divinationInfoCfg
      * @return
@@ -3598,6 +4568,61 @@ public class TotemConfigParseJFrame extends javax.swing.JFrame {
                 }
             }
             buildedContent += "    ),\r\n";
+        }
+        buildedContent += ");";
+        return buildedContent;
+    }
+
+    /**
+     * 物品扩展信息——收集活动相关
+     *
+     * @param func
+     * @param sheetNum
+     * @param content
+     * @return
+     */
+    public String buildFinalCollectActivityItemExtendStringFromStringArray(String func, int sheetNum, String[][] content) {
+        int rows = content.length;
+        String buildedContent = "";
+        buildedContent += "//******************************************************************************************************************\r\n"
+                + "//收集活动 物品扩展信息相关配置\r\n";
+
+        ArrayList itemIdList = new ArrayList();
+        for (int rowNum = 1; rowNum < rows; rowNum++) {
+            String[] rowInfo = content[rowNum];
+            String itemId = rowInfo[0];
+            if (itemIdList.contains(itemId)) {
+                JOptionPane.showMessageDialog(null, " 第 " + (sheetNum + 1) + " 个sheet " + " 第 " + (rowNum + 1) + "行 物品ID " + itemId + "重复", "转换错误-物品ID重复", JOptionPane.ERROR_MESSAGE, null);
+                System.exit(0);
+            } else {
+                itemIdList.add(itemId);
+            }
+        }
+        buildedContent += "$J7CONFIG['collectActivityItemExtend'] = array(\r\n";
+        String collectActivityItemExtendFormat = "    '%s' => array(\r\n"
+                + "        'iExtraOutput' => array(\r\n"
+                + "            '%s' => array(\r\n"
+                + "                'iActiveStartTime' =>  strtotime('%s'),\r\n"
+                + "                'iActiveEndTime' =>  strtotime('%s'),\r\n"
+                + "                'iRate' =>  '%s',\r\n"
+                + "                'iOutputNum' =>  '%s',\r\n"
+                + "            ),\r\n"
+                + "        ),\r\n"
+                + "    ),\r\n";
+        for (int rowNum = 1; rowNum < rows; rowNum++) {
+            if (!content[rowNum][0].isEmpty()) {
+                String period = content[rowNum][1];
+                HashMap<String, String> singleCollectActivityCommonConf = collectActivityCommonConf.get(period);
+                String iActiveStartTime = singleCollectActivityCommonConf.get("startTime");
+                String iActiveEndTime = singleCollectActivityCommonConf.get("endTime");
+                String iOutputItemId = singleCollectActivityCommonConf.get("scoreId");
+                String iRate = content[rowNum][2];
+                String iOutputNum = content[rowNum][3];
+                String itemId = content[rowNum][0];
+                buildedContent += String.format(collectActivityItemExtendFormat, itemId, iOutputItemId, iActiveStartTime, iActiveEndTime, iRate, iOutputNum);
+            } else {
+                break;
+            }
         }
         buildedContent += ");";
         return buildedContent;
@@ -4302,6 +5327,7 @@ public class TotemConfigParseJFrame extends javax.swing.JFrame {
      * @param func
      * @param sheetNum
      * @param content
+     * @return
      */
     public String buildFinalFlowerCraftStringDisplayFromStringArray(String func, int sheetNum, String[][] content) {
         int rows = content.length;
@@ -4344,6 +5370,7 @@ public class TotemConfigParseJFrame extends javax.swing.JFrame {
      * @param func
      * @param sheetNum
      * @param content
+     * @return
      */
     public String buildFinalFlowerCraftStringFromStringArray(String func, int sheetNum, String[][] content) {
         int rows = content.length;
@@ -4367,7 +5394,12 @@ public class TotemConfigParseJFrame extends javax.swing.JFrame {
 
         }
 
-        buildedContent += ");";
+        buildedContent += ");\r\n";
+        buildedContent += "//花艺品,花雕物品iType列表，只有再这个列表中的物品 才会添加到花艺品仓库 否则添加到鲜花保鲜仓库\r\n"
+                + "        $J7CONFIG['flowerCraftTypeList'] = array(\r\n"
+                + "    '43', '67',\r\n"
+                + ");";
+
         return buildedContent;
     }
 
@@ -5107,6 +6139,10 @@ public class TotemConfigParseJFrame extends javax.swing.JFrame {
             buildedContent += buildFinalRewardMachineStringFromStringArray(func, sheetNum, content);
         } else if ("FLORALSCULPTURECOMMON".equals(func)) {//花雕产品
             buildedContent += buildFinalFloralSculptureCommonStringFromStringArray(func, sheetNum, content);
+        } else if ("COLLECT_ACTIVITY".equals(func)) {//收集活动
+            buildedContent += buildFinalCollectActivityFromStringArray(func, sheetNum, content);
+        } else if ("COLLECT_ACTIVITY_ITEM_EXTEND".equals(func)) {//收集活动物品扩展相关
+            buildedContent += buildFinalCollectActivityItemExtendStringFromStringArray(func, sheetNum, content);
         }
         return buildedContent;
     }
@@ -5115,7 +6151,7 @@ public class TotemConfigParseJFrame extends javax.swing.JFrame {
         writeToFile(contents, descFile, "UTF-8");
     }
 
-    public void writeToFile(String contents, File descFile, String encoding) throws UnsupportedEncodingException, FileNotFoundException, IOException {
+    public static void writeToFile(String contents, File descFile, String encoding) throws UnsupportedEncodingException, FileNotFoundException, IOException {
         if (!descFile.getParentFile().exists()) {
             if (!descFile.getParentFile().mkdirs()) {
                 JOptionPane.showMessageDialog(null, "创建目录文件所在的目录失败", "信息提示", JOptionPane.ERROR_MESSAGE);
@@ -5174,6 +6210,10 @@ public class TotemConfigParseJFrame extends javax.swing.JFrame {
         fileMapping.put("FLORALSCULPTURE", "h花雕底座配置&花雕解锁.xls");
         fileMapping.put("REWARD_MACHINE", "m免费送机器.xls");
         fileMapping.put("FLORALSCULPTURECOMMON", "h花雕产品.xls");
+        fileMapping.put("COLLECT_ACTIVITY", "s收集活动.xls");
+        fileMapping.put("FLOWER_CRAFT_UNLOCK_ACTIVITY", "h花艺解锁活动.xls");
+        fileMapping.put("PARTY_ACTIVITY", "party活动.xls");
+        fileMapping.put("FLORAL_SCULPTURE_CONVERT", "h花雕兑换活动.xls");
 
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -5473,6 +6513,7 @@ public class TotemConfigParseJFrame extends javax.swing.JFrame {
     private javax.swing.JRadioButton adsGeneralizejRadioButton;
     private javax.swing.JRadioButton bigPackjRadioButton;
     private javax.swing.JButton closejButton;
+    private javax.swing.JRadioButton collectActivityjRadioButton;
     private javax.swing.JButton configFilejButton;
     private javax.swing.JLabel configFilejLabel;
     private javax.swing.JTextField configFilejTextField;
@@ -5487,8 +6528,10 @@ public class TotemConfigParseJFrame extends javax.swing.JFrame {
     private javax.swing.JRadioButton floralBenchGroupjRadioButton;
     private javax.swing.JRadioButton floralBenchUpgradejRadioButton;
     private javax.swing.JRadioButton floralSculptureCommonjRadioButton1;
+    private javax.swing.JRadioButton floralSculptureConvertjRadioButton;
     private javax.swing.JRadioButton floralSculptureMakeListjRadioButton;
     private javax.swing.JRadioButton floralSculpturejRadioButton;
+    private javax.swing.JRadioButton flowerCraftUnlockActivityjRadioButton;
     private javax.swing.JRadioButton flowerCraftjRadioButton;
     private javax.swing.JRadioButton flowerlandSpinjRadioButton;
     private javax.swing.JRadioButton fsGeneralizejRadioButton;
@@ -5507,6 +6550,7 @@ public class TotemConfigParseJFrame extends javax.swing.JFrame {
     private javax.swing.JLabel outputjLabel;
     private javax.swing.JTextField outputjTextField;
     private javax.swing.JButton parsejButton;
+    private javax.swing.JRadioButton partyActivityjRadioButton;
     private javax.swing.JRadioButton popWindowOptjRadioButton;
     private javax.swing.JRadioButton rewardMachinejRadioButton;
     private javax.swing.JRadioButton sapphireExchangejRadioButton;
