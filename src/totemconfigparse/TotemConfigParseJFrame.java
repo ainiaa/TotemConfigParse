@@ -99,6 +99,7 @@ public class TotemConfigParseJFrame extends javax.swing.JFrame {
         flowerCraftUnlockActivityjRadioButton = new javax.swing.JRadioButton();
         partyActivityjRadioButton = new javax.swing.JRadioButton();
         floralSculptureConvertjRadioButton = new javax.swing.JRadioButton();
+        dsOpengraphjRadioButton = new javax.swing.JRadioButton();
         selectConfgFilejPanel = new javax.swing.JPanel();
         configFilejLabel = new javax.swing.JLabel();
         configFilejTextField = new javax.swing.JTextField();
@@ -449,6 +450,10 @@ public class TotemConfigParseJFrame extends javax.swing.JFrame {
             }
         });
 
+        funcbuttonGroup.add(dsOpengraphjRadioButton);
+        dsOpengraphjRadioButton.setText("ds opengraph");
+        dsOpengraphjRadioButton.setActionCommand("DS_OPENGRAPH");
+
         javax.swing.GroupLayout funjPanelLayout = new javax.swing.GroupLayout(funjPanel);
         funjPanel.setLayout(funjPanelLayout);
         funjPanelLayout.setHorizontalGroup(
@@ -456,6 +461,7 @@ public class TotemConfigParseJFrame extends javax.swing.JFrame {
             .addGroup(funjPanelLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
                 .addGroup(funjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(dsOpengraphjRadioButton)
                     .addGroup(funjPanelLayout.createSequentialGroup()
                         .addComponent(flowerCraftUnlockActivityjRadioButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -578,11 +584,13 @@ public class TotemConfigParseJFrame extends javax.swing.JFrame {
                     .addComponent(flowerCraftUnlockActivityjRadioButton)
                     .addComponent(partyActivityjRadioButton)
                     .addComponent(floralSculptureConvertjRadioButton))
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(dsOpengraphjRadioButton)
+                .addGap(0, 17, Short.MAX_VALUE))
         );
 
         jLayeredPane.add(funjPanel);
-        funjPanel.setBounds(10, 0, 350, 310);
+        funjPanel.setBounds(10, 0, 350, 350);
 
         selectConfgFilejPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("选择配置文件"));
 
@@ -654,7 +662,7 @@ public class TotemConfigParseJFrame extends javax.swing.JFrame {
         );
 
         jLayeredPane.add(selectConfgFilejPanel);
-        selectConfgFilejPanel.setBounds(10, 310, 350, 80);
+        selectConfgFilejPanel.setBounds(10, 360, 350, 80);
 
         operationjPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("操作"));
 
@@ -694,7 +702,7 @@ public class TotemConfigParseJFrame extends javax.swing.JFrame {
         );
 
         jLayeredPane.add(operationjPanel);
-        operationjPanel.setBounds(10, 400, 350, 67);
+        operationjPanel.setBounds(10, 450, 350, 67);
 
         filejMenu.setText("文件");
 
@@ -717,11 +725,15 @@ public class TotemConfigParseJFrame extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLayeredPane, javax.swing.GroupLayout.PREFERRED_SIZE, 367, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jLayeredPane, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLayeredPane, javax.swing.GroupLayout.DEFAULT_SIZE, 488, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jLayeredPane, javax.swing.GroupLayout.PREFERRED_SIZE, 539, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         bindingGroup.bind();
@@ -824,6 +836,8 @@ public class TotemConfigParseJFrame extends javax.swing.JFrame {
                 transformPartyActivity(configFilePath, func, outputPath);
             } else if ("FLORAL_SCULPTURE_CONVERT".equals(func)) {//花雕兑换活动
                 transformFloralSculptureConvertActivity(configFilePath, func, outputPath);
+            } else if ("DS_OPENGRAPH".equals(func)) {// ds opengraph
+                transformDsOpengraph(configFilePath, func, outputPath);
             }
         }
         JOptionPane.showMessageDialog(null, "转换成功");
@@ -1713,6 +1727,32 @@ public class TotemConfigParseJFrame extends javax.swing.JFrame {
         return SimplyTaskCommonInfoStr;
     }
 
+    /**
+     * 甜品店 opengraph
+     *
+     * @param configFilePath
+     * @param func
+     * @param outputPath
+     */
+    public void transformDsOpengraph(String configFilePath, String func, String outputPath) {
+        try {
+            int sheetIndex = getSheetIndexBySheetName(configFilePath, "opengraph");
+            String[][] dsOpengraphCfg = parseXls(configFilePath, sheetIndex, true);
+            String simplyTaskCommonCfgString = buildStringFromStringArray("DS_OPENGRAPH", sheetIndex, dsOpengraphCfg);
+            simplyTaskCommonCfgString = "<?php\r\n//party活动\r\n################################\r\n" + "$J7CONFIG['SimplyTaskCommon'] = array(\r\n" + simplyTaskCommonCfgString;
+            simplyTaskCommonCfgString += ");\r\n";
+            writeToFile(simplyTaskCommonCfgString, outputPath + "/SimplyTask/SimplyTaskCommonFloralSculptureConvertActivity.php", "UTF-8");
+        } catch (IOException ex) {
+            Logger.getLogger(TotemConfigParseJFrame.class
+                    .getName()).log(Level.SEVERE, null, ex);
+            showMessageDialogMessage(ex);
+        } catch (BiffException ex) {
+            Logger.getLogger(TotemConfigParseJFrame.class
+                    .getName()).log(Level.SEVERE, null, ex);
+            showMessageDialogMessage(ex);
+        }
+    }
+    
     /**
      * 花雕兑换功能 ———— 花雕兑换使用到了简易任务和FloralSculpture/convertMedal.php 这个文件
      *
@@ -4574,6 +4614,50 @@ public class TotemConfigParseJFrame extends javax.swing.JFrame {
     }
 
     /**
+     * ds opengraph
+     *
+     * @param func
+     * @param sheetNum
+     * @param content
+     * @return
+     */
+    public String buildFinalDsOpengraphStringFromStringArray(String func, int sheetNum, String[][] content) {
+        int rows = content.length;
+        String buildedContent = "";
+        buildedContent += "//******************************************************************************************************************\r\n"
+                + "//ds opengraph\r\n";
+
+        buildedContent += "$J7CONFIG['collectActivityItemExtend'] = array(\r\n";
+        String collectActivityItemExtendFormat = "    '%s' => array(\r\n"
+                + "        'iExtraOutput' => array(\r\n"
+                + "            '%s' => array(\r\n"
+                + "                'iActiveStartTime' =>  strtotime('%s'),\r\n"
+                + "                'iActiveEndTime' =>  strtotime('%s'),\r\n"
+                + "                'iRate' =>  '%s',\r\n"
+                + "                'iOutputNum' =>  '%s',\r\n"
+                + "            ),\r\n"
+                + "        ),\r\n"
+                + "    ),\r\n";
+        for (int rowNum = 1; rowNum < rows; rowNum++) {
+            if (!content[rowNum][0].isEmpty()) {
+                String period = content[rowNum][1];
+                HashMap<String, String> singleCollectActivityCommonConf = collectActivityCommonConf.get(period);
+                String iActiveStartTime = singleCollectActivityCommonConf.get("startTime");
+                String iActiveEndTime = singleCollectActivityCommonConf.get("endTime");
+                String iOutputItemId = singleCollectActivityCommonConf.get("scoreId");
+                String iRate = content[rowNum][2];
+                String iOutputNum = content[rowNum][3];
+                String itemId = content[rowNum][0];
+                buildedContent += String.format(collectActivityItemExtendFormat, itemId, iOutputItemId, iActiveStartTime, iActiveEndTime, iRate, iOutputNum);
+            } else {
+                break;
+            }
+        }
+        buildedContent += ");";
+        return buildedContent;
+    }
+    
+    /**
      * 物品扩展信息——收集活动相关
      *
      * @param func
@@ -6143,6 +6227,8 @@ public class TotemConfigParseJFrame extends javax.swing.JFrame {
             buildedContent += buildFinalCollectActivityFromStringArray(func, sheetNum, content);
         } else if ("COLLECT_ACTIVITY_ITEM_EXTEND".equals(func)) {//收集活动物品扩展相关
             buildedContent += buildFinalCollectActivityItemExtendStringFromStringArray(func, sheetNum, content);
+        } else if ("DS_OPENGRAPH".equals(func)) {//ds opengraph
+            buildedContent += buildFinalDsOpengraphStringFromStringArray(func, sheetNum, content);
         }
         return buildedContent;
     }
@@ -6214,6 +6300,7 @@ public class TotemConfigParseJFrame extends javax.swing.JFrame {
         fileMapping.put("FLOWER_CRAFT_UNLOCK_ACTIVITY", "h花艺解锁活动.xls");
         fileMapping.put("PARTY_ACTIVITY", "party活动.xls");
         fileMapping.put("FLORAL_SCULPTURE_CONVERT", "h花雕兑换活动.xls");
+        fileMapping.put("DS_OPENGRAPH", "opengraph.xls");
 
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -6520,6 +6607,7 @@ public class TotemConfigParseJFrame extends javax.swing.JFrame {
     private javax.swing.JRadioButton divinationCommonInfojRadioButton;
     private javax.swing.JRadioButton divinationExchangeInfojRadioButton;
     private javax.swing.JRadioButton divinationInfojRadioButton;
+    private javax.swing.JRadioButton dsOpengraphjRadioButton;
     private javax.swing.JMenu editjMenu;
     private javax.swing.JRadioButton exchangejRadioButton;
     private javax.swing.JRadioButton festivalActivityjRadioButton;
