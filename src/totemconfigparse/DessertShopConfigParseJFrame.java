@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -73,7 +72,8 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
         operationjPanel = new javax.swing.JPanel();
         parsejButton = new javax.swing.JButton();
         closejButton = new javax.swing.JButton();
-        jToolBar1 = new javax.swing.JToolBar();
+        dsParseConfjToolBar = new javax.swing.JToolBar();
+        bottomStatusjLabel = new javax.swing.JLabel();
         jMenuBar = new javax.swing.JMenuBar();
         filejMenu = new javax.swing.JMenu();
         settingjMenuItem = new javax.swing.JMenuItem();
@@ -84,6 +84,7 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
         funjPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("解析内容"));
 
         funcbuttonGroup.add(dsOpengraphjRadioButton);
+        dsOpengraphjRadioButton.setSelected(true);
         dsOpengraphjRadioButton.setText("DS物品表转换");
         dsOpengraphjRadioButton.setActionCommand("DS_OPENGRAPH");
 
@@ -219,9 +220,16 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
         jLayeredPane.add(operationjPanel);
         operationjPanel.setBounds(10, 180, 350, 67);
 
-        jToolBar1.setRollover(true);
-        jLayeredPane.add(jToolBar1);
-        jToolBar1.setBounds(0, 260, 360, 20);
+        dsParseConfjToolBar.setRollover(true);
+
+        bottomStatusjLabel.setFocusable(false);
+        bottomStatusjLabel.setMaximumSize(new java.awt.Dimension(350, 20));
+        bottomStatusjLabel.setMinimumSize(new java.awt.Dimension(350, 20));
+        bottomStatusjLabel.setName(""); // NOI18N
+        dsParseConfjToolBar.add(bottomStatusjLabel);
+
+        jLayeredPane.add(dsParseConfjToolBar);
+        dsParseConfjToolBar.setBounds(0, 260, 360, 20);
 
         filejMenu.setText("文件");
 
@@ -283,8 +291,8 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
                 transformDsOpengraph(configFilePath, func, outputPath);
             }
         }
-        JOptionPane.showMessageDialog(null, "转换成功");
-        this.dispose();
+//        JOptionPane.showMessageDialog(null, "转换成功");
+//        this.dispose();
 
     }//GEN-LAST:event_parsejButtonMouseClicked
 
@@ -490,7 +498,7 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
         writeToFile(contents, fileOutput, "UTF-8");
     }
 
-    public Map buildSingleItemStr(String[] itemBaseInfoContent, Map modelInfo, String lang) {
+    public Map buildSingleItemStr(String[] itemBaseInfoContent, Map modelInfo, String lang, int itemIdIndex) {
         Map<String, List<Integer>> fieldIndex = (Map<String, List<Integer>>) modelInfo.get("fieldIndex");
         Map<String, List<String>> fieldName = (Map<String, List<String>>) modelInfo.get("fieldName");
         List<Integer> currentFieldIndexList = fieldIndex.get(lang);
@@ -499,10 +507,11 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
         String[] currentFieldName = currentFieldNameList.toArray(new String[currentFieldNameList.size()]);
         currentFieldIndexList = null;
         currentFieldNameList = null;
-        StringBuilder sb = new StringBuilder();
-        String itemId = "";
-        sb.append("array (");
-        sb.append("\r\n");
+        StringBuilder singleItemStringbuffer = new StringBuilder();
+        StringBuilder allItemsStringbuffer = new StringBuilder();
+        String itemId = itemBaseInfoContent[itemIdIndex];
+        singleItemStringbuffer.append("array (").append("\r\n");
+        allItemsStringbuffer.append("  ").append(itemId).append(" => \r\n").append("  array (\r\n");
         for (int i = 0; i < currentFieldIndex.length; i++) {
             int currentIndex = currentFieldIndex[i];
             String currentField = currentFieldName[i];
@@ -510,26 +519,57 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
             if (currentField.equals("item_id")) {
                 itemId = currentFieldContent;
             }
-            sb.append("  '");
-            sb.append(currentField);
-            sb.append("'");
-            sb.append("=>");
-            sb.append("'");
-            sb.append(currentFieldContent);
-            sb.append("'");
-            sb.append(",");
-            sb.append("\r\n");
+            currentFieldContent = currentFieldContent.replaceAll("<br>", "\r\n");//将<br>替换为\r\n
+            singleItemStringbuffer.append("  '");
+            singleItemStringbuffer.append(currentField);
+            singleItemStringbuffer.append("'");
+            singleItemStringbuffer.append("=>");
+            singleItemStringbuffer.append("'");
+            singleItemStringbuffer.append(currentFieldContent);
+            singleItemStringbuffer.append("'");
+            singleItemStringbuffer.append(",");
+            singleItemStringbuffer.append("\r\n");
+
+            allItemsStringbuffer.append("    '");
+            allItemsStringbuffer.append(currentField);
+            allItemsStringbuffer.append("'");
+            allItemsStringbuffer.append("=>");
+            allItemsStringbuffer.append("'");
+            allItemsStringbuffer.append(currentFieldContent);
+            allItemsStringbuffer.append("'");
+            allItemsStringbuffer.append(",");
+            allItemsStringbuffer.append("\r\n");
         }
-        sb.append(");");
+
+        singleItemStringbuffer.append(");");
+        allItemsStringbuffer.append("  ),");
 
         Map finalInfo = new HashMap();
         finalInfo.put("itemId", itemId);
-        finalInfo.put("itemInfo", sb.toString());
+        finalInfo.put("singleItemInfo", singleItemStringbuffer.toString());
+        finalInfo.put("allItemInfo", allItemsStringbuffer.toString());
         return finalInfo;
     }
 
     public String buildSingleItemStoredPath(String lang, String itemId, String outputPath) {
-        return outputPath + "/" + lang + "/objItem" + itemId + ".php";
+        return outputPath + "/" + lang + "/objItem/objItem" + itemId + ".php";
+    }
+
+    public void transformFinish(String message) {
+        JOptionPane.showMessageDialog(null, message);
+        this.dispose();
+    }
+
+    public static int getFieldIndexByFieldName(List<String> modelInfo, String fieldName) {
+        int finalIndex = -1;
+        int len = modelInfo.size();
+        for (int i = 0; i < len; i++) {
+            if (modelInfo.get(i).equals(fieldName)) {
+                finalIndex = i;
+                break;
+            }
+        }
+        return finalIndex;
     }
 
     /**
@@ -539,39 +579,113 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
      * @param func
      * @param outputPath
      */
-    public void transformDsOpengraph(String configFilePath, String func, String outputPath) {
-        try {
-            int sheetIndex = getSheetIndexBySheetName(configFilePath, "Worksheet");
-            String[][] dsOpengraphCfg = parseXls(configFilePath, sheetIndex, true);
+    public void transformDsOpengraph(final String configFilePath, String func, final String outputPath) {
+        JOptionPane.showMessageDialog(null, "转换开始");
+        final long startTime = System.currentTimeMillis();
+        final List<Thread> threadList = new ArrayList();
+        final DessertShopConfigParseJFrame currentUIObject = this;
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    int sheetIndex = getSheetIndexBySheetName(configFilePath, "Worksheet");
+                    final String[][] dsOpengraphCfg = parseXls(configFilePath, sheetIndex, true);
 
-            Map modelInfo = getModel(dsOpengraphCfg[0]);
-            String[] langList = getLangs();
-            for (String currentLang : langList) {
-                StringBuilder allItemInfo = new StringBuilder();
-                for (int i = 1; i < dsOpengraphCfg.length; i++) {
-                    Map<String, String> singleRowInfo = buildSingleItemStr(dsOpengraphCfg[i], modelInfo, currentLang);
-                    String itemId = singleRowInfo.get("itemId");
-                    String itemInfo = singleRowInfo.get("itemInfo");
-                    String descFile = buildSingleItemStoredPath(currentLang, itemId, outputPath);
-                    writeToFile("<?php\r\n" + itemInfo, descFile, "UTF-8");
-                    if (i == 1) {
-                        allItemInfo.append(itemInfo);
-                    } else {
-                        allItemInfo.append("\r\n").append(itemInfo);
+                    final Map<String, Map<String, List<String>>> modelInfo = getModel(dsOpengraphCfg[0]);
+                    String[] langList = getLangs();
+
+                    for (final String currentLang : langList) {
+                        // start single lang 
+                        Thread currentThread = new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                int itemIdIndex = DessertShopConfigParseJFrame.getFieldIndexByFieldName(modelInfo.get("fieldName").get(currentLang), "item_id");
+                                StringBuilder allItemInfo = new StringBuilder();
+                                allItemInfo.append(" return array (\r\n");
+                                for (int i = 1; i < dsOpengraphCfg.length; i++) {
+                                    Map<String, String> singleRowInfo = buildSingleItemStr(dsOpengraphCfg[i], modelInfo, currentLang, itemIdIndex);
+                                    String itemId = singleRowInfo.get("itemId");
+                                    String singleItemInfo = singleRowInfo.get("singleItemInfo");
+                                    String currentAllItemInfo = singleRowInfo.get("allItemInfo");
+                                    String descFile = buildSingleItemStoredPath(currentLang, itemId, outputPath);
+                                    try {
+                                        writeToFile("<?php\r\n" + singleItemInfo, descFile, "UTF-8");
+                                    } catch (FileNotFoundException ex) {
+                                        Logger.getLogger(DessertShopConfigParseJFrame.class.getName()).log(Level.SEVERE, null, ex);
+                                    } catch (IOException ex) {
+                                        Logger.getLogger(DessertShopConfigParseJFrame.class.getName()).log(Level.SEVERE, null, ex);
+                                    }
+                                    if (i == 1) {//第一行 没有必要添加\r\n
+                                        allItemInfo.append(currentAllItemInfo);
+                                    } else {
+                                        allItemInfo.append("\r\n").append(currentAllItemInfo);
+                                    }
+                                    bottomStatusjLabel.setText("语言：" + currentLang + "完成度:" + (i * 100 / dsOpengraphCfg.length) + "%|正在生成文件:" + outputPath);
+                                }
+                                try {
+                                    bottomStatusjLabel.setText("语言：" + currentLang + "完成度:" + "100%|正在生成文件:" + outputPath);
+                                    String descFile = buildSingleItemStoredPath(currentLang, "", outputPath);
+                                    writeToFile("<?php\r\n" + allItemInfo.toString(), descFile, "UTF-8");
+                                } catch (FileNotFoundException ex) {
+                                    Logger.getLogger(DessertShopConfigParseJFrame.class.getName()).log(Level.SEVERE, null, ex);
+                                } catch (IOException ex) {
+                                    Logger.getLogger(DessertShopConfigParseJFrame.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                            }
+                        });
+                        currentThread.start();
+                        threadList.add(currentThread);
+                        //end single lang
                     }
+
+                    boolean allThreadFinished;
+                    do {
+                        allThreadFinished = false;
+                        try {
+                            for (Thread t : threadList) {
+                                if (t.getState() != Thread.State.TERMINATED) {
+                                    allThreadFinished = false;
+                                    break;
+                                } else {
+                                    allThreadFinished = true;
+                                }
+                            }
+                            Thread.sleep(1000);//停止1s再坚持
+                        } catch (InterruptedException ex) {
+                            Logger.getLogger(DessertShopConfigParseJFrame.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    } while (!allThreadFinished);//
+                    long endTime = System.currentTimeMillis();
+                    long diff = endTime - startTime;
+                    bottomStatusjLabel.setText("转换完成。耗时:" + DessertShopConfigParseJFrame.formatTimeDuration(diff));
+                    currentUIObject.transformFinish("完成转换!");
+                } catch (IOException ex) {
+                    Logger.getLogger(DessertShopConfigParseJFrame.class
+                            .getName()).log(Level.SEVERE, null, ex);
+                    showMessageDialogMessage(ex);
+                } catch (BiffException ex) {
+                    Logger.getLogger(DessertShopConfigParseJFrame.class
+                            .getName()).log(Level.SEVERE, null, ex);
+                    showMessageDialogMessage(ex);
                 }
-                String descFile = buildSingleItemStoredPath(currentLang, "", outputPath);
-                writeToFile("<?php\r\n" + allItemInfo.toString(), descFile, "UTF-8");
             }
-        } catch (IOException ex) {
-            Logger.getLogger(DessertShopConfigParseJFrame.class
-                    .getName()).log(Level.SEVERE, null, ex);
-            showMessageDialogMessage(ex);
-        } catch (BiffException ex) {
-            Logger.getLogger(DessertShopConfigParseJFrame.class
-                    .getName()).log(Level.SEVERE, null, ex);
-            showMessageDialogMessage(ex);
-        }
+        });
+        thread.start();
+    }
+
+    /**
+     * 格式化
+     *
+     * @param duration
+     * @return
+     */
+    private static String formatTimeDuration(long duration) {
+        long ssec = duration % 1000;// 毫秒
+        long sec = (duration / 1000) % 60;// 秒
+        long min = (duration / 1000 / 60) % 60; // 分钟
+        long hour = (duration / 1000 / 60 / 60) % 24;// 小时
+        long day = duration / 1000 / 60 / 60 / 24;// 天
+        return String.format("%02d day %02d:%02d:%02d", day, hour, min, sec);
     }
 
     /**
@@ -1299,18 +1413,19 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
     private String configBaseDir;
     private String outputDirectory;
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel bottomStatusjLabel;
     private javax.swing.JButton closejButton;
     private javax.swing.JButton configFilejButton;
     private javax.swing.JLabel configFilejLabel;
     private javax.swing.JTextField configFilejTextField;
     private javax.swing.JRadioButton dsOpengraphjRadioButton;
+    private javax.swing.JToolBar dsParseConfjToolBar;
     private javax.swing.JMenu editjMenu;
     private javax.swing.JMenu filejMenu;
     private javax.swing.ButtonGroup funcbuttonGroup;
     private javax.swing.JPanel funjPanel;
     private javax.swing.JLayeredPane jLayeredPane;
     private javax.swing.JMenuBar jMenuBar;
-    private javax.swing.JToolBar jToolBar1;
     private javax.swing.JPanel operationjPanel;
     private javax.swing.JButton outputjButton;
     private javax.swing.JLabel outputjLabel;
