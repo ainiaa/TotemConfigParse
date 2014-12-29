@@ -366,11 +366,12 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
             } else if ("ACTIVITY_LIB".equals(func)) {//activityLibraryInfo
                 //transformActivityLib(configFilePath, func, outputPath);
                 specialField.put("activity_info", "parseCommonMultipleWithKeyValue@4");
-                specialField.put("unlockRecipe", "parseCommonMultiple@3");
+                specialField.put("unlockRecipe", "parseCommonMultiple@4");
                 fileName = "activityLibraryInfo";
                 idField = "id";
                 String keys = "activity_type,activity_id";
-                transformCommonContent(configFilePath, outputPath, fileName, sheetName, idField, specialField, keys);
+                String contentSplitFragment = ",!:";
+                transformCommonContent(configFilePath, outputPath, fileName, sheetName, idField, specialField, keys, contentSplitFragment);
             } else if ("AVATAR_ITEMS".equals(func)) {//avatarItems
                 specialField.put("suite_array", "parseCommonMultiple@3");
                 fileName = "avatarItems";
@@ -393,6 +394,14 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
                 specialField.put("randomShelfProductList", "parseCommonMultiple@3");
                 specialField.put("rankScoreRewards", "parseGameRankScoreRewards@3");
                 transformCommonSingleFileContent(configFilePath, outputPath, fileName, sheetName, specialField);
+            } else if ("BINDING_RECIPE".equals(func)) {//BINDING_RECIPE  这个需要重新实现 太复杂了。。
+                specialField.put("recipes", "parseCommonMultiple@4");
+                specialField.put("activate_data", "parseBindingRecipeActivateData@3");
+                fileName = "bindingRecipe";
+                idField = "item_id";
+                String keys = "activity_type,activity_id";
+                String contentSplitFragment = "|!,";
+                transformCommonContent(configFilePath, outputPath, fileName, sheetName, idField, specialField, keys, contentSplitFragment);
             }
         }
 //        JOptionPane.showMessageDialog(null, "转换成功");
@@ -752,7 +761,7 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
         return finalInfo;
     }
 
-    public Map buildSingleRowStr(String[] singleRowInfoContent, Map modelInfo, String lang, int idIndex, String idField, Map<String, String> specialField, String keys) {
+    public Map buildSingleRowStr(String[] singleRowInfoContent, Map modelInfo, String lang, int idIndex, String idField, Map<String, String> specialField, String keys, String contentSplitFragment) {
         Map<String, List<Integer>> fieldIndex = (Map<String, List<Integer>>) modelInfo.get("fieldIndex");
         Map<String, List<String>> fieldName = (Map<String, List<String>>) modelInfo.get("fieldName");
         List<Integer> currentFieldIndexList = fieldIndex.get(lang);
@@ -779,7 +788,7 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
                     String parseFieldFunctionName = parseFieldFunctionInfo[0];
                     int paramCount;
                     if (parseFieldFunctionInfo.length == 1) {
-                        paramCount = 3;
+                        paramCount = 4;
                     } else {
                         paramCount = Integer.valueOf(parseFieldFunctionInfo[1]);
                     }
@@ -796,8 +805,11 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
                         singleRowStringbuffer.append(parseField.invoke(this, new Object[]{currentField, currentFieldContent, "    "}));//@todo 精彩的写法
                         allRowsStringbuffer.append(parseField.invoke(this, new Object[]{currentField, currentFieldContent, "  "}));//@todo 精彩的写法
                     } else if (paramType.size() == 4) {
-                        singleRowStringbuffer.append(parseField.invoke(this, new Object[]{currentField, keys, currentFieldContent, "    "}));//@todo 精彩的写法
-                        allRowsStringbuffer.append(parseField.invoke(this, new Object[]{currentField, keys, currentFieldContent, "  "}));//@todo 精彩的写法
+                        singleRowStringbuffer.append(parseField.invoke(this, new Object[]{currentField, currentFieldContent, "    ", contentSplitFragment}));//@todo 精彩的写法
+                        allRowsStringbuffer.append(parseField.invoke(this, new Object[]{currentField, currentFieldContent, "  ", contentSplitFragment}));//@todo 精彩的写法
+                    } else if (paramType.size() == 5) {
+                        singleRowStringbuffer.append(parseField.invoke(this, new Object[]{currentField, keys, currentFieldContent, "    ", contentSplitFragment}));//@todo 精彩的写法
+                        allRowsStringbuffer.append(parseField.invoke(this, new Object[]{currentField, keys, currentFieldContent, "  ", contentSplitFragment}));//@todo 精彩的写法
                     }
 
                 } catch (IllegalAccessException ex) {
@@ -856,8 +868,9 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
         tmpContent.append(leadingString).append("'").append(field).append("' => ");
         if (!content.isEmpty()) {
             tmpContent.append("array(");
+            int index = 0;
             for (String currentContent : contentArray) {
-                tmpContent.append("'").append(currentContent).append("',");
+                tmpContent.append(index++).append(" => '").append(currentContent).append("',");
             }
             tmpContent.append(")");
         } else {
@@ -865,6 +878,142 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
         }
         tmpContent.append(",\r\n");
 
+        return tmpContent.toString();
+    }
+
+    /**
+     * 将 "a","b","c" 转换为 array( "a","b","c")
+     *
+     * @param field
+     * @param content
+     * 161:49501:4:0,162:49502:4:0,215:50501:5:1,218:50502:5:1|163:49503:4:0,164:49504:4:0,221:50503:5:1,224:50504:5:1|165:49505:4:0,166:49506:4:0,227:50505:5:1,230:50506:5:1
+     * @param leadingString
+     * @return
+     */
+    private String parseBindingRecipeActivateData(String field, String content, String leadingString) {
+        content = content.replaceAll("<br>", "\r\n");//将<br>替换为\r\n '11:6,2:31
+        String[] contentArray = content.split("\\|");//第一层
+        StringBuilder tmpContent = new StringBuilder();
+        tmpContent.append(leadingString).append("'").append(field).append("' => ");
+        if (!content.isEmpty()) {
+            tmpContent.append("array(\r\n");
+            int firstFoolrIndex = 0;
+            for (String currentContent : contentArray) {
+                int secondFoolrIndex = 0;
+                if (!currentContent.isEmpty()) {
+                    String[] currentContentArray = currentContent.split(",");//第二层
+                    tmpContent.append(leadingString).append(leadingString).append(firstFoolrIndex).append(" => array(\r\n");
+                    for (String currentItem : currentContentArray) {
+                        if (!currentItem.isEmpty()) {
+                            String[] singleFactors = currentItem.split(":");//第三层
+                            tmpContent.append(leadingString).append(leadingString).append(leadingString).append(secondFoolrIndex).append(" => array(\r\n");//),\r\n
+                            tmpContent.append(leadingString).append(leadingString).append(leadingString).append(leadingString).append(leadingString).append("'activate_id' => '").append(singleFactors[0]).append("',\r\n");
+                            tmpContent.append(leadingString).append(leadingString).append(leadingString).append(leadingString).append(leadingString).append("'activate_item_id' => '").append(singleFactors[1]).append("',\r\n");
+                            tmpContent.append(leadingString).append(leadingString).append(leadingString).append(leadingString).append(leadingString).append("'activate_num' => '").append(singleFactors[2]).append("',\r\n");
+                            tmpContent.append(leadingString).append(leadingString).append(leadingString).append(leadingString).append(leadingString).append("'activate_type' => '").append(singleFactors[3]).append("',\r\n");
+                            tmpContent.append(leadingString).append(leadingString).append(leadingString).append("),\r\n");//
+                        } else {//第二层
+                            tmpContent.append(leadingString).append(leadingString).append(leadingString).append(secondFoolrIndex).append(" => array(),\r\n");
+                        }
+                        secondFoolrIndex++;
+                    }
+                    tmpContent.append(leadingString).append(leadingString).append("),\r\n");
+                } else {
+                    tmpContent.append(leadingString).append(leadingString).append(firstFoolrIndex).append(" => array(),\r\n");
+                }
+                firstFoolrIndex++;
+            }
+            tmpContent.append(")");
+        } else {
+            tmpContent.append("NULL");
+        }
+        tmpContent.append(",\r\n");
+
+        return tmpContent.toString();
+    }
+
+    /**
+     * 将 "a","b","c" 转换为 array( "a","b","c")
+     *
+     * @param field
+     * @param content
+     * @param leadingString
+     * @return
+     */
+    private String parseCommonMultiple(String field, String content, String leadingString, String contentSplitFragment) {
+        content = content.replaceAll("<br>", "\r\n");//将<br>替换为\r\n '11:6,2:31
+        String[] contentSplitFragmentArray = contentSplitFragment.split("!");
+        StringBuilder tmpContent = new StringBuilder();
+        tmpContent.append(leadingString).append("'").append(field).append("' => array(\r\n");
+        //分隔内容
+        String firstSplitFragment, secondSplitFragment, thirdSplitFragment, fourthSplitFragment;
+        String[] firstContentArray, secondContentArray, thirdContentArray, fourthContentArray;
+        int firstIndex = 0, secondIndex = 0, thirdIndex = 0, fourthIndex = 0;
+        switch (contentSplitFragmentArray.length) {
+            case 1:
+                firstSplitFragment = contentSplitFragmentArray[0];
+                firstContentArray = content.split("\\" + firstSplitFragment);
+                for (String firstContentFragement : firstContentArray) {
+                    tmpContent.append(leadingString).append(leadingString).append(firstIndex++).append(" => '").append(firstContentFragement).append("',\r\n");
+                }
+                break;
+            case 2:
+                firstSplitFragment = contentSplitFragmentArray[0];
+                secondSplitFragment = contentSplitFragmentArray[1];
+                firstContentArray = content.split("\\" + firstSplitFragment);
+                for (String firstContentFragement : firstContentArray) {
+                    secondIndex = 0;
+                    thirdIndex = 0;
+                    fourthIndex = 0;
+                    if (!firstContentFragement.isEmpty()) {
+                        tmpContent.append(leadingString).append(leadingString).append(firstIndex++).append(" => array(\r\n");
+                        secondContentArray = firstContentFragement.split("\\" + secondSplitFragment);
+                        for (String secondContentFragement : secondContentArray) {
+                            tmpContent.append(leadingString).append(leadingString).append(leadingString).append(secondIndex++).append(" => '").append(secondContentFragement).append("',\r\n");
+                        }
+                        tmpContent.append(leadingString).append(leadingString).append("),\r\n");
+                    } else {
+                        tmpContent.append(leadingString).append(leadingString).append(firstIndex++).append(" => array(),\r\n");
+                    }
+                }
+                break;
+            case 3:
+                firstSplitFragment = contentSplitFragmentArray[0];
+                secondSplitFragment = contentSplitFragmentArray[1];
+                thirdSplitFragment = contentSplitFragmentArray[2];
+                firstContentArray = content.split("\\" + firstSplitFragment);
+                for (String firstContentFragement : firstContentArray) {
+                    secondIndex = 0;
+                    thirdIndex = 0;
+                    fourthIndex = 0;
+                    if (!firstContentFragement.isEmpty()) {
+                        tmpContent.append(leadingString).append(leadingString).append(firstIndex++).append(" => array(\r\n");
+                        secondContentArray = firstContentFragement.split("\\" + secondSplitFragment);
+                        for (String secondContentFragement : secondContentArray) {
+                            if (!secondContentFragement.isEmpty()) {
+                                tmpContent.append(leadingString).append(leadingString).append(leadingString).append(secondIndex++).append(" => array(\r\n");
+                                thirdContentArray = secondContentFragement.split("\\" + thirdSplitFragment);
+                                for (String thirdContentFragement : thirdContentArray) {
+                                    tmpContent.append(leadingString).append(leadingString).append(leadingString).append(leadingString).append(thirdIndex++).append(" => '").append(thirdContentFragement).append("',\r\n");
+                                }
+                                tmpContent.append(leadingString).append(leadingString).append(leadingString).append("),\r\n");
+                            } else {
+                                tmpContent.append(leadingString).append(leadingString).append(leadingString).append(secondIndex++).append(" => array(),\r\n");
+                            }
+                            //tmpContent.append(leadingString).append(leadingString).append(leadingString).append(secondIndex++).append(" => '").append(secondContentFragement).append("',\r\n");
+                        }
+                        tmpContent.append(leadingString).append(leadingString).append("),\r\n");
+                    } else {
+                        tmpContent.append(leadingString).append(leadingString).append(firstIndex++).append(" => array(),\r\n");
+                    }
+                }
+                break;
+            case 4:
+                break;
+            default://这么负载
+        }
+        
+        tmpContent.append(leadingString).append("),\r\n");
         return tmpContent.toString();
     }
 
@@ -1318,8 +1467,10 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
      * @param sheetName
      * @param idField
      * @param specialField
+     * @param keys
+     * @param contentSplitFragment
      */
-    public void transformCommonContent(final String configFilePath, final String outputPath, final String fileName, final String sheetName, final String idField, final Map specialField, final String keys) {
+    public void transformCommonContent(final String configFilePath, final String outputPath, final String fileName, final String sheetName, final String idField, final Map specialField, final String keys, final String contentSplitFragment) {
         final long startTime = System.currentTimeMillis();
         final List<Thread> threadList = new ArrayList();
         final DessertShopConfigParseJFrame currentUIObject = this;
@@ -1336,7 +1487,7 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
 
                     for (final String currentLang : langList) {
                         // start single lang 
-                        Thread currentThread = transformCommonThread(currentLang, outputPath, fileName, modelInfo, commonContent, idField, specialField, keys);
+                        Thread currentThread = transformCommonThread(currentLang, outputPath, fileName, modelInfo, commonContent, idField, specialField, keys, contentSplitFragment);
                         currentThread.start();
                         threadList.add(currentThread);
                         //end single lang
@@ -1375,7 +1526,7 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
             }
         }).start();
     }
-    
+
     /**
      * 通用
      *
@@ -1506,8 +1657,8 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
         });
         return currentThread;
     }
-    
-    private Thread transformCommonThread(final String currentLang, final String outputPath, final String fileName, final Map<String, Map<String, List<String>>> modelInfo, final String[][] commonContent, final String idField, final Map specialField, final String keys) {
+
+    private Thread transformCommonThread(final String currentLang, final String outputPath, final String fileName, final Map<String, Map<String, List<String>>> modelInfo, final String[][] commonContent, final String idField, final Map specialField, final String keys, final String contentSplitFragment) {
         Thread currentThread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -1515,7 +1666,7 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
                 StringBuilder allContent = new StringBuilder();
                 allContent.append(" return array (\r\n");
                 for (int i = 1; i < commonContent.length; i++) {
-                    Map<String, String> singleRowInfo = buildSingleRowStr(commonContent[i], modelInfo, currentLang, idIndex, idField, specialField, keys);
+                    Map<String, String> singleRowInfo = buildSingleRowStr(commonContent[i], modelInfo, currentLang, idIndex, idField, specialField, keys, contentSplitFragment);
                     String id = singleRowInfo.get(idField);
                     if (!id.isEmpty()) {//空id 直接无视
                         String singleItemInfo = singleRowInfo.get("singleRowInfo");
