@@ -394,7 +394,7 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
                 specialField.put("randomShelfProductList", "parseCommonMultiple@3");
                 specialField.put("rankScoreRewards", "parseGameRankScoreRewards@3");
                 transformCommonSingleFileContent(configFilePath, outputPath, fileName, sheetName, specialField);
-            } else if ("BINDING_RECIPE".equals(func)) {//BINDING_RECIPE  这个需要重新实现 太复杂了。。
+            } else if ("BINDING_RECIPE".equals(func)) {//bindingRecipe
                 specialField.put("recipes", "parseCommonMultiple@4");
                 specialField.put("activate_data", "parseBindingRecipeActivateData@3");
                 fileName = "bindingRecipe";
