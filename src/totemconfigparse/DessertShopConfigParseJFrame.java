@@ -1743,9 +1743,7 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
         String[][] finalContent = new String[originContent.length][originContent[0].length];
 //        System.arraycopy(originContent, 0, finalContent, 0, originContent.length);//这个会影响到 originContent 这个数组。。。。
         for(int i = 0;i < originContent.length;i++) {
-            for(int j = 0; j < originContent[i].length;j++) {
-                finalContent[i][j] = originContent[i][j];
-            }
+            System.arraycopy(originContent[i], 0, finalContent[i], 0, originContent[i].length);
         }
         List<String> fileNameInModelInfoList = modelInfo.get("fieldName").get(currentLang);
         List<Integer> fileIndexInModelInfoList = modelInfo.get("fieldIndex").get(currentLang);
