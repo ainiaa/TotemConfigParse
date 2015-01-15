@@ -19,6 +19,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.TimeZone;
 import java.util.logging.Level;
@@ -35,8 +36,6 @@ import jxl.Sheet;
 import jxl.Workbook;
 import jxl.WorkbookSettings;
 import jxl.read.biff.BiffException;
-import utils.Func;
-import utils.Utils;
 
 /**
  *
@@ -73,6 +72,7 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
         goodsOrderjRadioButton = new javax.swing.JRadioButton();
         requestInfojRadioButton = new javax.swing.JRadioButton();
         gamejRadioButton = new javax.swing.JRadioButton();
+        missionInfojRadioButton = new javax.swing.JRadioButton();
         selectConfgFilejPanel = new javax.swing.JPanel();
         configFilejLabel = new javax.swing.JLabel();
         configFilejTextField = new javax.swing.JTextField();
@@ -127,6 +127,10 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
         gamejRadioButton.setText("game");
         gamejRadioButton.setActionCommand("GAME");
 
+        funcbuttonGroup.add(missionInfojRadioButton);
+        missionInfojRadioButton.setText("missionInfo");
+        missionInfojRadioButton.setActionCommand("MISSION_INFO");
+
         javax.swing.GroupLayout funjPanelLayout = new javax.swing.GroupLayout(funjPanel);
         funjPanel.setLayout(funjPanelLayout);
         funjPanelLayout.setHorizontalGroup(
@@ -134,22 +138,25 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
             .addGroup(funjPanelLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
                 .addGroup(funjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(missionInfojRadioButton)
                     .addGroup(funjPanelLayout.createSequentialGroup()
-                        .addComponent(shopObjItemjRadioButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(activityLibraryjRadioButton))
-                    .addGroup(funjPanelLayout.createSequentialGroup()
-                        .addComponent(bindingRecipejRadioButton)
+                        .addGroup(funjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(funjPanelLayout.createSequentialGroup()
+                                .addComponent(shopObjItemjRadioButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(activityLibraryjRadioButton))
+                            .addGroup(funjPanelLayout.createSequentialGroup()
+                                .addComponent(bindingRecipejRadioButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(feedInfojRadioButton)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(feedInfojRadioButton)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(funjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(avatarItemsjRadioButton)
-                    .addComponent(requestInfojRadioButton))
-                .addGap(27, 27, 27)
-                .addGroup(funjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(gamejRadioButton)
-                    .addComponent(goodsOrderjRadioButton))
+                        .addGroup(funjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(avatarItemsjRadioButton)
+                            .addComponent(requestInfojRadioButton))
+                        .addGap(27, 27, 27)
+                        .addGroup(funjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(gamejRadioButton)
+                            .addComponent(goodsOrderjRadioButton))))
                 .addContainerGap(91, Short.MAX_VALUE))
         );
         funjPanelLayout.setVerticalGroup(
@@ -167,7 +174,9 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
                     .addComponent(feedInfojRadioButton)
                     .addComponent(requestInfojRadioButton)
                     .addComponent(gamejRadioButton))
-                .addContainerGap(112, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(missionInfojRadioButton)
+                .addContainerGap(87, Short.MAX_VALUE))
         );
 
         jLayeredPane.add(funjPanel);
@@ -402,6 +411,16 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
                 String keys = "activity_type,activity_id";
                 String contentSplitFragment = "|!,";
                 transformCommonContent(configFilePath, outputPath, fileName, sheetName, idField, specialField, keys, contentSplitFragment);
+            } else if ("MISSION_INFO".equals(func)) {//mission Info
+                specialField.put("reward_data", "parseMissionInfoRewardData@3");
+                specialField.put("mission_require", "parseMissionInfoMissionRequire@3");
+                fileName = "missionInfo";
+                idField = "mission_id";
+                String keys = "activity_type,activity_id";
+                String contentSplitFragment = "|!,";
+                Map<String, String[]> combineFields = new HashMap();
+                combineFields.put("mission_require", new String[]{"mission_sub_require", "mission_sub_require_desc", "mission_sub_require_tips"});
+                transformMissionContent(configFilePath, outputPath, fileName, sheetName, idField, specialField, keys, contentSplitFragment, combineFields);
             }
         }
 //        JOptionPane.showMessageDialog(null, "转换成功");
@@ -430,16 +449,14 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
     }
 
     public static String arrayImplode(String[] content, String implode) {
-        String finalStr = "";
+        StringBuilder finalStringBuffer = new StringBuilder();
         for (int index = 0; index < content.length; index++) {
-            if (index != content.length - 1 && index != 0) {
-                finalStr += implode + content[index];
-            } else {
-                finalStr = content[index];
+            if (index != 0) {
+                finalStringBuffer.append(implode);
             }
+            finalStringBuffer.append(content[index]);
         }
-
-        return finalStr;
+        return finalStringBuffer.toString();
     }
 
     public static String[] arrayFilterByIndex(String[] oldArrayContent, String[] indexes) {
@@ -740,10 +757,93 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
                     singleRowStringbuffer.append(parseField.invoke(this, new Object[]{currentField, currentFieldContent, "    "}));//@todo 精彩的写法
                     allRowsStringbuffer.append(parseField.invoke(this, new Object[]{currentField, currentFieldContent, "  "}));//@todo 精彩的写法
                 } catch (IllegalAccessException ex) {
+                    System.out.println(ex.getMessage());
                 } catch (SecurityException ex) {
+                    System.out.println(ex.getMessage());
                 } catch (IllegalArgumentException ex) {
+                    System.out.println(ex.getMessage());
                 } catch (InvocationTargetException ex) {
+                    System.out.println(ex.getMessage());
                 } catch (NoSuchMethodException ex) {
+                    System.out.println(ex.getMessage());
+                }
+            } else {
+                singleRowStringbuffer.append(commonSingleFieldString(currentField, currentFieldContent, "    "));
+                allRowsStringbuffer.append(commonSingleFieldString(currentField, currentFieldContent, "  "));
+            }
+        }
+
+        singleRowStringbuffer.append(");");
+        allRowsStringbuffer.append("  ),");
+
+        Map finalInfo = new HashMap();
+        finalInfo.put(idField, id);
+        finalInfo.put("singleRowInfo", singleRowStringbuffer.toString());
+        finalInfo.put("allRowsInfo", allRowsStringbuffer.toString());
+        return finalInfo;
+    }
+
+    public Map buildMissionSingleRowStr(String[] singleRowInfoContent, Map modelInfo, String lang, int idIndex, String idField, Map<String, String> specialField, String keys, String contentSplitFragment, Map combineFields) {
+        Map<String, List<Integer>> fieldIndex = (Map<String, List<Integer>>) modelInfo.get("fieldIndex");
+        Map<String, List<String>> fieldName = (Map<String, List<String>>) modelInfo.get("fieldName");
+        List<Integer> currentFieldIndexList = fieldIndex.get(lang);
+        List<String> currentFieldNameList = fieldName.get(lang);
+        Integer[] currentFieldIndex = currentFieldIndexList.toArray(new Integer[currentFieldIndexList.size()]);
+        String[] currentFieldName = currentFieldNameList.toArray(new String[currentFieldNameList.size()]);
+        currentFieldIndexList = null;
+        currentFieldNameList = null;
+        StringBuilder singleRowStringbuffer = new StringBuilder();
+        StringBuilder allRowsStringbuffer = new StringBuilder();
+        String id = singleRowInfoContent[idIndex];
+        singleRowStringbuffer.append("array (").append("\r\n");
+        allRowsStringbuffer.append("  '").append(id).append("' => \r\n").append("  array (\r\n");
+        for (int i = 0; i < currentFieldIndex.length; i++) {
+            int currentIndex = currentFieldIndex[i];
+            String currentField = currentFieldName[i];
+            String currentFieldContent = singleRowInfoContent[currentIndex];
+            if (currentField.equals(idField)) {
+                id = currentFieldContent;
+            }
+            if (specialField.containsKey(currentField)) {
+                try {
+                    String[] parseFieldFunctionInfo = specialField.get(currentField).split("@");
+                    String parseFieldFunctionName = parseFieldFunctionInfo[0];
+                    int paramCount;
+                    if (parseFieldFunctionInfo.length == 1) {
+                        paramCount = 4;
+                    } else {
+                        paramCount = Integer.valueOf(parseFieldFunctionInfo[1]);
+                    }
+
+                    List<Class> paramType = new ArrayList();
+                    for (int k = 0; k < paramCount; k++) {
+                        paramType.add(String.class);
+                    }
+                    Class clazz[] = paramType.toArray(new Class[]{});
+                    Method parseField = this.getClass().getDeclaredMethod(parseFieldFunctionName, clazz);//getMethod 方法 只能获取public 方法
+                    parseField.setAccessible(true);
+                    //@todo 这一部分可以重构成动态参数的方式 以后在修改
+                    if (paramType.size() == 3) {
+                        singleRowStringbuffer.append(parseField.invoke(this, new Object[]{currentField, currentFieldContent, "    "}));//@todo 精彩的写法
+                        allRowsStringbuffer.append(parseField.invoke(this, new Object[]{currentField, currentFieldContent, "  "}));//@todo 精彩的写法
+                    } else if (paramType.size() == 4) {
+                        singleRowStringbuffer.append(parseField.invoke(this, new Object[]{currentField, currentFieldContent, "    ", contentSplitFragment}));//@todo 精彩的写法
+                        allRowsStringbuffer.append(parseField.invoke(this, new Object[]{currentField, currentFieldContent, "  ", contentSplitFragment}));//@todo 精彩的写法
+                    } else if (paramType.size() == 5) {
+                        singleRowStringbuffer.append(parseField.invoke(this, new Object[]{currentField, keys, currentFieldContent, "    ", contentSplitFragment}));//@todo 精彩的写法
+                        allRowsStringbuffer.append(parseField.invoke(this, new Object[]{currentField, keys, currentFieldContent, "  ", contentSplitFragment}));//@todo 精彩的写法
+                    }
+
+                } catch (IllegalAccessException ex) {
+                    System.out.println("IllegalAccessException:" + ex.getMessage());
+                } catch (SecurityException ex) {
+                    System.out.println("SecurityException:" + ex.getMessage());
+                } catch (IllegalArgumentException ex) {
+                    System.out.println("IllegalArgumentException:" + ex.getMessage());
+                } catch (InvocationTargetException ex) {
+                    System.out.println("InvocationTargetException:" + ex.getMessage());
+                } catch (NoSuchMethodException ex) {
+                    System.out.println("NoSuchMethodException:" + ex.getMessage());
                 }
             } else {
                 singleRowStringbuffer.append(commonSingleFieldString(currentField, currentFieldContent, "    "));
@@ -813,10 +913,15 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
                     }
 
                 } catch (IllegalAccessException ex) {
+                    System.out.println("IllegalAccessException:" + ex.getMessage());
                 } catch (SecurityException ex) {
+                    System.out.println("SecurityException:" + ex.getMessage());
                 } catch (IllegalArgumentException ex) {
+                    System.out.println("IllegalArgumentException:" + ex.getMessage());
                 } catch (InvocationTargetException ex) {
+                    System.out.println("InvocationTargetException:" + ex.getMessage());
                 } catch (NoSuchMethodException ex) {
+                    System.out.println("NoSuchMethodException:" + ex.getMessage());
                 }
             } else {
                 singleRowStringbuffer.append(commonSingleFieldString(currentField, currentFieldContent, "    "));
@@ -932,6 +1037,98 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
         return tmpContent.toString();
     }
 
+    private String parseMissionInfoRewardData(String field, String content, String leadingString) {
+        content = content.replaceAll("<br>", "\r\n");//将<br>替换为\r\n '11:6,2:31
+        String[] contentArray = content.split(",");//第一层
+        StringBuilder tmpContent = new StringBuilder();
+        tmpContent.append(leadingString).append("'").append(field).append("' => ");
+        String leadingString2 = leadingString + leadingString;
+        String leadingString3 = leadingString + leadingString + leadingString;
+        String secondFloorContentFormat = "%s => array (\r\n"
+                + "%s'reward_index' => '%s',\r\n"
+                + "%s'reward_item_type' => '%s',\r\n"
+                + "%s'reward_item_id' => '%s',\r\n"
+                + "%s'reward_item_num' => '%s',\r\n"
+                + "%s),\r\n";
+        if (!content.isEmpty()) {
+            tmpContent.append("array(\r\n");
+            int firstFoolrIndex = 0;
+            for (String currentFirstFloorContent : contentArray) {
+                if (!currentFirstFloorContent.isEmpty()) {
+                    String[] currentSecondFloorContentArray = currentFirstFloorContent.split(":");//第二层
+                    tmpContent.append(leadingString).append(leadingString).append(firstFoolrIndex).append(String.format(secondFloorContentFormat, leadingString2, leadingString3, currentSecondFloorContentArray[0], leadingString3, currentSecondFloorContentArray[1], leadingString3, currentSecondFloorContentArray[2], leadingString3, currentSecondFloorContentArray[3], leadingString2));
+                } else {
+                    tmpContent.append(leadingString).append(leadingString).append(firstFoolrIndex).append(" => array(),\r\n");
+                }
+                firstFoolrIndex++;
+            }
+            tmpContent.append(")");
+        } else {
+            tmpContent.append("NULL");
+        }
+        tmpContent.append(",\r\n");
+
+        return tmpContent.toString();
+    }
+
+    private String parseMissionInfoMissionRequire(String field, String content, String leadingString) {
+        content = content.replaceAll("<br>", "\r\n");//将<br>替换为\r\n '11:6,2:31   //fck 这个太恶心了，  content 只有9项内容，其他的内容再另一个content中，且 还需要进行分割。。。 坑爹啊。。
+        String[] contentArray = content.split(MISSION_REQUIRE_FIRST_FLOOR);//第一层
+        StringBuilder tmpContent = new StringBuilder();
+        tmpContent.append(leadingString).append("'").append(field).append("' => ");
+        String leadingString2 = leadingString + leadingString;
+        String leadingString3 = leadingString + leadingString + leadingString;
+        String secondFloorContentFormat = "%s%d => array (\r\n"
+                + "%s'require_index' => '%s',\r\n"
+                + "%s'mission_require_icon' => '%s',\r\n"
+                + "%s'mission_require_type' => '%s',\r\n"
+                + "%s'require_item_id' => '%s',\r\n"
+                + "%s'require_item_num' => '%s',\r\n"
+                + "%s'require_type' => '%s',\r\n"
+                + "%s'require_id' => '%s',\r\n"
+                + "%s'is_skippable' => '%s',\r\n"
+                + "%s'require_skip_cash' => '%s',\r\n"
+                + "%s'mission_sub_require' => '%s',\r\n"
+                + "%s'mission_sub_require_desc' => '%s',\r\n"
+                + "%s'mission_sub_require_tips' => '%s',\r\n"
+                + "%s),\r\n";
+        if (!content.isEmpty()) {
+            tmpContent.append("array(\r\n");
+            int firstFoolrIndex = 0;
+            for (String currentFirstFloorContent : contentArray) {
+                if (!currentFirstFloorContent.isEmpty()) {
+                    String[] currentSecondFloorContentArray = currentFirstFloorContent.split(MISSION_REQUIRE_SECOND_FLOOR);//第二层
+                    tmpContent.append(leadingString).append(leadingString)
+                            .append(String.format(secondFloorContentFormat, leadingString2, firstFoolrIndex,
+                                            leadingString3, currentSecondFloorContentArray[0],
+                                            leadingString3, currentSecondFloorContentArray[1],
+                                            leadingString3, currentSecondFloorContentArray[2],
+                                            leadingString3, currentSecondFloorContentArray[3],
+                                            leadingString3, currentSecondFloorContentArray[4],
+                                            leadingString3, currentSecondFloorContentArray[5],
+                                            leadingString3, currentSecondFloorContentArray[6],
+                                            leadingString3, currentSecondFloorContentArray[7],
+                                            leadingString3, currentSecondFloorContentArray[8],
+                                            leadingString3, currentSecondFloorContentArray[9],
+                                            leadingString3, currentSecondFloorContentArray[10],
+                                            leadingString3, currentSecondFloorContentArray[11],
+                                            leadingString2));
+                } else {
+                    tmpContent.append(leadingString).append(leadingString).append(firstFoolrIndex).append(" => array(),\r\n");
+                }
+                firstFoolrIndex++;
+            }
+            tmpContent.append(")");
+        } else {
+            tmpContent.append("NULL");
+        }
+        tmpContent.append(",\r\n");
+
+        return tmpContent.toString();
+    }
+    private static final String MISSION_REQUIRE_SECOND_FLOOR = "!@@@@!";
+    private static final String MISSION_REQUIRE_FIRST_FLOOR = "-##-";
+
     /**
      * 将 "a","b","c" 转换为 array( "a","b","c")
      *
@@ -1012,7 +1209,7 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
                 break;
             default://这么负载
         }
-        
+
         tmpContent.append(leadingString).append("),\r\n");
         return tmpContent.toString();
     }
@@ -1171,6 +1368,18 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
     public void transformFinish(String message) {
         JOptionPane.showMessageDialog(null, message);
         this.dispose();
+    }
+
+    public static int getFieldIndexByFieldName(List<String> fileNameList, List<Integer> fileIndexList, String fieldName) {
+        int finalIndex = -1;
+        int len = fileNameList.size();
+        for (int i = 0; i < len; i++) {
+            if (fileNameList.get(i).equals(fieldName)) {
+                finalIndex = fileIndexList.get(i);
+                break;
+            }
+        }
+        return finalIndex;
     }
 
     public static int getFieldIndexByFieldName(List<String> modelInfo, String fieldName) {
@@ -1459,6 +1668,135 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
     }
 
     /**
+     * mission 特例
+     *
+     * @param configFilePath
+     * @param outputPath
+     * @param fileName
+     * @param sheetName
+     * @param idField
+     * @param specialField
+     * @param keys
+     * @param contentSplitFragment
+     * @param combineFields
+     */
+    public void transformMissionContent(final String configFilePath, final String outputPath, final String fileName, final String sheetName, final String idField, final Map specialField, final String keys, final String contentSplitFragment, final Map combineFields) {
+        final long startTime = System.currentTimeMillis();
+        final List<Thread> threadList = new ArrayList();
+        final DessertShopConfigParseJFrame currentUIObject = this;
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    int sheetIndex = getSheetIndexBySheetName(configFilePath, sheetName);
+                    final String[][] originContent = parseXls(configFilePath, sheetIndex, true);
+
+                    final Map<String, Map<String, List>> modelInfo = getModel(originContent[0], combineFields);
+                    final Map<String, Map<String, List>> fullModelInfo = getModel(originContent[0]);
+                    String[] langList = getLangs();
+
+                    for (final String currentLang : langList) {
+                        // start single lang 
+                        final String[][] singleLangContent = cleanupOriginContent(originContent, currentLang, fullModelInfo, combineFields);
+                        Thread currentThread = transformMissionThread(currentLang, outputPath, fileName, modelInfo, singleLangContent, idField, specialField, keys, contentSplitFragment, combineFields);
+                        currentThread.start();
+                        threadList.add(currentThread);
+                        //end single lang
+                    }
+
+                    boolean allThreadFinished;
+                    do {
+                        allThreadFinished = false;
+                        try {
+                            for (Thread t : threadList) {
+                                if (t.getState() != Thread.State.TERMINATED) {
+                                    allThreadFinished = false;
+                                    break;
+                                } else {
+                                    allThreadFinished = true;
+                                }
+                            }
+                            Thread.sleep(1000);//停止1s再执行
+                        } catch (InterruptedException ex) {
+                            Logger.getLogger(DessertShopConfigParseJFrame.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    } while (!allThreadFinished);//
+                    long endTime = System.currentTimeMillis();
+                    long diff = endTime - startTime;
+                    bottomStatusjLabel.setText("转换完成。耗时:" + DessertShopConfigParseJFrame.formatTimeDuration(diff));
+                    currentUIObject.transformFinish("完成转换!");
+                } catch (IOException ex) {
+                    Logger.getLogger(DessertShopConfigParseJFrame.class
+                            .getName()).log(Level.SEVERE, null, ex);
+                    showMessageDialogMessage(ex);
+                } catch (BiffException ex) {
+                    Logger.getLogger(DessertShopConfigParseJFrame.class
+                            .getName()).log(Level.SEVERE, null, ex);
+                    showMessageDialogMessage(ex);
+                }
+            }
+        }).start();
+    }
+
+    public String[][] cleanupOriginContent(final String[][] originContent, String currentLang, Map<String, Map<String, List>> modelInfo, Map<String, String[]> combineFields) {
+        String[][] finalContent = new String[originContent.length][originContent[0].length];
+//        System.arraycopy(originContent, 0, finalContent, 0, originContent.length);//这个会影响到 originContent 这个数组。。。。
+        for(int i = 0;i < originContent.length;i++) {
+            for(int j = 0; j < originContent[i].length;j++) {
+                finalContent[i][j] = originContent[i][j];
+            }
+        }
+        List<String> fileNameInModelInfoList = modelInfo.get("fieldName").get(currentLang);
+        List<Integer> fileIndexInModelInfoList = modelInfo.get("fieldIndex").get(currentLang);
+        Map<Integer, Integer[]> finalIndexMap = new HashMap();
+        for (Entry<String, String[]> entry : combineFields.entrySet()) {
+            String key = entry.getKey();
+            String[] value = entry.getValue();
+            int valueLen = value.length;
+            int keyIndex = getFieldIndexByFieldName(fileNameInModelInfoList, key);
+            List<Integer> current = new ArrayList();
+            for (int i = 0; i < valueLen; i++) {
+                int currentValueIndex = getFieldIndexByFieldName(fileNameInModelInfoList, fileIndexInModelInfoList, value[i]);
+                current.add(currentValueIndex);
+            }
+            finalIndexMap.put(keyIndex, current.toArray(new Integer[current.size()]));
+        }
+        int rowNum = finalContent.length;
+        for (int rowCount = 1; rowCount < rowNum; rowCount++) {
+            int columnNum = finalContent[rowCount].length;
+            for (int columnCount = 0; columnCount < columnNum; columnCount++) {
+                if (finalIndexMap.containsKey(columnCount)) {
+                    String originColumnContent = finalContent[rowCount][columnCount];
+                    String[] originColumnContentArray = originColumnContent.split(",");
+                    for(int i = 0; i < originColumnContentArray.length;i++) {
+                        originColumnContentArray[i] = originColumnContentArray[i].replaceAll(":", MISSION_REQUIRE_SECOND_FLOOR);
+                    }
+                    int originColumnContentNum = originColumnContentArray.length;
+                    Integer[] combineColumnArray = finalIndexMap.get(columnCount);
+                    int combineColumnNum = combineColumnArray.length;
+                    for (int combineColumnIndex = 0; combineColumnIndex < combineColumnNum; combineColumnIndex++) {
+                        String[] currentCombineColumnContentArray = finalContent[rowCount][combineColumnArray[combineColumnIndex]].split("\\|");
+                        if (currentCombineColumnContentArray.length == originColumnContentArray.length) {//有的时候 数据会不一致  直接无视 艹 坑爹玩意
+                            for (int originColumnContentIndex = 0; originColumnContentIndex < originColumnContentNum; originColumnContentIndex++) {
+                                originColumnContentArray[originColumnContentIndex] = originColumnContentArray[originColumnContentIndex] + MISSION_REQUIRE_SECOND_FLOOR + currentCombineColumnContentArray[originColumnContentIndex];
+                            }
+                        } else {
+                            for (int originColumnContentIndex = 0; originColumnContentIndex < originColumnContentNum; originColumnContentIndex++) {
+                                originColumnContentArray[originColumnContentIndex] = originColumnContentArray[originColumnContentIndex] + MISSION_REQUIRE_SECOND_FLOOR + " ";
+                            }
+                        }
+
+                    }
+                    //combineColumnArray
+                    finalContent[rowCount][columnCount] = arrayImplode(originColumnContentArray, MISSION_REQUIRE_FIRST_FLOOR);
+                }
+            }
+        }
+        return finalContent;
+    }
+
+    /**
      * 通用
      *
      * @param configFilePath
@@ -1658,6 +1996,49 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
         return currentThread;
     }
 
+    private Thread transformMissionThread(final String currentLang, final String outputPath, final String fileName, final Map<String, Map<String, List>> modelInfo, final String[][] commonContent, final String idField, final Map specialField, final String keys, final String contentSplitFragment, final Map combineFields) {
+        Thread currentThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                int idIndex = DessertShopConfigParseJFrame.getFieldIndexByFieldName(modelInfo.get("fieldName").get(currentLang), idField);
+                StringBuilder allContent = new StringBuilder();
+                allContent.append(" return array (\r\n");
+                for (int i = 1; i < commonContent.length; i++) {
+                    Map<String, String> singleRowInfo = buildMissionSingleRowStr(commonContent[i], modelInfo, currentLang, idIndex, idField, specialField, keys, contentSplitFragment, combineFields);
+                    String id = singleRowInfo.get(idField);
+                    if (!id.isEmpty()) {//空id 直接无视
+                        String singleItemInfo = singleRowInfo.get("singleRowInfo");
+                        String currentAllItemInfo = singleRowInfo.get("allRowsInfo");
+                        String descFile = buildSingleRowStoredPath(currentLang, id, outputPath, fileName, fileName);
+                        try {
+                            writeToFile("<?php\r\n return " + singleItemInfo, descFile, "UTF-8");
+                        } catch (FileNotFoundException ex) {
+                            Logger.getLogger(DessertShopConfigParseJFrame.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (IOException ex) {
+                            Logger.getLogger(DessertShopConfigParseJFrame.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        if (i == 1) {//第一行 没有必要添加\r\n
+                            allContent.append(currentAllItemInfo);
+                        } else {
+                            allContent.append("\r\n").append(currentAllItemInfo);
+                        }
+                        bottomStatusjLabel.setText("语言：" + currentLang + "完成度:" + (i * 100 / commonContent.length) + "%|正在生成文件:" + outputPath);
+                    }
+                }
+                try {
+                    bottomStatusjLabel.setText("语言：" + currentLang + "完成度:" + "100%|正在生成文件:" + outputPath);
+                    String descFile = buildSingleRowStoredPath(currentLang, "", outputPath, fileName, fileName);
+                    writeToFile("<?php\r\n" + allContent.toString() + "\r\n);", descFile, "UTF-8");
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(DessertShopConfigParseJFrame.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(DessertShopConfigParseJFrame.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+        return currentThread;
+    }
+
     private Thread transformCommonThread(final String currentLang, final String outputPath, final String fileName, final Map<String, Map<String, List<String>>> modelInfo, final String[][] commonContent, final String idField, final Map specialField, final String keys, final String contentSplitFragment) {
         Thread currentThread = new Thread(new Runnable() {
             @Override
@@ -1714,6 +2095,74 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
         long hour = (duration / 1000 / 60 / 60) % 24;// 小时
         long day = duration / 1000 / 60 / 60 / 24;// 天
         return String.format("%02d day %02d:%02d:%02d", day, hour, min, sec);
+    }
+
+    /**
+     * 需要跳过的field
+     *
+     * @param combineFields
+     * @return
+     */
+    private List<String> needSkipedFields(Map<String, String[]> combineFields) {
+        List<String> needSkipedFields = new ArrayList();
+
+        for (String key : combineFields.keySet()) {
+            String[] value = combineFields.get(key);
+            int len = value.length;
+            for (int i = 0; i < len; i++) {
+                needSkipedFields.add(value[i]);
+            }
+        }
+
+        return needSkipedFields;
+    }
+
+    public Map getModel(String[] dsOpengraphCfg, Map<String, String[]> combineFields) {
+        Map<String, List<Integer>> fieldIndex = new HashMap();
+        Map<String, List<String>> fieldName = new HashMap();
+        String[] langList = getLangs();
+        List needSkipedFields = needSkipedFields(combineFields);
+
+        for (int i = 0; i < langList.length; i++) {
+            String currentLang = langList[i];
+            fieldIndex.put(currentLang, new ArrayList());
+            fieldName.put(currentLang, new ArrayList());
+        }
+        for (int j = 0; j < dsOpengraphCfg.length; j++) {
+            String originField = dsOpengraphCfg[j];
+            boolean currentPrefixIsLang = false;
+            String prefix = "";
+            if (!originField.trim().isEmpty()) {
+                if (originField.length() >= 6) {//查看是否为属于某个特定的语言
+                    prefix = originField.substring(0, 5);
+                    currentPrefixIsLang = Arrays.asList(langList).contains(prefix);
+                }
+                if (currentPrefixIsLang) {//当前field 只属于某一个lang
+                    List currentModelIndex = fieldIndex.get(prefix);
+                    List currentModelField = fieldName.get(prefix);
+                    String currentFiled = originField.substring(6);
+                    if (!needSkipedFields.contains(currentFiled)) {//需要掉过的field不需要出现在最终的model中
+                        currentModelIndex.add(j);
+                        currentModelField.add(currentFiled);
+                    }
+                } else {//当前field 属于所有lang
+                    if (!needSkipedFields.contains(originField)) {//需要掉过的field不需要出现在最终的model中
+                        for (int i = 0; i < langList.length; i++) {
+                            String currentLang = langList[i];
+                            List currentModelIndex = fieldIndex.get(currentLang);
+                            List currentModelField = fieldName.get(currentLang);
+                            currentModelIndex.add(j);
+                            currentModelField.add(originField);
+                        }
+                    }
+                }
+            }
+        }
+
+        Map finalInfo = new HashMap();
+        finalInfo.put("fieldIndex", fieldIndex);
+        finalInfo.put("fieldName", fieldName);
+        return finalInfo;
     }
 
     /**
@@ -2462,6 +2911,7 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
     private javax.swing.JRadioButton goodsOrderjRadioButton;
     private javax.swing.JLayeredPane jLayeredPane;
     private javax.swing.JMenuBar jMenuBar;
+    private javax.swing.JRadioButton missionInfojRadioButton;
     private javax.swing.JPanel operationjPanel;
     private javax.swing.JButton outputjButton;
     private javax.swing.JLabel outputjLabel;
