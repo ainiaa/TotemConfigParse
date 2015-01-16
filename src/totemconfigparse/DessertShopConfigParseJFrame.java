@@ -62,6 +62,7 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         funcbuttonGroup = new javax.swing.ButtonGroup();
+        allInOnejbuttonGroup = new javax.swing.ButtonGroup();
         jLayeredPane = new javax.swing.JLayeredPane();
         funjPanel = new javax.swing.JPanel();
         shopObjItemjRadioButton = new javax.swing.JRadioButton();
@@ -73,6 +74,7 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
         requestInfojRadioButton = new javax.swing.JRadioButton();
         gamejRadioButton = new javax.swing.JRadioButton();
         missionInfojRadioButton = new javax.swing.JRadioButton();
+        dessertInfojRadioButton = new javax.swing.JRadioButton();
         selectConfgFilejPanel = new javax.swing.JPanel();
         configFilejLabel = new javax.swing.JLabel();
         configFilejTextField = new javax.swing.JTextField();
@@ -85,6 +87,9 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
         closejButton = new javax.swing.JButton();
         dsParseConfjToolBar = new javax.swing.JToolBar();
         bottomStatusjLabel = new javax.swing.JLabel();
+        allInOnejPanel = new javax.swing.JPanel();
+        allInOneYesjRadioButton = new javax.swing.JRadioButton();
+        allInOneNojRadioButton = new javax.swing.JRadioButton();
         jMenuBar = new javax.swing.JMenuBar();
         filejMenu = new javax.swing.JMenu();
         settingjMenuItem = new javax.swing.JMenuItem();
@@ -131,6 +136,10 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
         missionInfojRadioButton.setText("missionInfo");
         missionInfojRadioButton.setActionCommand("MISSION_INFO");
 
+        funcbuttonGroup.add(dessertInfojRadioButton);
+        dessertInfojRadioButton.setText("dessertInfo");
+        dessertInfojRadioButton.setActionCommand("DESSERT_INFO");
+
         javax.swing.GroupLayout funjPanelLayout = new javax.swing.GroupLayout(funjPanel);
         funjPanel.setLayout(funjPanelLayout);
         funjPanelLayout.setHorizontalGroup(
@@ -138,17 +147,15 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
             .addGroup(funjPanelLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
                 .addGroup(funjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(missionInfojRadioButton)
+                    .addComponent(bindingRecipejRadioButton)
+                    .addComponent(shopObjItemjRadioButton)
+                    .addComponent(missionInfojRadioButton))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(funjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(funjPanelLayout.createSequentialGroup()
                         .addGroup(funjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(funjPanelLayout.createSequentialGroup()
-                                .addComponent(shopObjItemjRadioButton)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(activityLibraryjRadioButton))
-                            .addGroup(funjPanelLayout.createSequentialGroup()
-                                .addComponent(bindingRecipejRadioButton)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(feedInfojRadioButton)))
+                            .addComponent(feedInfojRadioButton)
+                            .addComponent(activityLibraryjRadioButton))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(funjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(avatarItemsjRadioButton)
@@ -156,8 +163,9 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
                         .addGap(27, 27, 27)
                         .addGroup(funjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(gamejRadioButton)
-                            .addComponent(goodsOrderjRadioButton))))
-                .addContainerGap(91, Short.MAX_VALUE))
+                            .addComponent(goodsOrderjRadioButton)))
+                    .addComponent(dessertInfojRadioButton))
+                .addContainerGap(63, Short.MAX_VALUE))
         );
         funjPanelLayout.setVerticalGroup(
             funjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -175,12 +183,14 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
                     .addComponent(requestInfojRadioButton)
                     .addComponent(gamejRadioButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(missionInfojRadioButton)
-                .addContainerGap(87, Short.MAX_VALUE))
+                .addGroup(funjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(missionInfojRadioButton)
+                    .addComponent(dessertInfojRadioButton))
+                .addContainerGap(57, Short.MAX_VALUE))
         );
 
         jLayeredPane.add(funjPanel);
-        funjPanel.setBounds(10, 0, 520, 190);
+        funjPanel.setBounds(10, 0, 520, 160);
 
         selectConfgFilejPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("选择配置文件"));
 
@@ -252,7 +262,7 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
         );
 
         jLayeredPane.add(selectConfgFilejPanel);
-        selectConfgFilejPanel.setBounds(10, 200, 520, 80);
+        selectConfgFilejPanel.setBounds(10, 220, 520, 80);
 
         operationjPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("操作"));
 
@@ -292,7 +302,7 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
         );
 
         jLayeredPane.add(operationjPanel);
-        operationjPanel.setBounds(10, 280, 520, 67);
+        operationjPanel.setBounds(10, 310, 520, 67);
 
         dsParseConfjToolBar.setRollover(true);
         dsParseConfjToolBar.setMaximumSize(new java.awt.Dimension(520, 22));
@@ -305,7 +315,41 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
         dsParseConfjToolBar.add(bottomStatusjLabel);
 
         jLayeredPane.add(dsParseConfjToolBar);
-        dsParseConfjToolBar.setBounds(0, 350, 530, 20);
+        dsParseConfjToolBar.setBounds(0, 380, 530, 20);
+
+        allInOnejPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("一次性全转换"));
+
+        allInOnejbuttonGroup.add(allInOneYesjRadioButton);
+        allInOneYesjRadioButton.setSelected(true);
+        allInOneYesjRadioButton.setText("是");
+        allInOneYesjRadioButton.setActionCommand("YES");
+
+        allInOnejbuttonGroup.add(allInOneNojRadioButton);
+        allInOneNojRadioButton.setText("否");
+        allInOneNojRadioButton.setActionCommand("NO");
+
+        javax.swing.GroupLayout allInOnejPanelLayout = new javax.swing.GroupLayout(allInOnejPanel);
+        allInOnejPanel.setLayout(allInOnejPanelLayout);
+        allInOnejPanelLayout.setHorizontalGroup(
+            allInOnejPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(allInOnejPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(allInOneYesjRadioButton, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(allInOneNojRadioButton)
+                .addContainerGap(410, Short.MAX_VALUE))
+        );
+        allInOnejPanelLayout.setVerticalGroup(
+            allInOnejPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(allInOnejPanelLayout.createSequentialGroup()
+                .addGroup(allInOnejPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(allInOneYesjRadioButton)
+                    .addComponent(allInOneNojRadioButton))
+                .addGap(0, 13, Short.MAX_VALUE))
+        );
+
+        jLayeredPane.add(allInOnejPanel);
+        allInOnejPanel.setBounds(10, 160, 520, 60);
 
         filejMenu.setText("文件");
 
@@ -335,7 +379,7 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jLayeredPane, javax.swing.GroupLayout.PREFERRED_SIZE, 372, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLayeredPane, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
@@ -343,17 +387,63 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void parsejButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_parsejButtonMouseClicked
-        //功能选择
-        String func = "";
+        String allInOneFunc = "NO";
         if (funcbuttonGroup.getSelection() != null) {
-            func = funcbuttonGroup.getSelection().getActionCommand();
+            allInOneFunc = funcbuttonGroup.getSelection().getActionCommand();
         }
 
-        //配置文件
-        String configFilePath = configFilejTextField.getText();
-        //输出路径
-        String outputPath = outputjTextField.getText();
+        if ("YES".equals(allInOneFunc)) {//全部转换
+            //配置文件
+            String configFilePath = configFilejTextField.getText();
+            //输出路径
+            String outputPath = outputjTextField.getText();
+            Map<String, String> funcMap = initFuncList();
+            for (Entry<String, String> entry : funcMap.entrySet()) {
+                String func = entry.getKey();
+                String excelFileName = entry.getValue();
+                transformSingleExcel(func, configFilePath + "/" + excelFileName, outputPath);
+            }
 
+        } else {//转换某一个配置项
+            String func = "";
+            if (funcbuttonGroup.getSelection() != null) {
+                func = funcbuttonGroup.getSelection().getActionCommand();
+            }
+
+            //配置文件
+            String configFilePath = configFilejTextField.getText();
+            //输出路径
+            String outputPath = outputjTextField.getText();
+            transformSingleExcel(func, configFilePath, outputPath);
+        }
+
+//        JOptionPane.showMessageDialog(null, "转换成功");
+//        this.dispose();
+    }//GEN-LAST:event_parsejButtonMouseClicked
+
+    private Map<String, String> initFuncList() {
+        Map funcList = new HashMap();
+        funcList.put("DS_SHOP_OBJ_ITEM", "shopItem.xls");
+        funcList.put("ACTIVITY_LIB", "activityLibraryInfo.xls");
+        funcList.put("AVATAR_ITEMS", "avatarItems.xls");
+        funcList.put("FEED_INFO", "feedInfo.xls");
+        funcList.put("GOODS_ORDER", "goodsOrder.xls");
+        funcList.put("REQUEST_INFO", "requestInfo.xls");
+        funcList.put("GAME", "game.xls");
+        funcList.put("MISSION_INFO", "missionInfo.xls");
+        funcList.put("BINDING_RECIPE", "bindingRecipe.xls");
+        funcList.put("DESSERT_INFO", "dessertInfo.xls");
+        return funcList;
+    }
+
+    /**
+     * 转换单个excel
+     *
+     * @param func
+     * @param configFilePath
+     * @param outputPath
+     */
+    private void transformSingleExcel(String func, String configFilePath, String outputPath) {
         String msg = "";
         if (func.isEmpty()) {
             msg = "请选择解析内容 ";
@@ -366,14 +456,13 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, msg, "信息提示", JOptionPane.ERROR_MESSAGE);
         } else {
             String sheetName = "Worksheet";
-            String idField = "id";
-            String fileName = "";
+            String idField;
+            String fileName;
             Map specialField = new HashMap();
 
             if ("DS_SHOP_OBJ_ITEM".equals(func)) {//shopItem
                 transformShopObjectItem(configFilePath, func, outputPath);
             } else if ("ACTIVITY_LIB".equals(func)) {//activityLibraryInfo
-                //transformActivityLib(configFilePath, func, outputPath);
                 specialField.put("activity_info", "parseCommonMultipleWithKeyValue@4");
                 specialField.put("unlockRecipe", "parseCommonMultiple@4");
                 fileName = "activityLibraryInfo";
@@ -411,7 +500,7 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
                 String keys = "activity_type,activity_id";
                 String contentSplitFragment = "|!,";
                 transformCommonContent(configFilePath, outputPath, fileName, sheetName, idField, specialField, keys, contentSplitFragment);
-            } else if ("MISSION_INFO".equals(func)) {//mission Info
+            } else if ("MISSION_INFO".equals(func)) {//mission Info  @todo 还有一写文件没有生成
                 specialField.put("reward_data", "parseMissionInfoRewardData@3");
                 specialField.put("mission_require", "parseMissionInfoMissionRequire@3");
                 fileName = "missionInfo";
@@ -421,11 +510,11 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
                 Map<String, String[]> combineFields = new HashMap();
                 combineFields.put("mission_require", new String[]{"mission_sub_require", "mission_sub_require_desc", "mission_sub_require_tips"});
                 transformMissionContent(configFilePath, outputPath, fileName, sheetName, idField, specialField, keys, contentSplitFragment, combineFields);
+            } else if ("DESSERT_INFO".equals(func)) {//@todo 需要
+
             }
         }
-//        JOptionPane.showMessageDialog(null, "转换成功");
-//        this.dispose();
-    }//GEN-LAST:event_parsejButtonMouseClicked
+    }
 
     public String[] arrayPop(String[] oldArrayContent) {
         int rows = oldArrayContent.length;
@@ -1742,7 +1831,7 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
     public String[][] cleanupOriginContent(final String[][] originContent, String currentLang, Map<String, Map<String, List>> modelInfo, Map<String, String[]> combineFields) {
         String[][] finalContent = new String[originContent.length][originContent[0].length];
 //        System.arraycopy(originContent, 0, finalContent, 0, originContent.length);//这个会影响到 originContent 这个数组。。。。
-        for(int i = 0;i < originContent.length;i++) {
+        for (int i = 0; i < originContent.length; i++) {
             System.arraycopy(originContent[i], 0, finalContent[i], 0, originContent[i].length);
         }
         List<String> fileNameInModelInfoList = modelInfo.get("fieldName").get(currentLang);
@@ -1767,7 +1856,7 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
                 if (finalIndexMap.containsKey(columnCount)) {
                     String originColumnContent = finalContent[rowCount][columnCount];
                     String[] originColumnContentArray = originColumnContent.split(",");
-                    for(int i = 0; i < originColumnContentArray.length;i++) {
+                    for (int i = 0; i < originColumnContentArray.length; i++) {
                         originColumnContentArray[i] = originColumnContentArray[i].replaceAll(":", MISSION_REQUIRE_SECOND_FLOOR);
                     }
                     int originColumnContentNum = originColumnContentArray.length;
@@ -2892,6 +2981,10 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
     private String outputDirectory;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JRadioButton activityLibraryjRadioButton;
+    private javax.swing.JRadioButton allInOneNojRadioButton;
+    private javax.swing.JRadioButton allInOneYesjRadioButton;
+    private javax.swing.JPanel allInOnejPanel;
+    private javax.swing.ButtonGroup allInOnejbuttonGroup;
     private javax.swing.JRadioButton avatarItemsjRadioButton;
     private javax.swing.JRadioButton bindingRecipejRadioButton;
     private javax.swing.JLabel bottomStatusjLabel;
@@ -2899,6 +2992,7 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
     private javax.swing.JButton configFilejButton;
     private javax.swing.JLabel configFilejLabel;
     private javax.swing.JTextField configFilejTextField;
+    private javax.swing.JRadioButton dessertInfojRadioButton;
     private javax.swing.JToolBar dsParseConfjToolBar;
     private javax.swing.JMenu editjMenu;
     private javax.swing.JRadioButton feedInfojRadioButton;
