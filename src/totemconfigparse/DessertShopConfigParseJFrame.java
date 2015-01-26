@@ -1520,7 +1520,7 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
                                     String currentAllItemInfo = singleRowInfo.get("allItemInfo");
                                     String descFile = buildSingleItemStoredPath(currentLang, itemId, outputPath);
                                     try {
-                                        writeToFile("<?php\r\n" + singleItemInfo, descFile, "UTF-8");
+                                        writeToFile("<?php\r\n return " + singleItemInfo, descFile, "UTF-8");
                                     } catch (FileNotFoundException ex) {
                                         Logger.getLogger(DessertShopConfigParseJFrame.class.getName()).log(Level.SEVERE, null, ex);
                                     } catch (IOException ex) {
@@ -1536,7 +1536,7 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
                                 try {
                                     bottomStatusjLabel.setText("语言：" + currentLang + "完成度:" + "100%|正在生成文件:" + outputPath);
                                     String descFile = buildSingleItemStoredPath(currentLang, "", outputPath);
-                                    writeToFile("<?php\r\n" + allItemInfo.toString(), descFile, "UTF-8");
+                                    writeToFile("<?php\r\n" + allItemInfo.toString() + "\r\n);", descFile, "UTF-8");
                                 } catch (FileNotFoundException ex) {
                                     Logger.getLogger(DessertShopConfigParseJFrame.class.getName()).log(Level.SEVERE, null, ex);
                                 } catch (IOException ex) {
