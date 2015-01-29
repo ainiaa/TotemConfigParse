@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package utils;
+package com.coding91.utils;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
