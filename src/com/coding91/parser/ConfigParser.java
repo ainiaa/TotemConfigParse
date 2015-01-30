@@ -1,16 +1,10 @@
 package com.coding91.parser;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
-import java.io.Writer;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -23,6 +17,7 @@ import jxl.read.biff.BiffException;
 import com.coding91.utils.ArrayUtils;
 import com.coding91.utils.DateTimeUtils;
 import com.coding91.utils.ExcelParser;
+import com.coding91.utils.FileUtils;
 
 /**
  *
@@ -137,23 +132,6 @@ public class ConfigParser {
     public static HashMap<String, HashMap<String, String>> itemIdAndItemName;
     public static HashMap<String, HashMap<String, String>> collectActivityCommonConf;
 
-    public String getItemName(String itemId, String lang) {
-        itemIdAndItemName = buildItemIdAndItemName();
-        return itemIdAndItemName.get(itemId).get(lang);
-    }
-
-    public HashMap buildItemIdAndItemName() {
-        HashMap finalInfo = new HashMap();
-        HashMap itemNameInfo;
-        int rows = itemLangInfoCfg.length;
-        for (int rowNum = 1; rowNum < rows; rowNum++) {
-            String[] itemNameInfoArray = ArrayUtils.arraySlice(itemLangInfoCfg[rowNum], 1);
-            itemNameInfo = ArrayUtils.arrayCombine(itemLangs, itemNameInfoArray);
-            finalInfo.put(itemLangInfoCfg[rowNum][0], itemNameInfo);
-        }
-        return finalInfo;
-    }
-
     public String[][] itemLangInfoCfg(String configFilePath) {
         try {
             int langSheetIndex = ExcelParser.getSheetIndexBySheetName(configFilePath, "itemLang");
@@ -212,324 +190,7 @@ public class ConfigParser {
         JOptionPane.showMessageDialog(null, msg, title, JOptionPane.ERROR_MESSAGE, null);
         System.exit(0);
     }
-
-    public static void writeToFile(String contents, String descFile, String encoding) throws FileNotFoundException, IOException {
-        File fileOutput = new File(descFile);
-        writeToFile(contents, fileOutput, "UTF-8");
-    }
-
-    public Map buildSingleRowStr(String[] singleRowInfoContent, Map modelInfo, String lang, Map<String, String> specialField) {
-        Map<String, List<Integer>> fieldIndex = (Map<String, List<Integer>>) modelInfo.get("fieldIndex");
-        Map<String, List<String>> fieldName = (Map<String, List<String>>) modelInfo.get("fieldName");
-        List<Integer> currentFieldIndexList = fieldIndex.get(lang);
-        List<String> currentFieldNameList = fieldName.get(lang);
-        Integer[] currentFieldIndex = currentFieldIndexList.toArray(new Integer[currentFieldIndexList.size()]);
-        String[] currentFieldName = currentFieldNameList.toArray(new String[currentFieldNameList.size()]);
-        currentFieldIndexList = null;
-        currentFieldNameList = null;
-        StringBuilder singleRowStringbuffer = new StringBuilder();
-        singleRowStringbuffer.append("array (").append("\r\n");
-        for (int i = 0; i < currentFieldIndex.length; i++) {
-            int currentIndex = currentFieldIndex[i];
-            String currentField = currentFieldName[i];
-            String currentFieldContent = singleRowInfoContent[currentIndex];
-            if (specialField.containsKey(currentField)) {
-                try {
-                    String parseFieldFunctionName = specialField.get(currentField);
-                    Method parseField = this.getClass().getDeclaredMethod(parseFieldFunctionName, new Class[]{String.class, String.class, String.class});//getMethod 方法 只能获取public 方法
-                    parseField.setAccessible(true);
-                    singleRowStringbuffer.append(parseField.invoke(this, new Object[]{currentField, currentFieldContent, "    "}));//@todo 精彩的写法
-                } catch (IllegalAccessException ex) {
-                    System.out.println(ex.getMessage());
-                } catch (SecurityException ex) {
-                    System.out.println(ex.getMessage());
-                } catch (IllegalArgumentException ex) {
-                    System.out.println(ex.getMessage());
-                } catch (InvocationTargetException ex) {
-                    System.out.println(ex.getMessage());
-                } catch (NoSuchMethodException ex) {
-                    System.out.println(ex.getMessage());
-                }
-            } else {
-                singleRowStringbuffer.append(commonSingleFieldString(currentField, currentFieldContent, "    "));
-            }
-        }
-
-        singleRowStringbuffer.append(");");
-
-        Map finalInfo = new HashMap();
-        finalInfo.put("singleRowInfo", singleRowStringbuffer.toString());
-        return finalInfo;
-    }
-
-    public Map buildSingleRowStr(String[] singleRowInfoContent, Map modelInfo, String lang, Map<String, String> specialField, String keys) {
-        Map<String, List<Integer>> fieldIndex = (Map<String, List<Integer>>) modelInfo.get("fieldIndex");
-        Map<String, List<String>> fieldName = (Map<String, List<String>>) modelInfo.get("fieldName");
-        List<Integer> currentFieldIndexList = fieldIndex.get(lang);
-        List<String> currentFieldNameList = fieldName.get(lang);
-        Integer[] currentFieldIndex = currentFieldIndexList.toArray(new Integer[currentFieldIndexList.size()]);
-        String[] currentFieldName = currentFieldNameList.toArray(new String[currentFieldNameList.size()]);
-        currentFieldIndexList = null;
-        currentFieldNameList = null;
-        StringBuilder singleRowStringbuffer = new StringBuilder();
-        singleRowStringbuffer.append("array (").append("\r\n");
-        for (int i = 0; i < currentFieldIndex.length; i++) {
-            int currentIndex = currentFieldIndex[i];
-            String currentField = currentFieldName[i];
-            String currentFieldContent = singleRowInfoContent[currentIndex];
-            if (specialField.containsKey(currentField)) {
-                try {
-                    String parseFieldFunctionName = specialField.get(currentField);
-                    Method parseField = this.getClass().getDeclaredMethod(parseFieldFunctionName, new Class[]{String.class, String.class, String.class});//getMethod 方法 只能获取public 方法
-                    parseField.setAccessible(true);
-                    singleRowStringbuffer.append(parseField.invoke(this, new Object[]{currentField, currentFieldContent, "    "}));//@todo 精彩的写法
-                } catch (IllegalAccessException ex) {
-                    System.out.println(ex.getMessage());
-                } catch (SecurityException ex) {
-                    System.out.println(ex.getMessage());
-                } catch (IllegalArgumentException ex) {
-                    System.out.println(ex.getMessage());
-                } catch (InvocationTargetException ex) {
-                    System.out.println(ex.getMessage());
-                } catch (NoSuchMethodException ex) {
-                    System.out.println(ex.getMessage());
-                }
-            } else {
-                singleRowStringbuffer.append(commonSingleFieldString(currentField, currentFieldContent, "    "));
-            }
-        }
-
-        singleRowStringbuffer.append(");");
-
-        Map finalInfo = new HashMap();
-        finalInfo.put("singleRowInfo", singleRowStringbuffer.toString());
-        return finalInfo;
-    }
-
-    public Map buildSingleRowStr(String[] singleRowInfoContent, Map modelInfo, String lang, int idIndex, String idField, Map<String, String> specialField) {
-        Map<String, List<Integer>> fieldIndex = (Map<String, List<Integer>>) modelInfo.get("fieldIndex");
-        Map<String, List<String>> fieldName = (Map<String, List<String>>) modelInfo.get("fieldName");
-        List<Integer> currentFieldIndexList = fieldIndex.get(lang);
-        List<String> currentFieldNameList = fieldName.get(lang);
-        Integer[] currentFieldIndex = currentFieldIndexList.toArray(new Integer[currentFieldIndexList.size()]);
-        String[] currentFieldName = currentFieldNameList.toArray(new String[currentFieldNameList.size()]);
-        currentFieldIndexList = null;
-        currentFieldNameList = null;
-        StringBuilder singleRowStringbuffer = new StringBuilder();
-        StringBuilder allRowsStringbuffer = new StringBuilder();
-        String id = singleRowInfoContent[idIndex];
-        singleRowStringbuffer.append("array (").append("\r\n");
-        allRowsStringbuffer.append("  ").append(id).append(" => \r\n").append("  array (\r\n");
-        for (int i = 0; i < currentFieldIndex.length; i++) {
-            int currentIndex = currentFieldIndex[i];
-            String currentField = currentFieldName[i];
-            String currentFieldContent = singleRowInfoContent[currentIndex];
-            if (currentField.equals(idField)) {
-                id = currentFieldContent;
-            }
-            if (specialField.containsKey(currentField)) {
-                try {
-                    String[] parseFieldFunctionInfo = specialField.get(currentField).split("@");
-                    String parseFieldFunctionName = parseFieldFunctionInfo[0];
-                    int paramCount;
-                    if (parseFieldFunctionInfo.length == 1) {
-                        paramCount = 3;
-                    } else {
-                        paramCount = Integer.valueOf(parseFieldFunctionInfo[1]);
-                    }
-
-                    List<Class> paramType = new ArrayList();
-                    for (int k = 0; k < paramCount; k++) {
-                        paramType.add(String.class);
-                    }
-                    Class clazz[] = paramType.toArray(new Class[]{});
-                    Method parseField = this.getClass().getDeclaredMethod(parseFieldFunctionName, clazz);//getMethod 方法 只能获取public 方法
-                    parseField.setAccessible(true);
-                    singleRowStringbuffer.append(parseField.invoke(this, new Object[]{currentField, currentFieldContent, "    "}));//@todo 精彩的写法
-                    allRowsStringbuffer.append(parseField.invoke(this, new Object[]{currentField, currentFieldContent, "  "}));//@todo 精彩的写法
-                } catch (IllegalAccessException ex) {
-                    System.out.println(ex.getMessage());
-                } catch (SecurityException ex) {
-                    System.out.println(ex.getMessage());
-                } catch (IllegalArgumentException ex) {
-                    System.out.println(ex.getMessage());
-                } catch (InvocationTargetException ex) {
-                    System.out.println(ex.getMessage());
-                } catch (NoSuchMethodException ex) {
-                    System.out.println(ex.getMessage());
-                }
-            } else {
-                singleRowStringbuffer.append(commonSingleFieldString(currentField, currentFieldContent, "    "));
-                allRowsStringbuffer.append(commonSingleFieldString(currentField, currentFieldContent, "  "));
-            }
-        }
-
-        singleRowStringbuffer.append(");");
-        allRowsStringbuffer.append("  ),");
-
-        Map finalInfo = new HashMap();
-        finalInfo.put(idField, id);
-        finalInfo.put("singleRowInfo", singleRowStringbuffer.toString());
-        finalInfo.put("allRowsInfo", allRowsStringbuffer.toString());
-        return finalInfo;
-    }
-
-    public Map buildMissionSingleRowStr(String[] singleRowInfoContent, Map modelInfo, String lang, int idIndex, String idField, Map<String, String> specialField, String keys, String contentSplitFragment, Map combineFields) {
-        Map<String, List<Integer>> fieldIndex = (Map<String, List<Integer>>) modelInfo.get("fieldIndex");
-        Map<String, List<String>> fieldName = (Map<String, List<String>>) modelInfo.get("fieldName");
-        List<Integer> currentFieldIndexList = fieldIndex.get(lang);
-        List<String> currentFieldNameList = fieldName.get(lang);
-        Integer[] currentFieldIndex = currentFieldIndexList.toArray(new Integer[currentFieldIndexList.size()]);
-        String[] currentFieldName = currentFieldNameList.toArray(new String[currentFieldNameList.size()]);
-        currentFieldIndexList = null;
-        currentFieldNameList = null;
-        StringBuilder singleRowStringbuffer = new StringBuilder();
-        StringBuilder allRowsStringbuffer = new StringBuilder();
-        String id = singleRowInfoContent[idIndex];
-        singleRowStringbuffer.append("array (").append("\r\n");
-        allRowsStringbuffer.append("  '").append(id).append("' => \r\n").append("  array (\r\n");
-        for (int i = 0; i < currentFieldIndex.length; i++) {
-            int currentIndex = currentFieldIndex[i];
-            String currentField = currentFieldName[i];
-            String currentFieldContent = singleRowInfoContent[currentIndex];
-            if (currentField.equals(idField)) {
-                id = currentFieldContent;
-            }
-            if (specialField.containsKey(currentField)) {
-                try {
-                    String[] parseFieldFunctionInfo = specialField.get(currentField).split("@");
-                    String parseFieldFunctionName = parseFieldFunctionInfo[0];
-                    int paramCount;
-                    if (parseFieldFunctionInfo.length == 1) {
-                        paramCount = 4;
-                    } else {
-                        paramCount = Integer.valueOf(parseFieldFunctionInfo[1]);
-                    }
-
-                    List<Class> paramType = new ArrayList();
-                    for (int k = 0; k < paramCount; k++) {
-                        paramType.add(String.class);
-                    }
-                    Class clazz[] = paramType.toArray(new Class[]{});
-                    Method parseField = this.getClass().getDeclaredMethod(parseFieldFunctionName, clazz);//getMethod 方法 只能获取public 方法
-                    parseField.setAccessible(true);
-                    //@todo 这一部分可以重构成动态参数的方式 以后在修改
-                    if (paramType.size() == 3) {
-                        singleRowStringbuffer.append(parseField.invoke(this, new Object[]{currentField, currentFieldContent, "    "}));//@todo 精彩的写法
-                        allRowsStringbuffer.append(parseField.invoke(this, new Object[]{currentField, currentFieldContent, "  "}));//@todo 精彩的写法
-                    } else if (paramType.size() == 4) {
-                        singleRowStringbuffer.append(parseField.invoke(this, new Object[]{currentField, currentFieldContent, "    ", contentSplitFragment}));//@todo 精彩的写法
-                        allRowsStringbuffer.append(parseField.invoke(this, new Object[]{currentField, currentFieldContent, "  ", contentSplitFragment}));//@todo 精彩的写法
-                    } else if (paramType.size() == 5) {
-                        singleRowStringbuffer.append(parseField.invoke(this, new Object[]{currentField, keys, currentFieldContent, "    ", contentSplitFragment}));//@todo 精彩的写法
-                        allRowsStringbuffer.append(parseField.invoke(this, new Object[]{currentField, keys, currentFieldContent, "  ", contentSplitFragment}));//@todo 精彩的写法
-                    }
-
-                } catch (IllegalAccessException ex) {
-                    System.out.println("IllegalAccessException:" + ex.getMessage());
-                } catch (SecurityException ex) {
-                    System.out.println("SecurityException:" + ex.getMessage());
-                } catch (IllegalArgumentException ex) {
-                    System.out.println("IllegalArgumentException:" + ex.getMessage());
-                } catch (InvocationTargetException ex) {
-                    System.out.println("InvocationTargetException:" + ex.getMessage());
-                } catch (NoSuchMethodException ex) {
-                    System.out.println("NoSuchMethodException:" + ex.getMessage());
-                }
-            } else {
-                singleRowStringbuffer.append(commonSingleFieldString(currentField, currentFieldContent, "    "));
-                allRowsStringbuffer.append(commonSingleFieldString(currentField, currentFieldContent, "  "));
-            }
-        }
-
-        singleRowStringbuffer.append(");");
-        allRowsStringbuffer.append("  ),");
-
-        Map finalInfo = new HashMap();
-        finalInfo.put(idField, id);
-        finalInfo.put("singleRowInfo", singleRowStringbuffer.toString());
-        finalInfo.put("allRowsInfo", allRowsStringbuffer.toString());
-        return finalInfo;
-    }
-
-    public Map buildSingleRowStr(String[] singleRowInfoContent, Map modelInfo, String lang, int idIndex, String idField, Map<String, String> specialField, String keys, String contentSplitFragment) {
-        Map<String, List<Integer>> fieldIndex = (Map<String, List<Integer>>) modelInfo.get("fieldIndex");
-        Map<String, List<String>> fieldName = (Map<String, List<String>>) modelInfo.get("fieldName");
-        List<Integer> currentFieldIndexList = fieldIndex.get(lang);
-        List<String> currentFieldNameList = fieldName.get(lang);
-        Integer[] currentFieldIndex = currentFieldIndexList.toArray(new Integer[currentFieldIndexList.size()]);
-        String[] currentFieldName = currentFieldNameList.toArray(new String[currentFieldNameList.size()]);
-        currentFieldIndexList = null;
-        currentFieldNameList = null;
-        StringBuilder singleRowStringbuffer = new StringBuilder();
-        StringBuilder allRowsStringbuffer = new StringBuilder();
-        String id = singleRowInfoContent[idIndex];
-        singleRowStringbuffer.append("array (").append("\r\n");
-        allRowsStringbuffer.append("  ").append(id).append(" => \r\n").append("  array (\r\n");
-        for (int i = 0; i < currentFieldIndex.length; i++) {
-            int currentIndex = currentFieldIndex[i];
-            String currentField = currentFieldName[i];
-            String currentFieldContent = singleRowInfoContent[currentIndex];
-            if (currentField.equals(idField)) {
-                id = currentFieldContent;
-            }
-            if (specialField.containsKey(currentField)) {
-                try {
-                    String[] parseFieldFunctionInfo = specialField.get(currentField).split("@");
-                    String parseFieldFunctionName = parseFieldFunctionInfo[0];
-                    int paramCount;
-                    if (parseFieldFunctionInfo.length == 1) {
-                        paramCount = 4;
-                    } else {
-                        paramCount = Integer.valueOf(parseFieldFunctionInfo[1]);
-                    }
-
-                    List<Class> paramType = new ArrayList();
-                    for (int k = 0; k < paramCount; k++) {
-                        paramType.add(String.class);
-                    }
-                    Class clazz[] = paramType.toArray(new Class[]{});
-                    Method parseField = this.getClass().getDeclaredMethod(parseFieldFunctionName, clazz);//getMethod 方法 只能获取public 方法
-                    parseField.setAccessible(true);
-                    //@todo 这一部分可以重构成动态参数的方式 以后在修改
-                    if (paramType.size() == 3) {
-                        singleRowStringbuffer.append(parseField.invoke(this, new Object[]{currentField, currentFieldContent, "    "}));//@todo 精彩的写法
-                        allRowsStringbuffer.append(parseField.invoke(this, new Object[]{currentField, currentFieldContent, "  "}));//@todo 精彩的写法
-                    } else if (paramType.size() == 4) {
-                        singleRowStringbuffer.append(parseField.invoke(this, new Object[]{currentField, currentFieldContent, "    ", contentSplitFragment}));//@todo 精彩的写法
-                        allRowsStringbuffer.append(parseField.invoke(this, new Object[]{currentField, currentFieldContent, "  ", contentSplitFragment}));//@todo 精彩的写法
-                    } else if (paramType.size() == 5) {
-                        singleRowStringbuffer.append(parseField.invoke(this, new Object[]{currentField, keys, currentFieldContent, "    ", contentSplitFragment}));//@todo 精彩的写法
-                        allRowsStringbuffer.append(parseField.invoke(this, new Object[]{currentField, keys, currentFieldContent, "  ", contentSplitFragment}));//@todo 精彩的写法
-                    }
-
-                } catch (IllegalAccessException ex) {
-                    System.out.println("IllegalAccessException:" + ex.getMessage());
-                } catch (SecurityException ex) {
-                    System.out.println("SecurityException:" + ex.getMessage());
-                } catch (IllegalArgumentException ex) {
-                    System.out.println("IllegalArgumentException:" + ex.getMessage());
-                } catch (InvocationTargetException ex) {
-                    System.out.println("InvocationTargetException:" + ex.getMessage());
-                } catch (NoSuchMethodException ex) {
-                    System.out.println("NoSuchMethodException:" + ex.getMessage());
-                }
-            } else {
-                singleRowStringbuffer.append(commonSingleFieldString(currentField, currentFieldContent, "    "));
-                allRowsStringbuffer.append(commonSingleFieldString(currentField, currentFieldContent, "  "));
-            }
-        }
-
-        singleRowStringbuffer.append(");");
-        allRowsStringbuffer.append("  ),");
-
-        Map finalInfo = new HashMap();
-        finalInfo.put(idField, id);
-        finalInfo.put("singleRowInfo", singleRowStringbuffer.toString());
-        finalInfo.put("allRowsInfo", allRowsStringbuffer.toString());
-        return finalInfo;
-    }
-
+    
     private String parseActivityInfo(String field, String content, String leadingString) {
         content = content.replaceAll("<br>", "\r\n");//将<br>替换为\r\n '11:6,2:31
         String[] contentArray = content.split(",");
@@ -871,12 +532,6 @@ public class ConfigParser {
         return tmpContent.toString();
     }
 
-    public String commonSingleFieldString(String field, String content, String leadingString) {
-        content = content.replaceAll("<br>", "\r\n");//将<br>替换为\r\n
-        String contentFormat = "'%s' => '%s',\r\n";
-        return leadingString + String.format(contentFormat, field, content);
-    }
-
     public Map buildSingleItemStr(String[] itemBaseInfoContent, Map modelInfo, String lang, int itemIdIndex) {
         Map<String, List<Integer>> fieldIndex = (Map<String, List<Integer>>) modelInfo.get("fieldIndex");
         Map<String, List<String>> fieldName = (Map<String, List<String>>) modelInfo.get("fieldName");
@@ -1007,7 +662,7 @@ public class ConfigParser {
                                     String currentAllItemInfo = singleRowInfo.get("allItemInfo");
                                     String descFile = buildSingleItemStoredPath(currentLang, itemId, outputPath);
                                     try {
-                                        writeToFile("<?php\r\n return " + singleItemInfo, descFile, "UTF-8");
+                                        FileUtils.writeToFile("<?php\r\n return " + singleItemInfo, descFile, "UTF-8");
                                     } catch (FileNotFoundException ex) {
                                         showMessageDialogMessage(ex);
                                     } catch (IOException ex) {
@@ -1023,7 +678,7 @@ public class ConfigParser {
                                 try {
                                     notifyMessage("语言：" + currentLang + "完成度:" + "100%|正在生成文件:" + outputPath);
                                     String descFile = buildSingleItemStoredPath(currentLang, "", outputPath);
-                                    writeToFile("<?php\r\n" + allItemInfo.toString() + "\r\n);", descFile, "UTF-8");
+                                    FileUtils.writeToFile("<?php\r\n" + allItemInfo.toString() + "\r\n);", descFile, "UTF-8");
                                 } catch (FileNotFoundException ex) {
                                     showMessageDialogMessage(ex);
                                 } catch (IOException ex) {
@@ -1102,13 +757,13 @@ public class ConfigParser {
 
                                 specialField.put("activity_info", "parseActivityInfo");
                                 for (int i = 1; i < activityLibCfg.length; i++) {
-                                    Map<String, String> singleRowInfo = buildSingleRowStr(activityLibCfg[i], modelInfo, currentLang, activityIdIndex, idField, specialField);
+                                    Map<String, String> singleRowInfo = BuildConfigContent.buildSingleRowStr(activityLibCfg[i], modelInfo, currentLang, activityIdIndex, idField, specialField);
                                     String id = singleRowInfo.get(idField);
                                     String singleItemInfo = singleRowInfo.get("singleRowInfo");
                                     String currentAllItemInfo = singleRowInfo.get("allRowsInfo");
                                     String descFile = buildSingleRowStoredPath(currentLang, id, outputPath, "activityLibraryInfo", "activityLibraryInfo");
                                     try {
-                                        writeToFile("<?php\r\n" + singleItemInfo, descFile, "UTF-8");
+                                        FileUtils.writeToFile("<?php\r\n" + singleItemInfo, descFile, "UTF-8");
                                     } catch (FileNotFoundException ex) {
                                         showMessageDialogMessage(ex);
                                     } catch (IOException ex) {
@@ -1124,7 +779,7 @@ public class ConfigParser {
                                 try {
                                     notifyMessage("语言：" + currentLang + "完成度:" + "100%|正在生成文件:" + outputPath);
                                     String descFile = buildSingleRowStoredPath(currentLang, "", outputPath, "activityLibraryInfo", "activityLibraryInfo");
-                                    writeToFile("<?php\r\n" + allActivityInfo.toString(), descFile, "UTF-8");
+                                    FileUtils.writeToFile("<?php\r\n" + allActivityInfo.toString(), descFile, "UTF-8");
                                 } catch (FileNotFoundException ex) {
                                     showMessageDialogMessage(ex);
                                 } catch (IOException ex) {
@@ -1490,11 +1145,11 @@ public class ConfigParser {
             @Override
             public void run() {
                 for (int i = 1; i < commonContent.length; i++) {
-                    Map<String, String> singleRowInfo = buildSingleRowStr(commonContent[i], modelInfo, currentLang, specialField);
+                    Map<String, String> singleRowInfo = BuildConfigContent.buildSingleRowStr(commonContent[i], modelInfo, currentLang, specialField);
                     String singleItemInfo = singleRowInfo.get("singleRowInfo");
                     String descFile = buildSingleRowStoredPath(currentLang, "", outputPath, fileName);
                     try {
-                        writeToFile("<?php\r\n return " + singleItemInfo, descFile, "UTF-8");
+                        FileUtils.writeToFile("<?php\r\n return " + singleItemInfo, descFile, "UTF-8");
                     } catch (FileNotFoundException ex) {
                         showMessageDialogMessage(ex);
                     } catch (IOException ex) {
@@ -1515,14 +1170,14 @@ public class ConfigParser {
                 StringBuilder allContent = new StringBuilder();
                 allContent.append(" return array (\r\n");
                 for (int i = 1; i < commonContent.length; i++) {
-                    Map<String, String> singleRowInfo = buildSingleRowStr(commonContent[i], modelInfo, currentLang, idIndex, idField, specialField);
+                    Map<String, String> singleRowInfo = BuildConfigContent.buildSingleRowStr(commonContent[i], modelInfo, currentLang, idIndex, idField, specialField);
                     String id = singleRowInfo.get(idField);
                     if (!id.isEmpty()) {//空id 直接无视
                         String singleItemInfo = singleRowInfo.get("singleRowInfo");
                         String currentAllItemInfo = singleRowInfo.get("allRowsInfo");
                         String descFile = buildSingleRowStoredPath(currentLang, id, outputPath, fileName, fileName);
                         try {
-                            writeToFile("<?php\r\n return " + singleItemInfo, descFile, "UTF-8");
+                            FileUtils.writeToFile("<?php\r\n return " + singleItemInfo, descFile, "UTF-8");
                         } catch (FileNotFoundException ex) {
                             showMessageDialogMessage(ex);
                         } catch (IOException ex) {
@@ -1539,7 +1194,7 @@ public class ConfigParser {
                 try {
                     notifyMessage("语言：" + currentLang + "完成度:" + "100%|正在生成文件:" + outputPath);
                     String descFile = buildSingleRowStoredPath(currentLang, "", outputPath, fileName, fileName);
-                    writeToFile("<?php\r\n" + allContent.toString() + "\r\n);", descFile, "UTF-8");
+                    FileUtils.writeToFile("<?php\r\n" + allContent.toString() + "\r\n);", descFile, "UTF-8");
                 } catch (FileNotFoundException ex) {
                     showMessageDialogMessage(ex);
                 } catch (IOException ex) {
@@ -1558,14 +1213,14 @@ public class ConfigParser {
                 StringBuilder allContent = new StringBuilder();
                 allContent.append(" return array (\r\n");
                 for (int i = 1; i < commonContent.length; i++) {
-                    Map<String, String> singleRowInfo = buildMissionSingleRowStr(commonContent[i], modelInfo, currentLang, idIndex, idField, specialField, keys, contentSplitFragment, combineFields);
+                    Map<String, String> singleRowInfo = BuildConfigContent.buildMissionSingleRowStr(commonContent[i], modelInfo, currentLang, idIndex, idField, specialField, keys, contentSplitFragment, combineFields);
                     String id = singleRowInfo.get(idField);
                     if (!id.isEmpty()) {//空id 直接无视
                         String singleItemInfo = singleRowInfo.get("singleRowInfo");
                         String currentAllItemInfo = singleRowInfo.get("allRowsInfo");
                         String descFile = buildSingleRowStoredPath(currentLang, id, outputPath, fileName, fileName);
                         try {
-                            writeToFile("<?php\r\n return " + singleItemInfo, descFile, "UTF-8");
+                            FileUtils.writeToFile("<?php\r\n return " + singleItemInfo, descFile, "UTF-8");
                         } catch (FileNotFoundException ex) {
                             showMessageDialogMessage(ex);
                         } catch (IOException ex) {
@@ -1582,7 +1237,7 @@ public class ConfigParser {
                 try {
                     notifyMessage("语言：" + currentLang + "完成度:" + "100%|正在生成文件:" + outputPath);
                     String descFile = buildSingleRowStoredPath(currentLang, "", outputPath, fileName, fileName);
-                    writeToFile("<?php\r\n" + allContent.toString() + "\r\n);", descFile, "UTF-8");
+                    FileUtils.writeToFile("<?php\r\n" + allContent.toString() + "\r\n);", descFile, "UTF-8");
                 } catch (FileNotFoundException ex) {
                     showMessageDialogMessage(ex);
                 } catch (IOException ex) {
@@ -1601,14 +1256,14 @@ public class ConfigParser {
                 StringBuilder allContent = new StringBuilder();
                 allContent.append(" return array (\r\n");
                 for (int i = 1; i < commonContent.length; i++) {
-                    Map<String, String> singleRowInfo = buildSingleRowStr(commonContent[i], modelInfo, currentLang, idIndex, idField, specialField, keys, contentSplitFragment);
+                    Map<String, String> singleRowInfo = BuildConfigContent.buildSingleRowStr(commonContent[i], modelInfo, currentLang, idIndex, idField, specialField, keys, contentSplitFragment);
                     String id = singleRowInfo.get(idField);
                     if (!id.isEmpty()) {//空id 直接无视
                         String singleItemInfo = singleRowInfo.get("singleRowInfo");
                         String currentAllItemInfo = singleRowInfo.get("allRowsInfo");
                         String descFile = buildSingleRowStoredPath(currentLang, id, outputPath, fileName, fileName);
                         try {
-                            writeToFile("<?php\r\n return " + singleItemInfo, descFile, "UTF-8");
+                            FileUtils.writeToFile("<?php\r\n return " + singleItemInfo, descFile, "UTF-8");
                         } catch (FileNotFoundException ex) {
                             showMessageDialogMessage(ex);
                         } catch (IOException ex) {
@@ -1625,7 +1280,7 @@ public class ConfigParser {
                 try {
                     notifyMessage("语言：" + currentLang + "完成度:" + "100%|正在生成文件:" + outputPath);
                     String descFile = buildSingleRowStoredPath(currentLang, "", outputPath, fileName, fileName);
-                    writeToFile("<?php\r\n" + allContent.toString() + "\r\n);", descFile, "UTF-8");
+                    FileUtils.writeToFile("<?php\r\n" + allContent.toString() + "\r\n);", descFile, "UTF-8");
                 } catch (FileNotFoundException ex) {
                     showMessageDialogMessage(ex);
                 } catch (IOException ex) {
@@ -1750,17 +1405,7 @@ public class ConfigParser {
         finalInfo.put("fieldName", fieldName);
         return finalInfo;
     }
-
-    public String getSingleRowContent(String[] dsOpengraphCfg) {
-
-        return "";
-    }
-
-    public String getSingleRowContentByLang(String[] dsOpengraphCfg, String lang) {
-
-        return "";
-    }
-
+    
     public static String[] getLangs() {
         return new String[]{"zh_tw", "de_de", "fr_fr", "en_us", "es_es"};
     }
@@ -1866,26 +1511,6 @@ public class ConfigParser {
             buildedContent += buildFinalDsOpengraphStringFromStringArray(func, sheetNum, content);
         }
         return buildedContent;
-    }
-
-    public void writeToFile(String contents, File descFile) throws UnsupportedEncodingException, FileNotFoundException, IOException {
-        writeToFile(contents, descFile, "UTF-8");
-    }
-
-    public static void writeToFile(String contents, File descFile, String encoding) throws UnsupportedEncodingException, FileNotFoundException, IOException {
-        if (!descFile.getParentFile().exists()) {
-            if (!descFile.getParentFile().mkdirs()) {
-                JOptionPane.showMessageDialog(null, "创建目录文件所在的目录失败", "信息提示", JOptionPane.ERROR_MESSAGE);
-                System.out.println("创建目录文件所在的目录失败！");
-            }
-        }
-        if (!descFile.exists()) {
-            descFile.createNewFile();
-        }
-        Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(descFile), encoding));
-        writer.write(contents);
-        writer.flush();
-        writer.close();
     }
 
     /**
