@@ -209,5 +209,18 @@ public class ArrayUtils {
         }
         return lastIndex;
     }
+    
+    public static String[] getModelFromStringArray(String[][] content) {
+        String[] model;
+        int i = 0;
+        for (; i < content[0].length; i++) {
+            if (content[0][i].isEmpty()) {
+                break;
+            }
+        }
+        model = new String[i];
+        System.arraycopy(content[0], 0, model, 0, i);
+        return model;
+    }
 
 }

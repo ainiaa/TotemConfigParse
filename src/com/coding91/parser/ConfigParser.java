@@ -70,7 +70,7 @@ public class ConfigParser {
             Map specialField = new HashMap();
 
             if ("DS_SHOP_OBJ_ITEM".equals(func)) {//shopItem
-                transformShopObjectItem(configFilePath, func, outputPath);
+                TransformConfigLogic.transformShopObjectItem(configFilePath, func, outputPath);
             } else if ("ACTIVITY_LIB".equals(func)) {//activityLibraryInfo
                 specialField.put("activity_info", "parseCommonMultipleWithKeyValue@4");
                 specialField.put("unlockRecipe", "parseCommonMultiple@4");
@@ -148,7 +148,7 @@ public class ConfigParser {
         String langs[];
         try {
             String[][] itemLangCfg = itemLangInfoCfg(configFilePath);
-            String[] itemLangModelName = getModelFromStringArray(itemLangCfg);
+            String[] itemLangModelName = ArrayUtils.getModelFromStringArray(itemLangCfg);
             langs = ArrayUtils.arraySlice(itemLangModelName, 1);
         } catch (Exception e) {
             langs = new String[0];
@@ -217,103 +217,6 @@ public class ConfigParser {
         return finalIndex;
     }
 
-    /**
-     * 甜品店 shop object item
-     *
-     * @param configFilePath
-     * @param func
-     * @param outputPath
-     */
-    public void transformShopObjectItem(final String configFilePath, String func, final String outputPath) {
-        JOptionPane.showMessageDialog(null, "转换开始");
-        final long startTime = System.currentTimeMillis();
-        final List<Thread> threadList = new ArrayList();
-        final ConfigParser currentUIObject = this;
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    int sheetIndex = ExcelParser.getSheetIndexBySheetName(configFilePath, "Worksheet");
-                    final String[][] dsOpengraphCfg = ExcelParser.parseXls(configFilePath, sheetIndex, true);
-
-                    final Map<String, Map<String, List<String>>> modelInfo = TransformConfigLogic.getModel(dsOpengraphCfg[0]);
-                    String[] langList = getLangs();
-
-                    for (final String currentLang : langList) {
-                        // start single lang 
-                        Thread currentThread = new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                int itemIdIndex = ConfigParser.getFieldIndexByFieldName(modelInfo.get("fieldName").get(currentLang), "item_id");
-                                StringBuilder allItemInfo = new StringBuilder();
-                                allItemInfo.append(" return array (\r\n");
-                                for (int i = 1; i < dsOpengraphCfg.length; i++) {
-                                    Map<String, String> singleRowInfo = BuildConfigLogic.buildSingleItemStr(dsOpengraphCfg[i], modelInfo, currentLang, itemIdIndex);
-                                    String itemId = singleRowInfo.get("itemId");
-                                    String singleItemInfo = singleRowInfo.get("singleItemInfo");
-                                    String currentAllItemInfo = singleRowInfo.get("allItemInfo");
-                                    String descFile = BuildConfigLogic.buildSingleItemStoredPath(currentLang, itemId, outputPath);
-                                    try {
-                                        FileUtils.writeToFile("<?php\r\n return " + singleItemInfo, descFile, "UTF-8");
-                                    } catch (FileNotFoundException ex) {
-                                        showMessageDialogMessage(ex);
-                                    } catch (IOException ex) {
-                                        showMessageDialogMessage(ex);
-                                    }
-                                    if (i == 1) {//第一行 没有必要添加\r\n
-                                        allItemInfo.append(currentAllItemInfo);
-                                    } else {
-                                        allItemInfo.append("\r\n").append(currentAllItemInfo);
-                                    }
-                                    notifyMessage("语言：" + currentLang + "完成度:" + (i * 100 / dsOpengraphCfg.length) + "%|正在生成文件:" + outputPath);
-                                }
-                                try {
-                                    notifyMessage("语言：" + currentLang + "完成度:" + "100%|正在生成文件:" + outputPath);
-                                    String descFile = BuildConfigLogic.buildSingleItemStoredPath(currentLang, "", outputPath);
-                                    FileUtils.writeToFile("<?php\r\n" + allItemInfo.toString() + "\r\n);", descFile, "UTF-8");
-                                } catch (FileNotFoundException ex) {
-                                    showMessageDialogMessage(ex);
-                                } catch (IOException ex) {
-                                    showMessageDialogMessage(ex);
-                                }
-                            }
-                        });
-                        currentThread.start();
-                        threadList.add(currentThread);
-                        //end single lang
-                    }
-
-                    boolean allThreadFinished;
-                    do {
-                        allThreadFinished = false;
-                        try {
-                            for (Thread t : threadList) {
-                                if (t.getState() != Thread.State.TERMINATED) {
-                                    allThreadFinished = false;
-                                    break;
-                                } else {
-                                    allThreadFinished = true;
-                                }
-                            }
-                            Thread.sleep(1000);//停止1s再坚持
-                        } catch (InterruptedException ex) {
-                            showMessageDialogMessage(ex);
-                        }
-                    } while (!allThreadFinished);//
-                    long endTime = System.currentTimeMillis();
-                    long diff = endTime - startTime;
-                    notifyMessage("转换完成。耗时:" + DateTimeUtils.formatTimeDuration(diff));
-                    currentUIObject.transformFinish("完成转换!");
-                } catch (IOException ex) {
-                    showMessageDialogMessage(ex);
-                } catch (BiffException ex) {
-                    showMessageDialogMessage(ex);
-                }
-            }
-        });
-        thread.start();
-    }
-
     public static void notifyMessage(String msg) {
         System.out.println("notifyMessage :" + msg);
     }
@@ -360,34 +263,11 @@ public class ConfigParser {
         return sb.toString();
     }
 
-    public String[] getModelFromStringArray(String[][] content) {
-        String[] model;
-        int i = 0;
-        for (; i < content[0].length; i++) {
-            if (content[0][i].isEmpty()) {
-                break;
-            }
-        }
-        model = new String[i];
-        System.arraycopy(content[0], 0, model, 0, i);
-        return model;
-    }
-
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
         System.out.println(" ==========");
-    }
-
-    public static boolean isNumeric(String str) {
-        for (int i = str.length(); --i >= 0;) {
-            int chr = str.charAt(i);
-            if (chr < 48 || chr > 57) {
-                return false;
-            }
-        }
-        return true;
     }
 
     public static void showMessageDialogMessage(Exception ex) {

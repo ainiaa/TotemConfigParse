@@ -8,6 +8,7 @@ package com.coding91.logic;
 import com.coding91.parser.BuildConfigContent;
 import com.coding91.parser.ConfigParser;
 import static com.coding91.parser.ConfigParser.getLangs;
+import static com.coding91.parser.ConfigParser.notifyMessage;
 import static com.coding91.parser.ConfigParser.showMessageDialogMessage;
 import com.coding91.utils.DateTimeUtils;
 import com.coding91.utils.ExcelParser;
@@ -28,6 +29,101 @@ import jxl.read.biff.BiffException;
  */
 public class TransformConfigLogic {
     
+    /**
+     * 甜品店 shop object item
+     *
+     * @param configFilePath
+     * @param func
+     * @param outputPath
+     */
+    public static void transformShopObjectItem(final String configFilePath, String func, final String outputPath) {
+        JOptionPane.showMessageDialog(null, "转换开始");
+        final long startTime = System.currentTimeMillis();
+        final List<Thread> threadList = new ArrayList();
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    int sheetIndex = ExcelParser.getSheetIndexBySheetName(configFilePath, "Worksheet");
+                    final String[][] dsOpengraphCfg = ExcelParser.parseXls(configFilePath, sheetIndex, true);
+
+                    final Map<String, Map<String, List<String>>> modelInfo = TransformConfigLogic.getModel(dsOpengraphCfg[0]);
+                    String[] langList = getLangs();
+
+                    for (final String currentLang : langList) {
+                        // start single lang 
+                        Thread currentThread = new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                int itemIdIndex = ConfigParser.getFieldIndexByFieldName(modelInfo.get("fieldName").get(currentLang), "item_id");
+                                StringBuilder allItemInfo = new StringBuilder();
+                                allItemInfo.append(" return array (\r\n");
+                                for (int i = 1; i < dsOpengraphCfg.length; i++) {
+                                    Map<String, String> singleRowInfo = BuildConfigLogic.buildSingleItemStr(dsOpengraphCfg[i], modelInfo, currentLang, itemIdIndex);
+                                    String itemId = singleRowInfo.get("itemId");
+                                    String singleItemInfo = singleRowInfo.get("singleItemInfo");
+                                    String currentAllItemInfo = singleRowInfo.get("allItemInfo");
+                                    String descFile = BuildConfigLogic.buildSingleItemStoredPath(currentLang, itemId, outputPath);
+                                    try {
+                                        FileUtils.writeToFile("<?php\r\n return " + singleItemInfo, descFile, "UTF-8");
+                                    } catch (FileNotFoundException ex) {
+                                        showMessageDialogMessage(ex);
+                                    } catch (IOException ex) {
+                                        showMessageDialogMessage(ex);
+                                    }
+                                    if (i == 1) {//第一行 没有必要添加\r\n
+                                        allItemInfo.append(currentAllItemInfo);
+                                    } else {
+                                        allItemInfo.append("\r\n").append(currentAllItemInfo);
+                                    }
+                                    notifyMessage("语言：" + currentLang + "完成度:" + (i * 100 / dsOpengraphCfg.length) + "%|正在生成文件:" + outputPath);
+                                }
+                                try {
+                                    notifyMessage("语言：" + currentLang + "完成度:" + "100%|正在生成文件:" + outputPath);
+                                    String descFile = BuildConfigLogic.buildSingleItemStoredPath(currentLang, "", outputPath);
+                                    FileUtils.writeToFile("<?php\r\n" + allItemInfo.toString() + "\r\n);", descFile, "UTF-8");
+                                } catch (FileNotFoundException ex) {
+                                    showMessageDialogMessage(ex);
+                                } catch (IOException ex) {
+                                    showMessageDialogMessage(ex);
+                                }
+                            }
+                        });
+                        currentThread.start();
+                        threadList.add(currentThread);
+                        //end single lang
+                    }
+
+                    boolean allThreadFinished;
+                    do {
+                        allThreadFinished = false;
+                        try {
+                            for (Thread t : threadList) {
+                                if (t.getState() != Thread.State.TERMINATED) {
+                                    allThreadFinished = false;
+                                    break;
+                                } else {
+                                    allThreadFinished = true;
+                                }
+                            }
+                            Thread.sleep(1000);//停止1s再坚持
+                        } catch (InterruptedException ex) {
+                            showMessageDialogMessage(ex);
+                        }
+                    } while (!allThreadFinished);//
+                    long endTime = System.currentTimeMillis();
+                    long diff = endTime - startTime;
+                    notifyMessage("转换完成。耗时:" + DateTimeUtils.formatTimeDuration(diff));
+                    ConfigParser.transformFinish("完成转换!");
+                } catch (IOException ex) {
+                    showMessageDialogMessage(ex);
+                } catch (BiffException ex) {
+                    showMessageDialogMessage(ex);
+                }
+            }
+        });
+        thread.start();
+    }
     
     /**
      * mission 特例

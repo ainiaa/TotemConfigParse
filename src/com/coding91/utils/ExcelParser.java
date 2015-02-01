@@ -5,7 +5,6 @@
  */
 package com.coding91.utils;
 
-import static com.coding91.parser.ConfigParser.isNumeric;
 import java.io.File;
 import java.io.IOException;
 import jxl.Cell;
@@ -114,7 +113,7 @@ public class ExcelParser {
             finalContents = DateTimeUtils.formatTime(sheet.getCell(i, j));
         } else {
             String tmpContent = sheet.getCell(i, j).getContents();
-            if (!isNumeric(tmpContent) && escapeSlash) {
+            if (!StringUtils.isNumeric(tmpContent) && escapeSlash) {
                 tmpContent = tmpContent.replace("\\'", "\'");//防止单引号已经被转义了 如果没有这一步骤的话 被转义的单引号就会出现问题
                 tmpContent = tmpContent.replace("\'", "\\'");
             }
