@@ -17,6 +17,14 @@ import java.util.Map;
  * @author Administrator
  */
 public class ParseConfigLogic {
+
+    /**
+     *
+     * @param field
+     * @param content
+     * @param leadingString
+     * @return
+     */
     public static String parseActivityInfo(String field, String content, String leadingString) {
         content = content.replaceAll("<br>", "\r\n");//将<br>替换为\r\n '11:6,2:31
         String[] contentArray = content.split(",");
@@ -157,19 +165,19 @@ public class ParseConfigLogic {
         String leadingString2 = leadingString + leadingString;
         String leadingString3 = leadingString + leadingString + leadingString;
         String secondFloorContentFormat = "%s%d => array (\r\n"
-                + "%s'require_index' => '%s',\r\n"
-                + "%s'mission_require_icon' => '%s',\r\n"
-                + "%s'mission_require_type' => '%s',\r\n"
-                + "%s'require_item_id' => '%s',\r\n"
-                + "%s'require_item_num' => '%s',\r\n"
-                + "%s'require_type' => '%s',\r\n"
-                + "%s'require_id' => '%s',\r\n"
-                + "%s'is_skippable' => '%s',\r\n"
-                + "%s'require_skip_cash' => '%s',\r\n"
-                + "%s'mission_sub_require' => '%s',\r\n"
-                + "%s'mission_sub_require_desc' => '%s',\r\n"
-                + "%s'mission_sub_require_tips' => '%s',\r\n"
-                + "%s),\r\n";
+                + leadingString3 + "%s'require_index' => '%s',\r\n"
+                + leadingString3 + "%s'mission_require_icon' => '%s',\r\n"
+                + leadingString3 + "%s'mission_require_type' => '%s',\r\n"
+                + leadingString3 + "%s'require_item_id' => '%s',\r\n"
+                + leadingString3 + "%s'require_item_num' => '%s',\r\n"
+                + leadingString3 + "%s'require_type' => '%s',\r\n"
+                + leadingString3 + "%s'require_id' => '%s',\r\n"
+                + leadingString3 + "%s'is_skippable' => '%s',\r\n"
+                + leadingString3 + "%s'require_skip_cash' => '%s',\r\n"
+                + leadingString3 + "%s'mission_sub_require' => '%s',\r\n"
+                + leadingString3 + "%s'mission_sub_require_desc' => '%s',\r\n"
+                + leadingString3 + "%s'mission_sub_require_tips' => '%s',\r\n"
+                + leadingString3 + "%s),\r\n";
         if (!content.isEmpty()) {
             tmpContent.append("array(\r\n");
             int firstFoolrIndex = 0;
@@ -178,19 +186,19 @@ public class ParseConfigLogic {
                     String[] currentSecondFloorContentArray = currentFirstFloorContent.split(MISSION_REQUIRE_SECOND_FLOOR);//第二层
                     tmpContent.append(leadingString).append(leadingString)
                             .append(String.format(secondFloorContentFormat, leadingString2, firstFoolrIndex,
-                                            leadingString3, currentSecondFloorContentArray[0],
-                                            leadingString3, currentSecondFloorContentArray[1],
-                                            leadingString3, currentSecondFloorContentArray[2],
-                                            leadingString3, currentSecondFloorContentArray[3],
-                                            leadingString3, currentSecondFloorContentArray[4],
-                                            leadingString3, currentSecondFloorContentArray[5],
-                                            leadingString3, currentSecondFloorContentArray[6],
-                                            leadingString3, currentSecondFloorContentArray[7],
-                                            leadingString3, currentSecondFloorContentArray[8],
-                                            leadingString3, currentSecondFloorContentArray[9],
-                                            leadingString3, currentSecondFloorContentArray[10],
-                                            leadingString3, currentSecondFloorContentArray[11],
-                                            leadingString2));
+                                            currentSecondFloorContentArray[0],
+                                            currentSecondFloorContentArray[1],
+                                            currentSecondFloorContentArray[2],
+                                            currentSecondFloorContentArray[3],
+                                            currentSecondFloorContentArray[4],
+                                            currentSecondFloorContentArray[5],
+                                            currentSecondFloorContentArray[6],
+                                            currentSecondFloorContentArray[7],
+                                            currentSecondFloorContentArray[8],
+                                            currentSecondFloorContentArray[9],
+                                            currentSecondFloorContentArray[10],
+                                            currentSecondFloorContentArray[11]
+                                    ));
                 } else {
                     tmpContent.append(leadingString).append(leadingString).append(firstFoolrIndex).append(" => array(),\r\n");
                 }
@@ -213,6 +221,7 @@ public class ParseConfigLogic {
      * @param field
      * @param content
      * @param leadingString
+     * @param contentSplitFragment
      * @return
      */
     public static String parseCommonMultiple(String field, String content, String leadingString, String contentSplitFragment) {
@@ -328,37 +337,38 @@ public class ParseConfigLogic {
     /**
      * 将 1:12,2:22,3:33 转换为 array ( 0 => array('key' => 1,'value' => 12), 1 =>
      * array('key' => 2,'value' => 22), 2 => array('key' => 3,'value' => 33), )
-     *
+     * currentField, currentFieldContent, "    ", contentSplitFragment
      * @param field
+     * @param keys
      * @param content
      * @param leadingString
      * @return
      */
-    public static String parseCommonMultipleWithKeyValue(String field, String keys, String content, String leadingString) {
+    public static String parseCommonMultipleWithKeyValue(String field, String content, String leadingString, String keys) {
         content = content.replaceAll("<br>", "\r\n");//将<br>替换为\r\n '11:6,2:31
         String[] contentArray = content.split(",");
         StringBuilder tmpContent = new StringBuilder();
         tmpContent.append(leadingString).append("'").append(field).append("' => ");
         if (!content.isEmpty()) {
-            tmpContent.append("array(");
+            tmpContent.append("array(\r\n");
             String[] keyArray = keys.split(",");
+            int index = 0;
             for (String currentContent : contentArray) {
                 String[] contentFactor = currentContent.split(":");
-                tmpContent.append(leadingString).append(leadingString).append("array(");
+                tmpContent.append(leadingString).append(leadingString).append(leadingString).append(leadingString).append(index++).append(" => array(\r\n");
                 if (contentFactor.length == keyArray.length) {
                     for (int i = 0; i < keyArray.length; i++) {
-                        tmpContent.append(String.format("'%s' => '%s',", keyArray[i], contentFactor[i]));
+                        tmpContent.append(String.format("'%s' => '%s',\r\n", keyArray[i], contentFactor[i]));
                     }
                 }
-                tmpContent.append("),");
+                tmpContent.append("),\r\n");
             }
             tmpContent.append(")");
         }
         tmpContent.append(",\r\n");
         return tmpContent.toString();
     }
-    
-    
+
     public static String[][] cleanupOriginContent(final String[][] originContent, String currentLang, Map<String, Map<String, List>> modelInfo, Map<String, String[]> combineFields) {
         String[][] finalContent = new String[originContent.length][originContent[0].length];
 //        System.arraycopy(originContent, 0, finalContent, 0, originContent.length);//这个会影响到 originContent 这个数组。。。。

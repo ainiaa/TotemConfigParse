@@ -10,6 +10,7 @@ import com.coding91.parser.ConfigParser;
 import static com.coding91.parser.ConfigParser.getLangs;
 import static com.coding91.parser.ConfigParser.notifyMessage;
 import static com.coding91.parser.ConfigParser.showMessageDialogMessage;
+import com.coding91.transformRunable.TransformRunable;
 import com.coding91.utils.DateTimeUtils;
 import com.coding91.utils.ExcelParser;
 import com.coding91.utils.FileUtils;
@@ -28,7 +29,7 @@ import jxl.read.biff.BiffException;
  * @author Administrator
  */
 public class TransformConfigLogic {
-    
+
     /**
      * 甜品店 shop object item
      *
@@ -124,7 +125,7 @@ public class TransformConfigLogic {
         });
         thread.start();
     }
-    
+
     /**
      * mission 特例
      *
@@ -191,7 +192,7 @@ public class TransformConfigLogic {
             }
         }).start();
     }
-    
+
     /**
      * 甜品店 活动库
      *
@@ -226,7 +227,7 @@ public class TransformConfigLogic {
 
                                 specialField.put("activity_info", "parseActivityInfo");
                                 for (int i = 1; i < activityLibCfg.length; i++) {
-                                    Map<String, String> singleRowInfo = BuildConfigContent.buildSingleRowStr(activityLibCfg[i], modelInfo, currentLang, activityIdIndex, idField, specialField);
+                                    Map<String, String> singleRowInfo = BuildConfigContent.buildSingleRowStr(activityLibCfg[i], modelInfo, currentLang, activityIdIndex, idField, specialField, null, null, null);
                                     String id = singleRowInfo.get(idField);
                                     String singleItemInfo = singleRowInfo.get("singleRowInfo");
                                     String currentAllItemInfo = singleRowInfo.get("allRowsInfo");
@@ -291,7 +292,7 @@ public class TransformConfigLogic {
         });
         thread.start();
     }
-    
+
     /**
      * 通用
      *
@@ -304,56 +305,19 @@ public class TransformConfigLogic {
      */
     public static void transformCommonContent(final String configFilePath, final String outputPath, final String fileName, final String sheetName, final String idField, final Map specialField) {
         final long startTime = System.currentTimeMillis();
-        final List<Thread> threadList = new ArrayList();
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    int sheetIndex = ExcelParser.getSheetIndexBySheetName(configFilePath, sheetName);
-                    final String[][] commonContent = ExcelParser.parseXls(configFilePath, sheetIndex, true);
+        TransformRunable transformRunable = new TransformRunable();
+        transformRunable.setConfigFilePath(configFilePath);
+        transformRunable.setOutputPath(outputPath);
+        transformRunable.setFileName(fileName);
+        transformRunable.setSheetName(sheetName);
+        transformRunable.setIdField(idField);
+        transformRunable.setSpecialField(specialField);
+        transformRunable.setStartTime(startTime);
 
-                    final Map<String, Map<String, List<String>>> modelInfo = getModel(commonContent[0]);
-                    String[] langList = getLangs();
-
-                    for (final String currentLang : langList) {
-                        // start single lang 
-                        Thread currentThread = transformCommonThread(currentLang, outputPath, fileName, modelInfo, commonContent, idField, specialField);
-                        currentThread.start();
-                        threadList.add(currentThread);
-                        //end single lang
-                    }
-
-                    boolean allThreadFinished;
-                    do {
-                        allThreadFinished = false;
-                        try {
-                            for (Thread t : threadList) {
-                                if (t.getState() != Thread.State.TERMINATED) {
-                                    allThreadFinished = false;
-                                    break;
-                                } else {
-                                    allThreadFinished = true;
-                                }
-                            }
-                            Thread.sleep(1000);//停止1s再执行
-                        } catch (InterruptedException ex) {
-                            showMessageDialogMessage(ex);
-                        }
-                    } while (!allThreadFinished);//
-                    long endTime = System.currentTimeMillis();
-                    long diff = endTime - startTime;
-                    ConfigParser.notifyMessage("转换完成。耗时:" + DateTimeUtils.formatTimeDuration(diff));
-                    ConfigParser.transformFinish("完成转换!");
-                } catch (IOException ex) {
-                    showMessageDialogMessage(ex);
-                } catch (BiffException ex) {
-                    showMessageDialogMessage(ex);
-                }
-            }
-        }).start();
+        new Thread(transformRunable).start();
     }
-    
+
     /**
      * 通用
      *
@@ -365,57 +329,23 @@ public class TransformConfigLogic {
      * @param specialField
      * @param keys
      * @param contentSplitFragment
+     * @param defaultValue
      */
-    public static void transformCommonContent(final String configFilePath, final String outputPath, final String fileName, final String sheetName, final String idField, final Map specialField, final String keys, final String contentSplitFragment) {
+    public static void transformCommonContent(final String configFilePath, final String outputPath, final String fileName, final String sheetName, final String idField, final Map specialField, final String keys, final String contentSplitFragment, final Map defaultValue) {
         final long startTime = System.currentTimeMillis();
-        final List<Thread> threadList = new ArrayList();
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    int sheetIndex = ExcelParser.getSheetIndexBySheetName(configFilePath, sheetName);
-                    final String[][] commonContent = ExcelParser.parseXls(configFilePath, sheetIndex, true);
-
-                    final Map<String, Map<String, List<String>>> modelInfo = getModel(commonContent[0]);
-                    String[] langList = getLangs();
-
-                    for (final String currentLang : langList) {
-                        // start single lang 
-                        Thread currentThread = transformCommonThread(currentLang, outputPath, fileName, modelInfo, commonContent, idField, specialField, keys, contentSplitFragment);
-                        currentThread.start();
-                        threadList.add(currentThread);
-                        //end single lang
-                    }
-
-                    boolean allThreadFinished;
-                    do {
-                        allThreadFinished = false;
-                        try {
-                            for (Thread t : threadList) {
-                                if (t.getState() != Thread.State.TERMINATED) {
-                                    allThreadFinished = false;
-                                    break;
-                                } else {
-                                    allThreadFinished = true;
-                                }
-                            }
-                            Thread.sleep(1000);//停止1s再执行
-                        } catch (InterruptedException ex) {
-                            showMessageDialogMessage(ex);
-                        }
-                    } while (!allThreadFinished);//
-                    long endTime = System.currentTimeMillis();
-                    long diff = endTime - startTime;
-                    ConfigParser.notifyMessage("转换完成。耗时:" + DateTimeUtils.formatTimeDuration(diff));
-                    ConfigParser.transformFinish("完成转换!");
-                } catch (IOException ex) {
-                    showMessageDialogMessage(ex);
-                } catch (BiffException ex) {
-                    showMessageDialogMessage(ex);
-                }
-            }
-        }).start();
+        TransformRunable transformRunable = new TransformRunable();
+        transformRunable.setConfigFilePath(configFilePath);
+        transformRunable.setOutputPath(outputPath);
+        transformRunable.setFileName(fileName);
+        transformRunable.setSheetName(sheetName);
+        transformRunable.setIdField(idField);
+        transformRunable.setSpecialField(specialField);
+        transformRunable.setStartTime(startTime);
+        transformRunable.setKeys(keys);
+        transformRunable.setDefalutValue(defaultValue);
+        transformRunable.setContentSplitFragment(contentSplitFragment);
+        new Thread(transformRunable).start();
     }
 
     /**
@@ -484,7 +414,8 @@ public class TransformConfigLogic {
             @Override
             public void run() {
                 for (int i = 1; i < commonContent.length; i++) {
-                    Map<String, String> singleRowInfo = BuildConfigContent.buildSingleRowStr(commonContent[i], modelInfo, currentLang, specialField);
+                    //String[] singleRowInfoContent, Map modelInfo, String lang, int idIndex, String idField, Map<String, String> specialField, String keys, String contentSplitFragment
+                    Map<String, String> singleRowInfo = BuildConfigContent.buildSingleRowStr(commonContent[i], modelInfo, currentLang, -1, null, specialField, null, null, null);
                     String singleItemInfo = singleRowInfo.get("singleRowInfo");
                     String descFile = BuildConfigLogic.buildSingleRowStoredPath(currentLang, "", outputPath, fileName);
                     try {
@@ -495,49 +426,6 @@ public class TransformConfigLogic {
                         showMessageDialogMessage(ex);
                     }
                     ConfigParser.notifyMessage("语言：" + currentLang + "完成度:" + (i * 100 / commonContent.length) + "%|正在生成文件:" + outputPath);
-                }
-            }
-        });
-        return currentThread;
-    }
-
-    private static Thread transformCommonThread(final String currentLang, final String outputPath, final String fileName, final Map<String, Map<String, List<String>>> modelInfo, final String[][] commonContent, final String idField, final Map specialField) {
-        Thread currentThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                int idIndex = ConfigParser.getFieldIndexByFieldName(modelInfo.get("fieldName").get(currentLang), idField);
-                StringBuilder allContent = new StringBuilder();
-                allContent.append(" return array (\r\n");
-                for (int i = 1; i < commonContent.length; i++) {
-                    Map<String, String> singleRowInfo = BuildConfigContent.buildSingleRowStr(commonContent[i], modelInfo, currentLang, idIndex, idField, specialField);
-                    String id = singleRowInfo.get(idField);
-                    if (!id.isEmpty()) {//空id 直接无视
-                        String singleItemInfo = singleRowInfo.get("singleRowInfo");
-                        String currentAllItemInfo = singleRowInfo.get("allRowsInfo");
-                        String descFile = BuildConfigLogic.buildSingleRowStoredPath(currentLang, id, outputPath, fileName, fileName);
-                        try {
-                            FileUtils.writeToFile("<?php\r\n return " + singleItemInfo, descFile, "UTF-8");
-                        } catch (FileNotFoundException ex) {
-                            showMessageDialogMessage(ex);
-                        } catch (IOException ex) {
-                            showMessageDialogMessage(ex);
-                        }
-                        if (i == 1) {//第一行 没有必要添加\r\n
-                            allContent.append(currentAllItemInfo);
-                        } else {
-                            allContent.append("\r\n").append(currentAllItemInfo);
-                        }
-                        ConfigParser.notifyMessage("语言：" + currentLang + "完成度:" + (i * 100 / commonContent.length) + "%|正在生成文件:" + outputPath);
-                    }
-                }
-                try {
-                    ConfigParser.notifyMessage("语言：" + currentLang + "完成度:" + "100%|正在生成文件:" + outputPath);
-                    String descFile = BuildConfigLogic.buildSingleRowStoredPath(currentLang, "", outputPath, fileName, fileName);
-                    FileUtils.writeToFile("<?php\r\n" + allContent.toString() + "\r\n);", descFile, "UTF-8");
-                } catch (FileNotFoundException ex) {
-                    showMessageDialogMessage(ex);
-                } catch (IOException ex) {
-                    showMessageDialogMessage(ex);
                 }
             }
         });
@@ -587,7 +475,7 @@ public class TransformConfigLogic {
         return currentThread;
     }
 
-    private static Thread transformCommonThread(final String currentLang, final String outputPath, final String fileName, final Map<String, Map<String, List<String>>> modelInfo, final String[][] commonContent, final String idField, final Map specialField, final String keys, final String contentSplitFragment) {
+    private static Thread transformCommonThread(final String currentLang, final String outputPath, final String fileName, final Map<String, Map<String, List<String>>> modelInfo, final String[][] commonContent, final String idField, final Map specialField, final String keys, final String contentSplitFragment, final Map defaultValue) {
         Thread currentThread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -595,7 +483,7 @@ public class TransformConfigLogic {
                 StringBuilder allContent = new StringBuilder();
                 allContent.append(" return array (\r\n");
                 for (int i = 1; i < commonContent.length; i++) {
-                    Map<String, String> singleRowInfo = BuildConfigContent.buildSingleRowStr(commonContent[i], modelInfo, currentLang, idIndex, idField, specialField, keys, contentSplitFragment);
+                    Map<String, String> singleRowInfo = BuildConfigContent.buildSingleRowStr(commonContent[i], modelInfo, currentLang, idIndex, idField, specialField, keys, contentSplitFragment, specialField);
                     String id = singleRowInfo.get(idField);
                     if (!id.isEmpty()) {//空id 直接无视
                         String singleItemInfo = singleRowInfo.get("singleRowInfo");
@@ -629,7 +517,7 @@ public class TransformConfigLogic {
         });
         return currentThread;
     }
-    
+
     /**
      * 需要跳过的field
      *
@@ -649,7 +537,7 @@ public class TransformConfigLogic {
 
         return needSkipedFields;
     }
-    
+
     public static Map getModel(String[] dsOpengraphCfg, Map<String, String[]> combineFields) {
         Map<String, List<Integer>> fieldIndex = new HashMap();
         Map<String, List<String>> fieldName = new HashMap();

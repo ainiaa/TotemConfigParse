@@ -15,6 +15,7 @@ import java.util.Map;
  * @author Administrator
  */
 public class BuildConfigLogic {
+
     public static Map buildSingleItemStr(String[] itemBaseInfoContent, Map modelInfo, String lang, int itemIdIndex) {
         Map<String, List<Integer>> fieldIndex = (Map<String, List<Integer>>) modelInfo.get("fieldIndex");
         Map<String, List<String>> fieldName = (Map<String, List<String>>) modelInfo.get("fieldName");
@@ -29,6 +30,8 @@ public class BuildConfigLogic {
         String itemId = itemBaseInfoContent[itemIdIndex];
         singleItemStringbuffer.append("array (").append("\r\n");
         allItemsStringbuffer.append("  ").append(itemId).append(" => \r\n").append("  array (\r\n");
+        String singleItemformat = "  '%s' => '%s', \r\n";
+        String allItemsformat = "    '%s' => '%s', \r\n";
         for (int i = 0; i < currentFieldIndex.length; i++) {
             int currentIndex = currentFieldIndex[i];
             String currentField = currentFieldName[i];
@@ -37,25 +40,8 @@ public class BuildConfigLogic {
                 itemId = currentFieldContent;
             }
             currentFieldContent = currentFieldContent.replaceAll("<br>", "\r\n");//将<br>替换为\r\n
-            singleItemStringbuffer.append("  '");
-            singleItemStringbuffer.append(currentField);
-            singleItemStringbuffer.append("'");
-            singleItemStringbuffer.append("=>");
-            singleItemStringbuffer.append("'");
-            singleItemStringbuffer.append(currentFieldContent);
-            singleItemStringbuffer.append("'");
-            singleItemStringbuffer.append(",");
-            singleItemStringbuffer.append("\r\n");
-
-            allItemsStringbuffer.append("    '");
-            allItemsStringbuffer.append(currentField);
-            allItemsStringbuffer.append("'");
-            allItemsStringbuffer.append("=>");
-            allItemsStringbuffer.append("'");
-            allItemsStringbuffer.append(currentFieldContent);
-            allItemsStringbuffer.append("'");
-            allItemsStringbuffer.append(",");
-            allItemsStringbuffer.append("\r\n");
+            singleItemStringbuffer.append(String.format(singleItemformat, currentField, currentFieldContent));
+            allItemsStringbuffer.append(String.format(allItemsformat, currentField, currentFieldContent));
         }
 
         singleItemStringbuffer.append(");");
@@ -79,8 +65,7 @@ public class BuildConfigLogic {
     public static String buildFinalDsOpengraphStringFromStringArray(String func, int sheetNum, String[][] content) {
         int rows = content.length;
         String buildedContent = "";
-        buildedContent += "//******************************************************************************************************************\r\n"
-                + "//ds opengraph\r\n";
+        buildedContent += "//******************************************************************************************************************\r\n//ds opengraph\r\n";
 
         buildedContent += "$J7CONFIG['collectActivityItemExtend'] = array(\r\n";
         String collectActivityItemExtendFormat = "    '%s' => array(\r\n"
@@ -111,7 +96,7 @@ public class BuildConfigLogic {
         buildedContent += ");";
         return buildedContent;
     }
-    
+
     public static String buildStringFromStringArray(String func, int sheetNum, String[][] content) {
         String buildedContent = "";
         if ("DS_SHOP_OBJ_ITEM".equals(func)) {//ds shop object item
@@ -119,7 +104,7 @@ public class BuildConfigLogic {
         }
         return buildedContent;
     }
-    
+
     public static String buildSingleRowStoredPath(String lang, String itemId, String outputPath, String dirName, String fileName) {
         return outputPath + "/" + lang + "/" + dirName + "/" + fileName + itemId + ".php";
     }
