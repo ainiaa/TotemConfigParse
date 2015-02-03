@@ -394,6 +394,8 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
             allInOneFunc = funcbuttonGroup.getSelection().getActionCommand();
         }
 
+        String msg = "";
+
         if ("YES".equals(allInOneFunc)) {//全部转换
             //配置文件
             String configFilePath = configFilejTextField.getText();
@@ -416,6 +418,18 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
             String configFilePath = configFilejTextField.getText();
             //输出路径
             String outputPath = outputjTextField.getText();
+
+            if (func.isEmpty()) {
+                msg = "请选择解析内容 ";
+            } else if (configFilePath.isEmpty()) {
+                msg = "请选择待解析文件(xls) ";
+            } else if (outputPath.isEmpty()) {
+                msg = "请选择输出路径";
+            }
+            if (!msg.isEmpty()) {
+                JOptionPane.showMessageDialog(null, msg, "信息提示", JOptionPane.ERROR_MESSAGE);
+                System.exit(0);
+            }
             ConfigParserDispatch.transformSingleExcel(func, configFilePath, outputPath);
         }
 

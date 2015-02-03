@@ -106,7 +106,7 @@ public class BuildConfigContent {
                     Class clazz[] = paramType.toArray(new Class[]{});
                     Method parseField = ParseConfigLogic.class.getDeclaredMethod(parseFieldFunctionName, clazz);//getMethod 方法 只能获取public 方法
                     parseField.setAccessible(true);
-                    //@todo 这一部分可以重构成动态参数的方式 以后在修改
+                    //@todo 这一部分可以重构成动态参数的方式 以后在修改  下面这一块调用是存在问题的 需要考虑应该怎么将实参传递过去!!!!
                     if (paramType.size() == 3) {
                         singleRowStringbuffer.append(parseField.invoke(getInstance(), new Object[]{currentField, currentFieldContent, "    "}));//@todo 精彩的写法
                         allRowsStringbuffer.append(parseField.invoke(getInstance(), new Object[]{currentField, currentFieldContent, "  "}));//@todo 精彩的写法

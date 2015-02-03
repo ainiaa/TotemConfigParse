@@ -21,6 +21,49 @@ import java.util.Map;
  */
 public class TransformCommonContentThread extends Thread {
 
+    public Thread transformCommonThread(final String currentLang) {
+        Thread currentThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                int idIndex = ConfigParser.getFieldIndexByFieldName(modelInfo.get("fieldName").get(currentLang), idField);
+                StringBuilder allContent = new StringBuilder();
+                allContent.append(" return array (\r\n");
+                for (int i = 1; i < commonContent.length; i++) {
+                    Map<String, String> singleRowInfo = BuildConfigContent.buildSingleRowStr(commonContent[i], modelInfo, currentLang, idIndex, idField, specialField, keys, contentSplitFragment, defaultValue);
+                    String id = singleRowInfo.get(idField);
+                    if (!id.isEmpty()) {//空id 直接无视
+                        String singleItemInfo = singleRowInfo.get("singleRowInfo");
+                        String currentAllItemInfo = singleRowInfo.get("allRowsInfo");
+                        String descFile = BuildConfigLogic.buildSingleRowStoredPath(currentLang, id, outputPath, fileName, fileName);
+                        try {
+                            FileUtils.writeToFile("<?php\r\n return " + singleItemInfo, descFile, "UTF-8");
+                        } catch (FileNotFoundException ex) {
+                            showMessageDialogMessage(ex);
+                        } catch (IOException ex) {
+                            showMessageDialogMessage(ex);
+                        }
+                        if (i == 1) {//第一行 没有必要添加\r\n
+                            allContent.append(currentAllItemInfo);
+                        } else {
+                            allContent.append("\r\n").append(currentAllItemInfo);
+                        }
+                        ConfigParser.notifyMessage("语言：" + currentLang + "完成度:" + (i * 100 / commonContent.length) + "%|正在生成文件:" + outputPath);
+                    }
+                }
+                try {
+                    ConfigParser.notifyMessage("语言：" + currentLang + "完成度:" + "100%|正在生成文件:" + outputPath);
+                    String descFile = BuildConfigLogic.buildSingleRowStoredPath(currentLang, "", outputPath, fileName, fileName);
+                    FileUtils.writeToFile("<?php\r\n" + allContent.toString() + "\r\n);", descFile, "UTF-8");
+                } catch (FileNotFoundException ex) {
+                    showMessageDialogMessage(ex);
+                } catch (IOException ex) {
+                    showMessageDialogMessage(ex);
+                }
+            }
+        });
+        return currentThread;
+    }
+
     private String outputPath;
     private String fileName;
     private Map<String, Map<String, List<String>>> modelInfo;
@@ -102,48 +145,4 @@ public class TransformCommonContentThread extends Thread {
     public void setDefaultValue(Map defaultValue) {
         this.defaultValue = defaultValue;
     }
-
-    public Thread transformCommonThread(final String currentLang) {
-        Thread currentThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                int idIndex = ConfigParser.getFieldIndexByFieldName(modelInfo.get("fieldName").get(currentLang), idField);
-                StringBuilder allContent = new StringBuilder();
-                allContent.append(" return array (\r\n");
-                for (int i = 1; i < commonContent.length; i++) {
-                    Map<String, String> singleRowInfo = BuildConfigContent.buildSingleRowStr(commonContent[i], modelInfo, currentLang, idIndex, idField, specialField, keys, contentSplitFragment, defaultValue);
-                    String id = singleRowInfo.get(idField);
-                    if (!id.isEmpty()) {//空id 直接无视
-                        String singleItemInfo = singleRowInfo.get("singleRowInfo");
-                        String currentAllItemInfo = singleRowInfo.get("allRowsInfo");
-                        String descFile = BuildConfigLogic.buildSingleRowStoredPath(currentLang, id, outputPath, fileName, fileName);
-                        try {
-                            FileUtils.writeToFile("<?php\r\n return " + singleItemInfo, descFile, "UTF-8");
-                        } catch (FileNotFoundException ex) {
-                            showMessageDialogMessage(ex);
-                        } catch (IOException ex) {
-                            showMessageDialogMessage(ex);
-                        }
-                        if (i == 1) {//第一行 没有必要添加\r\n
-                            allContent.append(currentAllItemInfo);
-                        } else {
-                            allContent.append("\r\n").append(currentAllItemInfo);
-                        }
-                        ConfigParser.notifyMessage("语言：" + currentLang + "完成度:" + (i * 100 / commonContent.length) + "%|正在生成文件:" + outputPath);
-                    }
-                }
-                try {
-                    ConfigParser.notifyMessage("语言：" + currentLang + "完成度:" + "100%|正在生成文件:" + outputPath);
-                    String descFile = BuildConfigLogic.buildSingleRowStoredPath(currentLang, "", outputPath, fileName, fileName);
-                    FileUtils.writeToFile("<?php\r\n" + allContent.toString() + "\r\n);", descFile, "UTF-8");
-                } catch (FileNotFoundException ex) {
-                    showMessageDialogMessage(ex);
-                } catch (IOException ex) {
-                    showMessageDialogMessage(ex);
-                }
-            }
-        });
-        return currentThread;
-    }
-
 }

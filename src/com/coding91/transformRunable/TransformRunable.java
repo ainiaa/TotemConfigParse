@@ -24,6 +24,60 @@ import jxl.read.biff.BiffException;
  */
 public class TransformRunable implements Runnable {
 
+    @Override
+    public void run() {
+        try {
+            int sheetIndex = ExcelParser.getSheetIndexBySheetName(configFilePath, sheetName);
+            final String[][] commonContent = ExcelParser.parseXls(configFilePath, sheetIndex, true);
+
+            final Map<String, Map<String, List<String>>> modelInfo = getModel(commonContent[0]);
+            String[] langList = getLangs();
+            TransformCommonContentThread transformCommonContentThread = new TransformCommonContentThread();
+            transformCommonContentThread.setCommonContent(commonContent);//commonContent
+            transformCommonContentThread.setContentSplitFragment(contentSplitFragment);//contentSplitFragment
+            transformCommonContentThread.setDefaultValue(defalutValue);
+            transformCommonContentThread.setFileName(fileName);//fileName
+            transformCommonContentThread.setIdField(idField);//idField
+            transformCommonContentThread.setKeys(keys);//keys
+            transformCommonContentThread.setModelInfo(modelInfo);//modelInfo
+            transformCommonContentThread.setOutputPath(outputPath);//outputPath
+            transformCommonContentThread.setSpecialField(specialField);//specialField 
+            for (final String currentLang : langList) {
+                // start single lang 
+                Thread currentThread = transformCommonContentThread.transformCommonThread(currentLang);
+                currentThread.start();
+                threadList.add(currentThread);
+                //end single lang
+            }
+
+            boolean allThreadFinished;
+            do {
+                allThreadFinished = false;
+                try {
+                    for (Thread t : threadList) {
+                        if (t.getState() != Thread.State.TERMINATED) {
+                            allThreadFinished = false;
+                            break;
+                        } else {
+                            allThreadFinished = true;
+                        }
+                    }
+                    Thread.sleep(1000);//停止1s再执行
+                } catch (InterruptedException ex) {
+                    showMessageDialogMessage(ex);
+                }
+            } while (!allThreadFinished);//
+            long endTime = System.currentTimeMillis();
+            long diff = endTime - startTime;
+            ConfigParser.notifyMessage("转换完成。耗时:" + DateTimeUtils.formatTimeDuration(diff));
+            ConfigParser.transformFinish("完成转换!");
+        } catch (IOException ex) {
+            showMessageDialogMessage(ex);
+        } catch (BiffException ex) {
+            showMessageDialogMessage(ex);
+        }
+    }
+
     private String configFilePath;
     private String sheetName;
     private String outputPath;
@@ -123,59 +177,4 @@ public class TransformRunable implements Runnable {
     public void setDefalutValue(Map defalutValue) {
         this.defalutValue = defalutValue;
     }
-
-    @Override
-    public void run() {
-        try {
-            int sheetIndex = ExcelParser.getSheetIndexBySheetName(configFilePath, sheetName);
-            final String[][] commonContent = ExcelParser.parseXls(configFilePath, sheetIndex, true);
-
-            final Map<String, Map<String, List<String>>> modelInfo = getModel(commonContent[0]);
-            String[] langList = getLangs();
-            TransformCommonContentThread transformCommonContentThread = new TransformCommonContentThread();
-            transformCommonContentThread.setCommonContent(commonContent);//commonContent
-            transformCommonContentThread.setContentSplitFragment(contentSplitFragment);//contentSplitFragment
-            transformCommonContentThread.setDefaultValue(defalutValue);
-            transformCommonContentThread.setFileName(fileName);//fileName
-            transformCommonContentThread.setIdField(idField);//idField
-            transformCommonContentThread.setKeys(keys);//keys
-            transformCommonContentThread.setModelInfo(modelInfo);//modelInfo
-            transformCommonContentThread.setOutputPath(outputPath);//outputPath
-            transformCommonContentThread.setSpecialField(specialField);//specialField 
-            for (final String currentLang : langList) {
-                // start single lang 
-                Thread currentThread = transformCommonContentThread.transformCommonThread(currentLang);
-                currentThread.start();
-                threadList.add(currentThread);
-                //end single lang
-            }
-
-            boolean allThreadFinished;
-            do {
-                allThreadFinished = false;
-                try {
-                    for (Thread t : threadList) {
-                        if (t.getState() != Thread.State.TERMINATED) {
-                            allThreadFinished = false;
-                            break;
-                        } else {
-                            allThreadFinished = true;
-                        }
-                    }
-                    Thread.sleep(1000);//停止1s再执行
-                } catch (InterruptedException ex) {
-                    showMessageDialogMessage(ex);
-                }
-            } while (!allThreadFinished);//
-            long endTime = System.currentTimeMillis();
-            long diff = endTime - startTime;
-            ConfigParser.notifyMessage("转换完成。耗时:" + DateTimeUtils.formatTimeDuration(diff));
-            ConfigParser.transformFinish("完成转换!");
-        } catch (IOException ex) {
-            showMessageDialogMessage(ex);
-        } catch (BiffException ex) {
-            showMessageDialogMessage(ex);
-        }
-    }
-
 }
