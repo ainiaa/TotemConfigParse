@@ -1,0 +1,16 @@
+uid7000,USER_EX_7000,acceptedLevelPackageId
+uid8000,USER_EX_8000,onlinePackageInfo
+uid7001,USER_EX_7001,acceptedLevelPackageId
+uid8001,USER_EX_8001,onlinePackageInfo
+uid7002,USER_EX_7002,acceptedLevelPackageId
+uid8002,USER_EX_8002,onlinePackageInfo
+uid7003,USER_EX_7003,acceptedLevelPackageId
+uid8003,USER_EX_8003,onlinePackageInfo
+uid7004,USER_EX_7004,acceptedLevelPackageId
+uid8004,USER_EX_8004,onlinePackageInfo
+uid7005,USER_EX_7005,acceptedLevelPackageId
+uid8000,USER_EX_8005,onlinePackageInfo
+uid7006,USER_EX_7006,acceptedLevelPackageId
+uid8006,USER_EX_8006,onlinePackageInfo
+uid7007,USER_EX_7007,acceptedLevelPackageId
+uid8007,USER_EX_8007,onlinePackageInfo

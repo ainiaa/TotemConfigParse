@@ -55,6 +55,94 @@ public class BuildConfigContent {
         String contentFormat = "'%s' => '%s',\r\n";
         return leadingString + String.format(contentFormat, field, content);
     }
+    
+    /**
+     * 
+     * @param singleRowInfoContent
+     * @param modelInfo
+     * @param lang
+     * @param idIndex
+     * @param idField
+     * @param specialField
+     * @param defaultValue
+     * @return 
+     */
+    public static Map buildSingleRowStrEx(String[] singleRowInfoContent, Map modelInfo, String lang, int idIndex, String idField, Map<String, String> specialField, Map<String, String> defaultValue) {
+        Map<String, List<Integer>> fieldIndex = (Map<String, List<Integer>>) modelInfo.get("fieldIndex");
+        Map<String, List<String>> fieldName = (Map<String, List<String>>) modelInfo.get("fieldName");
+        List<Integer> currentFieldIndexList = fieldIndex.get(lang);
+        List<String> currentFieldNameList = fieldName.get(lang);
+        Integer[] currentFieldIndex = currentFieldIndexList.toArray(new Integer[currentFieldIndexList.size()]);
+        String[] currentFieldName = currentFieldNameList.toArray(new String[currentFieldNameList.size()]);
+        StringBuilder singleRowStringbuffer = new StringBuilder();
+        StringBuilder allRowsStringbuffer = new StringBuilder();
+        String id = singleRowInfoContent[idIndex];
+        singleRowStringbuffer.append("array (").append("\r\n");
+        allRowsStringbuffer.append("  ").append(id).append(" => \r\n").append("  array (\r\n");
+        for (int i = 0; i < currentFieldIndex.length; i++) {
+            int currentIndex = currentFieldIndex[i];
+            String currentField = currentFieldName[i];
+            String currentFieldContent = singleRowInfoContent[currentIndex];
+            if (currentField.equals(idField)) {
+                id = currentFieldContent;
+            }
+            if (specialField.containsKey(currentField)) {
+                try {
+                    String[] parseFieldFunctionInfo = specialField.get(currentField).split("@");
+                    String parseFieldFunctionName = parseFieldFunctionInfo[0];
+                    int paramCount;
+                    if (parseFieldFunctionInfo.length == 1) {
+                        paramCount = 4;
+                    } else {
+                        paramCount = Integer.valueOf(parseFieldFunctionInfo[1]);
+                    }
+
+                    List<Class> paramType = new ArrayList();
+                    for (int k = 0; k < paramCount; k++) {
+                        paramType.add(String.class);
+                    }
+                    Class clazz[] = paramType.toArray(new Class[]{});
+                    Method parseField = ParseConfigLogic.class.getDeclaredMethod(parseFieldFunctionName, clazz);//getMethod 方法 只能获取public 方法
+                    parseField.setAccessible(true);
+                    //@todo 这一部分可以重构成动态参数的方式 以后在修改  下面这一块调用是存在问题的 需要考虑应该怎么将实参传递过去!!!!
+                    if (paramType.size() == 3) {
+                        singleRowStringbuffer.append(parseField.invoke(getInstance(), new Object[]{currentField, currentFieldContent, "    "}));//@todo 精彩的写法
+                        allRowsStringbuffer.append(parseField.invoke(getInstance(), new Object[]{currentField, currentFieldContent, "  "}));//@todo 精彩的写法
+                    } else if (paramType.size() == 4) {
+                        singleRowStringbuffer.append(parseField.invoke(getInstance(), new Object[]{currentField, currentFieldContent, "    ", "keys"}));//@todo 精彩的写法
+                        allRowsStringbuffer.append(parseField.invoke(getInstance(), new Object[]{currentField, currentFieldContent, "  ", "keys"}));//@todo 精彩的写法
+                    } else if (paramType.size() == 5) {
+                        singleRowStringbuffer.append(parseField.invoke(getInstance(), new Object[]{currentField, currentFieldContent, "    ", "contentSplitFragment", "keys"}));//@todo 精彩的写法
+                        allRowsStringbuffer.append(parseField.invoke(getInstance(), new Object[]{currentField, currentFieldContent, "  ", "contentSplitFragment", "keys"}));//@todo 精彩的写法
+                    }
+
+                } catch (IllegalAccessException ex) {
+                    System.out.println("IllegalAccessException:" + ex.getMessage());
+                } catch (SecurityException ex) {
+                    System.out.println("SecurityException:" + ex.getMessage());
+                } catch (IllegalArgumentException ex) {
+                    System.out.println("IllegalArgumentException:" + ex.getMessage());
+                } catch (InvocationTargetException ex) {
+                    System.out.println("InvocationTargetException:" + ex.getMessage());
+                } catch (NoSuchMethodException ex) {
+                    System.out.println("NoSuchMethodException:" + ex.getMessage());
+                }
+            } else {
+                singleRowStringbuffer.append(commonSingleFieldString(currentField, currentFieldContent, "    "));
+                allRowsStringbuffer.append(commonSingleFieldString(currentField, currentFieldContent, "  "));
+            }
+        }
+
+        singleRowStringbuffer.append(");");
+        allRowsStringbuffer.append("  ),");
+
+        Map finalInfo = new HashMap();
+        finalInfo.put(idField, id);
+        finalInfo.put("singleRowInfo", singleRowStringbuffer.toString());
+        finalInfo.put("allRowsInfo", allRowsStringbuffer.toString());
+        return finalInfo;
+    }
+    
 
     /**
      * 

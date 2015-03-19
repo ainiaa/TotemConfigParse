@@ -3,11 +3,10 @@ package com.coding91.parser;
 import com.coding91.logic.TransformConfigLogic;
 import java.util.HashMap;
 import java.util.Map;
-import javax.swing.JOptionPane;
 
 /**
  *
- * @author Administrator
+ * @author Jeff Liu
  */
 public class ConfigParserDispatch {
 
@@ -26,15 +25,30 @@ public class ConfigParserDispatch {
         Map specialField = new HashMap();
         Map defaultValue = new HashMap();
         if ("DS_SHOP_OBJ_ITEM".equals(func)) {//shopItem
-            TransformConfigLogic.transformShopObjectItem(configFilePath, func, outputPath);
+            TransformConfigLogic.transformShopObjectItem(configFilePath, outputPath);
         } else if ("ACTIVITY_LIB".equals(func)) {//activityLibraryInfo @todo 看看是不是好用
-            specialField.put("activity_info", "parseCommonMultipleWithKeyValue@4");
+            Map activityInfoParam = new HashMap();
+            activityInfoParam.put("contentKey", "activity_type,activity_id");
+            activityInfoParam.put("contentSeparator", new String[]{",", ":"});
+            activityInfoParam.put("parseFunction", "parseCommonMultipleWithKeyValue");
+            specialField.put("activity_info", activityInfoParam);
+            
+            Map unlockRecipeParam = new HashMap();
+            unlockRecipeParam.put("contentKey", "activity_type,activity_id");
+            unlockRecipeParam.put("contentSeparator", new String[]{});
+            unlockRecipeParam.put("parseFunction", "parseCommonMultipleEx");
             specialField.put("unlockRecipe", "parseCommonMultiple@4");
+            
             fileName = "activityLibraryInfo";
             idField = "id";
-            String keys = "activity_type,activity_id";
-            String contentSplitFragment = ",!:";
-            TransformConfigLogic.transformCommonContent(configFilePath, outputPath, fileName, sheetName, idField, specialField, keys, contentSplitFragment, defaultValue);
+            /*
+//            specialField.put("activity_info", "parseCommonMultipleWithKeyValue@4");
+//            specialField.put("unlockRecipe", "parseCommonMultiple@4");
+//            String keys = "activity_type,activity_id";
+//            String contentSplitFragment = ",!:";
+//            TransformConfigLogic.transformCommonContent(configFilePath, outputPath, fileName, sheetName, idField, specialField, keys, contentSplitFragment, defaultValue);//old implement
+                    */
+            TransformConfigLogic.transformCommonContentEx(configFilePath, outputPath, fileName, sheetName, idField, specialField, defaultValue);
         } else if ("AVATAR_ITEMS".equals(func)) {//avatarItems
             specialField.put("suite_array", "parseCommonMultiple@3");
             fileName = "avatarItems";

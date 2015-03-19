@@ -16,7 +16,7 @@ import java.util.Map;
  */
 public class BuildConfigLogic {
 
-    public static Map buildSingleItemStr(String[] itemBaseInfoContent, Map modelInfo, String lang, int itemIdIndex) {
+    public static Map buildSingleItemStr(String[] itemBaseInfoContent, Map modelInfo, String lang, int itemIdIndex, Map<String, String> fieldDefaultPair) {
         Map<String, List<Integer>> fieldIndex = (Map<String, List<Integer>>) modelInfo.get("fieldIndex");
         Map<String, List<String>> fieldName = (Map<String, List<String>>) modelInfo.get("fieldName");
         List<Integer> currentFieldIndexList = fieldIndex.get(lang);
@@ -30,12 +30,13 @@ public class BuildConfigLogic {
         String itemId = itemBaseInfoContent[itemIdIndex];
         singleItemStringbuffer.append("array (").append("\r\n");
         allItemsStringbuffer.append("  ").append(itemId).append(" => \r\n").append("  array (\r\n");
-        String singleItemformat = "  '%s' => '%s', \r\n";
-        String allItemsformat = "    '%s' => '%s', \r\n";
+        String singleItemformat = "  '%s' => %s, \r\n";
+        String allItemsformat = "    '%s' => %s, \r\n";
         for (int i = 0; i < currentFieldIndex.length; i++) {
             int currentIndex = currentFieldIndex[i];
             String currentField = currentFieldName[i];
             String currentFieldContent = itemBaseInfoContent[currentIndex];
+            currentFieldContent = getFiledFinalValue(currentField, currentFieldContent, fieldDefaultPair);
             if (currentField.equals("item_id")) {
                 itemId = currentFieldContent;
             }
@@ -52,6 +53,30 @@ public class BuildConfigLogic {
         finalInfo.put("singleItemInfo", singleItemStringbuffer.toString());
         finalInfo.put("allItemInfo", allItemsStringbuffer.toString());
         return finalInfo;
+    }
+
+    /**
+     * 获得默认值
+     * @param fieldName
+     * @param fieldValue
+     * @param fieldDefaultPair
+     * @return 
+     */
+    public static String getFiledFinalValue(String fieldName, String fieldValue, Map<String, String> fieldDefaultPair) {
+        boolean needFormat = true;
+        if (fieldValue.equals("0") || fieldValue.isEmpty()) {//当前值为空 尝试获得默认值
+            if (fieldDefaultPair.containsKey(fieldName + ".default")) {//默认值里面有
+                fieldValue = fieldDefaultPair.get(fieldName + ".default");
+                needFormat = false;
+            } else if (fieldDefaultPair.containsKey(fieldName + ".type") && fieldDefaultPair.containsKey(fieldDefaultPair.get(fieldName + ".type"))) {
+                fieldValue = fieldDefaultPair.get(fieldDefaultPair.get(fieldName + ".type"));
+                needFormat = false;
+            }
+        } 
+        if (needFormat){
+            fieldValue = "'" + fieldValue + "'";
+        }
+        return fieldValue;
     }
 
     /**
@@ -114,6 +139,6 @@ public class BuildConfigLogic {
     }
 
     public static String buildSingleItemStoredPath(String lang, String itemId, String outputPath) {
-        return outputPath + "/" + lang + "/objItem/objItem" + itemId + ".php";
+        return outputPath + "/" + lang + "/shopItem/shopItem" + itemId + ".php";
     }
 }

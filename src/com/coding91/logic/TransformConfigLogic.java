@@ -34,10 +34,9 @@ public class TransformConfigLogic {
      * 甜品店 shop object item
      *
      * @param configFilePath
-     * @param func
      * @param outputPath
      */
-    public static void transformShopObjectItem(final String configFilePath, String func, final String outputPath) {
+    public static void transformShopObjectItem(final String configFilePath, final String outputPath) {
         JOptionPane.showMessageDialog(null, "转换开始");
         final long startTime = System.currentTimeMillis();
         final List<Thread> threadList = new ArrayList();
@@ -46,10 +45,10 @@ public class TransformConfigLogic {
             public void run() {
                 try {
                     int sheetIndex = ExcelParser.getSheetIndexBySheetName(configFilePath, "Worksheet");
-                    final String[][] dsOpengraphCfg = ExcelParser.parseXls(configFilePath, sheetIndex, true);
-
-                    final Map<String, Map<String, List<String>>> modelInfo = TransformConfigLogic.getModel(dsOpengraphCfg[0]);
+                    final String[][] dsShopObjectContentArray = ExcelParser.parseXls(configFilePath, sheetIndex, true);
+                    final Map<String, Map<String, List<String>>> modelInfo = TransformConfigLogic.getModel(dsShopObjectContentArray[0]);
                     String[] langList = getLangs();
+                    final Map<String, String> fieldDefaultPair = FileUtils.loadSetting("resources/data/config/defaultvalue/shopItem.properties", true);
 
                     for (final String currentLang : langList) {
                         // start single lang 
@@ -59,8 +58,8 @@ public class TransformConfigLogic {
                                 int itemIdIndex = ConfigParser.getFieldIndexByFieldName(modelInfo.get("fieldName").get(currentLang), "item_id");
                                 StringBuilder allItemInfo = new StringBuilder();
                                 allItemInfo.append(" return array (\r\n");
-                                for (int i = 1; i < dsOpengraphCfg.length; i++) {
-                                    Map<String, String> singleRowInfo = BuildConfigLogic.buildSingleItemStr(dsOpengraphCfg[i], modelInfo, currentLang, itemIdIndex);
+                                for (int i = 1; i < dsShopObjectContentArray.length; i++) {
+                                    Map<String, String> singleRowInfo = BuildConfigLogic.buildSingleItemStr(dsShopObjectContentArray[i], modelInfo, currentLang, itemIdIndex, fieldDefaultPair);
                                     String itemId = singleRowInfo.get("itemId");
                                     String singleItemInfo = singleRowInfo.get("singleItemInfo");
                                     String currentAllItemInfo = singleRowInfo.get("allItemInfo");
@@ -77,7 +76,7 @@ public class TransformConfigLogic {
                                     } else {
                                         allItemInfo.append("\r\n").append(currentAllItemInfo);
                                     }
-                                    notifyMessage("语言：" + currentLang + "完成度:" + (i * 100 / dsOpengraphCfg.length) + "%|正在生成文件:" + outputPath);
+                                    notifyMessage("语言：" + currentLang + "完成度:" + (i * 100 / dsShopObjectContentArray.length) + "%|正在生成文件:" + outputPath);
                                 }
                                 try {
                                     notifyMessage("语言：" + currentLang + "完成度:" + "100%|正在生成文件:" + outputPath);
@@ -318,6 +317,32 @@ public class TransformConfigLogic {
         new Thread(transformRunable).start();
     }
 
+    /**
+     * 通用
+     *
+     * @param configFilePath
+     * @param outputPath
+     * @param fileName
+     * @param sheetName
+     * @param idField
+     * @param specialField
+     * @param defaultValue
+     */
+    public static void transformCommonContentEx(final String configFilePath, final String outputPath, final String fileName, final String sheetName, final String idField, final Map specialField, final Map defaultValue) {
+        final long startTime = System.currentTimeMillis();
+
+        TransformRunable transformRunable = new TransformRunable();
+        transformRunable.setConfigFilePath(configFilePath);
+        transformRunable.setOutputPath(outputPath);
+        transformRunable.setFileName(fileName);
+        transformRunable.setSheetName(sheetName);
+        transformRunable.setIdField(idField);
+        transformRunable.setSpecialField(specialField);
+        transformRunable.setStartTime(startTime);
+        transformRunable.setDefalutValue(defaultValue);
+        new Thread(transformRunable).start();
+    }
+    
     /**
      * 通用
      *

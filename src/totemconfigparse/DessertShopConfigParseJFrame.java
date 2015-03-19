@@ -2,10 +2,10 @@ package totemconfigparse;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
@@ -47,7 +47,7 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
      * Creates new form TotemConfigParseJFrame
      */
     public DessertShopConfigParseJFrame() {
-        loadSetting("./setting.properties");
+        loadSetting("resources/data/setting.properties");
         initComponents();
 
     }
@@ -1451,7 +1451,7 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
     }
 
     public String buildSingleItemStoredPath(String lang, String itemId, String outputPath) {
-        return outputPath + "/" + lang + "/objItem/objItem" + itemId + ".php";
+        return outputPath + "/" + lang + "/shopItem/shopItem" + itemId + ".php";
     }
 
     public void transformFinish(String message) {
@@ -2892,49 +2892,25 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
         return sheetNumber;
     }
 
-    private void loadSetting(String file_path) {
-        File f = new File(file_path);
+    private void loadSetting(String filePath) {
+        String finalFilePath = DessertShopConfigParseJFrame.class.getClassLoader().getResource(filePath).toString();
+        finalFilePath = finalFilePath.substring(6);//删除字符串卡头的 file:/
+        System.out.println("finalFilePath:" + finalFilePath);
+        File f = new File(finalFilePath);
         if (f.exists()) {
             Properties prop = new Properties();
-            FileInputStream fis;
             try {
-                fis = new FileInputStream(file_path);
-                try {
-                    prop.load(fis);
-
-                } catch (IOException ex) {
-                    Logger.getLogger(DessertShopConfigParseJFrame.class
-                            .getName()).log(Level.SEVERE, null, ex);
-                    showMessageDialogMessage(ex);
-                }
-                if (!prop.getProperty("configBaseDir", "").isEmpty()) {
-                    try {
-                        configBaseDir = new String(prop.getProperty("configBaseDir").getBytes("ISO-8859-1"), "UTF-8");
-//                        System.out.println(configBaseDir);
-
-                    } catch (UnsupportedEncodingException ex) {
-                        Logger.getLogger(DessertShopConfigParseJFrame.class
-                                .getName()).log(Level.SEVERE, null, ex);
-                        showMessageDialogMessage(ex);
-                    }
-
-                }
-                if (!prop.getProperty("outputDirectory", "").isEmpty()) {
-                    try {
-                        outputDirectory = new String(prop.getProperty("outputDirectory").getBytes("ISO-8859-1"), "UTF-8");
-//                        System.out.println(outputDirectory);
-                    } catch (UnsupportedEncodingException ex) {
-                        showMessageDialogMessage(ex);
-                        Logger
-                                .getLogger(DessertShopConfigParseJFrame.class
-                                        .getName()).log(Level.SEVERE, null, ex);
-                    }
-
-                }
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(DessertShopConfigParseJFrame.class
-                        .getName()).log(Level.SEVERE, null, ex);
+                System.out.println("filePath:" + filePath);
+                prop.load(new InputStreamReader(DessertShopConfigParseJFrame.class.getClassLoader().getResourceAsStream(filePath), "UTF-8"));
+            } catch (IOException ex) {
                 showMessageDialogMessage(ex);
+            }
+            if (!prop.getProperty("configBaseDir", "").isEmpty()) {
+                configBaseDir = prop.getProperty("configBaseDir");
+
+            }
+            if (!prop.getProperty("outputDirectory", "").isEmpty()) {
+                outputDirectory = prop.getProperty("outputDirectory");
             }
         }
     }

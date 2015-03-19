@@ -6,20 +6,20 @@
 package com.coding91.utils;
 
 import com.coding91.parser.BuildConfigContent;
-import com.coding91.parser.ConfigParser;
 import static com.coding91.parser.ConfigParser.itemIdAndItemName;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import javax.swing.JOptionPane;
 
 /**
@@ -85,40 +85,52 @@ public class FileUtils {
         itemIdAndItemName = BuildConfigContent.buildItemIdAndItemName();
         return itemIdAndItemName.get(itemId).get(lang);
     }
-    
-    public static Map<String, String> loadSetting(String file_path) {
-        String configBaseDir = "", outputDirectory = "";
+
+    public static Map<String, String> loadSetting(String filePath, boolean extension) {
         HashMap finalResult = new HashMap();
-        File f = new File(file_path);
+
+        String finalFilePath = FileUtils.class.getClassLoader().getResource(filePath).toString();
+        finalFilePath = finalFilePath.substring(6);//删除字符串卡头的 file:/
+        File f = new File(finalFilePath);
         if (f.exists()) {
             Properties prop = new Properties();
-            FileInputStream fis;
             try {
-                fis = new FileInputStream(file_path);
-                try {
-                    prop.load(fis);
-                } catch (IOException ex) {
-                    ConfigParser.showMessageDialogMessage(ex);
-                }
-                if (!prop.getProperty("configBaseDir", "").isEmpty()) {
-                    try {
-                        configBaseDir = new String(prop.getProperty("configBaseDir").getBytes("ISO-8859-1"), "UTF-8");
-                    } catch (UnsupportedEncodingException ex) {
-                        ConfigParser.showMessageDialogMessage(ex);
-                    }
-                }
-                if (!prop.getProperty("outputDirectory", "").isEmpty()) {
-                    try {
-                        outputDirectory = new String(prop.getProperty("outputDirectory").getBytes("ISO-8859-1"), "UTF-8");
-                    } catch (UnsupportedEncodingException ex) {
-                        ConfigParser.showMessageDialogMessage(ex);
-                    }
-                }
-                finalResult.put("configBaseDir", configBaseDir);
-                finalResult.put("outputDirectory", outputDirectory);
-            } catch (FileNotFoundException ex) {
-                ConfigParser.showMessageDialogMessage(ex);
+                prop.load(new InputStreamReader(FileUtils.class.getClassLoader().getResourceAsStream(filePath), "UTF-8"));
+            } catch (IOException ex) {
+                //showMessageDialogMessage(ex);//todo
             }
+            Set<Map.Entry<Object, Object>> propertyEntrySet = prop.entrySet();
+            for(Map.Entry<Object, Object> currentProperty : propertyEntrySet) {
+                finalResult.put(currentProperty.getKey().toString(), currentProperty.getValue().toString());
+            }
+        }
+        return finalResult;
+    }
+    
+    public static Map<String, String> loadSetting(String filePath) {
+        String configBaseDir = "", outputDirectory = "";
+        HashMap finalResult = new HashMap();
+
+        String finalFilePath = FileUtils.class.getClassLoader().getResource(filePath).toString();
+        finalFilePath = finalFilePath.substring(6);//删除字符串卡头的 file:/
+        File f = new File(finalFilePath);
+        if (f.exists()) {
+            Properties prop = new Properties();
+            try {
+                prop.load(new InputStreamReader(FileUtils.class.getClassLoader().getResourceAsStream(filePath), "UTF-8"));
+            } catch (IOException ex) {
+                //showMessageDialogMessage(ex);//todo
+            }
+            if (!prop.getProperty("configBaseDir", "").isEmpty()) {
+                configBaseDir = prop.getProperty("configBaseDir");
+
+            }
+            if (!prop.getProperty("outputDirectory", "").isEmpty()) {
+                outputDirectory = prop.getProperty("outputDirectory");
+            }
+
+            finalResult.put("configBaseDir", configBaseDir);
+            finalResult.put("outputDirectory", outputDirectory);
         }
         return finalResult;
     }
