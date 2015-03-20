@@ -29,7 +29,8 @@ public class TransformCommonContentThread extends Thread {
                 StringBuilder allContent = new StringBuilder();
                 allContent.append(" return array (\r\n");
                 for (int i = 1; i < commonContent.length; i++) {
-                    Map<String, String> singleRowInfo = BuildConfigContent.buildSingleRowStr(commonContent[i], modelInfo, currentLang, idIndex, idField, specialField, keys, contentSplitFragment, defaultValue);
+                    BuildConfigContent bcc = new BuildConfigContent();
+                    Map<String, String> singleRowInfo = bcc.buildSingleRowStr(commonContent[i], modelInfo, currentLang, idIndex, idField, specialField, keys, contentSplitFragment, defaultValue);
                     String id = singleRowInfo.get(idField);
                     if (!id.isEmpty()) {//空id 直接无视
                         String singleItemInfo = singleRowInfo.get("singleRowInfo");

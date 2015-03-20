@@ -7,7 +7,6 @@ package com.coding91.logic;
 
 import static com.coding91.parser.ConfigParser.getFieldIndexByFieldName;
 import com.coding91.utils.ArrayUtils;
-import com.coding91.utils.FileUtils;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -347,12 +346,12 @@ public class ParseConfigLogic {
         return finalContent.toString();
     }
 
-    public static String parseCommonMultipleEx(String fieldName, String fieldValue, String flagment, String contentKey, String index) {
-        String[] flagmentArray = flagment.split(FileUtils.CONTENT_SEPARATOR);
-        String[] contentKeyArray = flagment.split(FileUtils.CONTENT_SEPARATOR);
-        int indexIntValue = Integer.valueOf(index);
-        return parseCommonMultipleEx(fieldName, fieldValue, flagmentArray, contentKeyArray, indexIntValue);
-    }
+//    public static String parseCommonMultipleEx(String fieldName, String fieldValue, String flagment, String contentKey, String index) {
+//        String[] flagmentArray = flagment.split(FileUtils.CONTENT_SEPARATOR);
+//        String[] contentKeyArray = flagment.split(FileUtils.CONTENT_SEPARATOR);
+//        int indexIntValue = Integer.valueOf(index);
+//        return parseCommonMultipleEx(fieldName, fieldValue, flagmentArray, contentKeyArray, indexIntValue);
+//    }
     
     public static String parseCommonMultipleEx(String fieldName, String fieldValue, Map<String, ?> parseFunctionParam, String index) {
         String[] contentSeparator = (String[])parseFunctionParam.get("contentSeparator");

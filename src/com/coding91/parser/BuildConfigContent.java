@@ -95,7 +95,7 @@ public class BuildConfigContent {
 
                     Method parseField = ParseConfigLogic.class.getDeclaredMethod(parseFieldFunctionName, new Class[]{Map.class});//getMethod 方法 只能获取public 方法
                     parseField.setAccessible(true);
-                    
+
                     singleRowStringbuffer.append("'").append(currentField).append("' => ").append(parseField.invoke(getInstance(), new Object[]{parseFieldFunctionInfo})).append(",\r\n");
                     allRowsStringbuffer.append("'").append(currentField).append("' => ").append(parseField.invoke(getInstance(), new Object[]{parseFieldFunctionInfo})).append(",\r\n");
 
@@ -139,7 +139,7 @@ public class BuildConfigContent {
      * @param defaultValue
      * @return
      */
-    public static Map buildSingleRowStr(String[] singleRowInfoContent, Map modelInfo, String lang, int idIndex, String idField, Map<String, String> specialField, String keys, String contentSplitFragment, Map<String, String> defaultValue) {
+    public Map buildSingleRowStr(String[] singleRowInfoContent, Map modelInfo, String lang, int idIndex, String idField, Map<String, String> specialField, String keys, String contentSplitFragment, Map<String, String> defaultValue) {
         Map<String, List<Integer>> fieldIndex = (Map<String, List<Integer>>) modelInfo.get("fieldIndex");
         Map<String, List<String>> fieldName = (Map<String, List<String>>) modelInfo.get("fieldName");
         List<Integer> currentFieldIndexList = fieldIndex.get(lang);
@@ -187,7 +187,6 @@ public class BuildConfigContent {
                         singleRowStringbuffer.append(parseField.invoke(getInstance(), new Object[]{currentField, currentFieldContent, "    ", contentSplitFragment, keys}));//@todo 精彩的写法
                         allRowsStringbuffer.append(parseField.invoke(getInstance(), new Object[]{currentField, currentFieldContent, "  ", contentSplitFragment, keys}));//@todo 精彩的写法
                     }
-
                 } catch (IllegalAccessException ex) {
                     System.out.println("IllegalAccessException:" + ex.getMessage());
                 } catch (SecurityException ex) {

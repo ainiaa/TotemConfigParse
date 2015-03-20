@@ -227,7 +227,8 @@ public class TransformConfigLogic {
 
                                 specialField.put("activity_info", "parseActivityInfo");
                                 for (int i = 1; i < activityLibCfg.length; i++) {
-                                    Map<String, String> singleRowInfo = BuildConfigContent.buildSingleRowStr(activityLibCfg[i], modelInfo, currentLang, activityIdIndex, idField, specialField, null, null, null);
+                                    BuildConfigContent bcc = new BuildConfigContent();
+                                    Map<String, String> singleRowInfo = bcc.buildSingleRowStr(activityLibCfg[i], modelInfo, currentLang, activityIdIndex, idField, specialField, null, null, null);
                                     String id = singleRowInfo.get(idField);
                                     String singleItemInfo = singleRowInfo.get("singleRowInfo");
                                     String currentAllItemInfo = singleRowInfo.get("allRowsInfo");
@@ -431,7 +432,8 @@ public class TransformConfigLogic {
             public void run() {
                 for (int i = 1; i < commonContent.length; i++) {
                     //String[] singleRowInfoContent, Map modelInfo, String lang, int idIndex, String idField, Map<String, String> specialField, String keys, String contentSplitFragment
-                    Map<String, String> singleRowInfo = BuildConfigContent.buildSingleRowStr(commonContent[i], modelInfo, currentLang, -1, null, specialField, null, null, null);
+                    BuildConfigContent bcc = new BuildConfigContent();
+                    Map<String, String> singleRowInfo = bcc.buildSingleRowStr(commonContent[i], modelInfo, currentLang, -1, null, specialField, null, null, null);
                     String singleItemInfo = singleRowInfo.get("singleRowInfo");
                     String descFile = BuildConfigLogic.buildSingleRowStoredPath(currentLang, "", outputPath, fileName);
                     try {
@@ -499,7 +501,8 @@ public class TransformConfigLogic {
                 StringBuilder allContent = new StringBuilder();
                 allContent.append(" return array (\r\n");
                 for (int i = 1; i < commonContent.length; i++) {
-                    Map<String, String> singleRowInfo = BuildConfigContent.buildSingleRowStr(commonContent[i], modelInfo, currentLang, idIndex, idField, specialField, keys, contentSplitFragment, specialField);
+                    BuildConfigContent bcc = new BuildConfigContent();
+                    Map<String, String> singleRowInfo = bcc.buildSingleRowStr(commonContent[i], modelInfo, currentLang, idIndex, idField, specialField, keys, contentSplitFragment, specialField);
                     String id = singleRowInfo.get(idField);
                     if (!id.isEmpty()) {//空id 直接无视
                         String singleItemInfo = singleRowInfo.get("singleRowInfo");

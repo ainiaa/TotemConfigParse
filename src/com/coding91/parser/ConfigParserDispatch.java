@@ -84,9 +84,21 @@ public class ConfigParserDispatch {
 
         } else if ("GAME".equals(func)) {//game todo 还没有处理
             fileName = "game";
+            Map randomShelfProductListParam = new HashMap();
+            randomShelfProductListParam.put("contentKey", new String[]{});
+            randomShelfProductListParam.put("contentSeparator", new String[]{"|", ","});
+            randomShelfProductListParam.put("parseFunction", "parseCommonMultipleEx");
+            specialField.put("randomShelfProductList", randomShelfProductListParam);
+            
+            Map rankScoreRewardsParam = new HashMap();
+            rankScoreRewardsParam.put("contentKey", new String[]{});
+            rankScoreRewardsParam.put("contentSeparator", new String[]{"|", ","});
+            rankScoreRewardsParam.put("parseFunction", "parseGameRankScoreRewards");
+            specialField.put("randomShelfProductList", randomShelfProductListParam);
+            
 //            specialField.put("randomShelfProductList", "parseCommonMultiple@3");
 //            specialField.put("rankScoreRewards", "parseGameRankScoreRewards@3");
-//            TransformConfigLogic.transformCommonSingleFileContent(configFilePath, outputPath, fileName, sheetName, specialField);
+            TransformConfigLogic.transformCommonSingleFileContent(configFilePath, outputPath, fileName, sheetName, specialField);
         } else if ("MISSION_INFO".equals(func)) {//mission Info  @todo 还有一写文件没有生成
 //            specialField.put("reward_data", "parseMissionInfoRewardData@3");
 //            specialField.put("mission_require", "parseMissionInfoMissionRequire@3");
