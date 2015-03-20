@@ -21,6 +21,16 @@ import java.util.Map;
  */
 public class TransformCommonContentExThread extends Thread {
 
+    public TransformCommonContentExThread(String outputPath, String fileName, Map<String, Map<String, List<String>>> modelInfo, String[][] commonContent, String idField, Map<String, Map<String, String>> specialField) {
+        this.outputPath = outputPath;
+        this.fileName = fileName;
+        this.modelInfo = modelInfo;
+        this.commonContent = commonContent;
+        this.idField = idField;
+        this.specialField = specialField;
+    }
+
+
     public Thread transformCommonThread(final String currentLang) {
         Thread currentThread = new Thread(new Runnable() {
             @Override
@@ -29,7 +39,7 @@ public class TransformCommonContentExThread extends Thread {
                 StringBuilder allContent = new StringBuilder();
                 allContent.append(" return array (\r\n");
                 for (int i = 1; i < commonContent.length; i++) {
-                    Map<String, String> singleRowInfo = BuildConfigContent.buildSingleRowStrEx(commonContent[i], modelInfo, currentLang, idIndex, idField, specialField, defaultValue);
+                    Map<String, String> singleRowInfo = BuildConfigContent.buildSingleRowStrEx(commonContent[i], modelInfo, currentLang, idIndex, idField, specialField);
                     String id = singleRowInfo.get(idField);
                     if (!id.isEmpty()) {//空id 直接无视
                         String singleItemInfo = singleRowInfo.get("singleRowInfo");
@@ -70,7 +80,6 @@ public class TransformCommonContentExThread extends Thread {
     private String[][] commonContent;
     private String idField;
     private Map specialField;
-    private Map defaultValue;
 
     public String getOutputPath() {
         return outputPath;
@@ -118,13 +127,5 @@ public class TransformCommonContentExThread extends Thread {
 
     public void setSpecialField(Map specialField) {
         this.specialField = specialField;
-    }
-
-    public Map getDefaultValue() {
-        return defaultValue;
-    }
-
-    public void setDefaultValue(Map defaultValue) {
-        this.defaultValue = defaultValue;
     }
 }

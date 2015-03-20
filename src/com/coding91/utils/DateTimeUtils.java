@@ -25,12 +25,23 @@ public class DateTimeUtils {
      * @return
      */
     public static String formatTimeDuration(long duration) {
+        return formatTimeDuration(duration, false);
+    }
+
+    public static String formatTimeDuration(long duration, boolean showDay) {
+        String finalDateString;
         long ssec = duration % 1000;// 毫秒
         long sec = (duration / 1000) % 60;// 秒
         long min = (duration / 1000 / 60) % 60; // 分钟
         long hour = (duration / 1000 / 60 / 60) % 24;// 小时
-        long day = duration / 1000 / 60 / 60 / 24;// 天
-        return String.format("%02d day %02d:%02d:%02d", day, hour, min, sec);
+
+        if (showDay) {
+            long day = duration / 1000 / 60 / 60 / 24;// 天
+            finalDateString = String.format("%02d day %02d:%02d:%02d", day, hour, min, sec);
+        } else {
+            finalDateString = String.format("%02d:%02d:%02d", hour, min, sec);
+        }
+        return finalDateString;
     }
 
     public static String formatTime(Cell formatCell) {

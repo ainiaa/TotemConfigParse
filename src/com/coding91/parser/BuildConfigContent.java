@@ -55,19 +55,18 @@ public class BuildConfigContent {
         String contentFormat = "'%s' => '%s',\r\n";
         return leadingString + String.format(contentFormat, field, content);
     }
-    
+
     /**
-     * 
+     *
      * @param singleRowInfoContent
      * @param modelInfo
      * @param lang
      * @param idIndex
      * @param idField
      * @param specialField
-     * @param defaultValue
-     * @return 
+     * @return
      */
-    public static Map buildSingleRowStrEx(String[] singleRowInfoContent, Map modelInfo, String lang, int idIndex, String idField, Map<String, String> specialField, Map<String, String> defaultValue) {
+    public static Map buildSingleRowStrEx(String[] singleRowInfoContent, Map modelInfo, String lang, int idIndex, String idField, Map<String, Map<String, ?>> specialField) {
         Map<String, List<Integer>> fieldIndex = (Map<String, List<Integer>>) modelInfo.get("fieldIndex");
         Map<String, List<String>> fieldName = (Map<String, List<String>>) modelInfo.get("fieldName");
         List<Integer> currentFieldIndexList = fieldIndex.get(lang);
@@ -88,33 +87,17 @@ public class BuildConfigContent {
             }
             if (specialField.containsKey(currentField)) {
                 try {
-                    String[] parseFieldFunctionInfo = specialField.get(currentField).split("@");
-                    String parseFieldFunctionName = parseFieldFunctionInfo[0];
-                    int paramCount;
-                    if (parseFieldFunctionInfo.length == 1) {
-                        paramCount = 4;
-                    } else {
-                        paramCount = Integer.valueOf(parseFieldFunctionInfo[1]);
-                    }
+                    Map parseFieldFunctionInfo = specialField.get(currentField);
 
-                    List<Class> paramType = new ArrayList();
-                    for (int k = 0; k < paramCount; k++) {
-                        paramType.add(String.class);
-                    }
-                    Class clazz[] = paramType.toArray(new Class[]{});
-                    Method parseField = ParseConfigLogic.class.getDeclaredMethod(parseFieldFunctionName, clazz);//getMethod 方法 只能获取public 方法
+                    String parseFieldFunctionName = (String) parseFieldFunctionInfo.get("parseFunction");
+                    parseFieldFunctionInfo.put("fieldName", currentField);
+                    parseFieldFunctionInfo.put("fieldValue", currentFieldContent);
+
+                    Method parseField = ParseConfigLogic.class.getDeclaredMethod(parseFieldFunctionName, new Class[]{Map.class});//getMethod 方法 只能获取public 方法
                     parseField.setAccessible(true);
-                    //@todo 这一部分可以重构成动态参数的方式 以后在修改  下面这一块调用是存在问题的 需要考虑应该怎么将实参传递过去!!!!
-                    if (paramType.size() == 3) {
-                        singleRowStringbuffer.append(parseField.invoke(getInstance(), new Object[]{currentField, currentFieldContent, "    "}));//@todo 精彩的写法
-                        allRowsStringbuffer.append(parseField.invoke(getInstance(), new Object[]{currentField, currentFieldContent, "  "}));//@todo 精彩的写法
-                    } else if (paramType.size() == 4) {
-                        singleRowStringbuffer.append(parseField.invoke(getInstance(), new Object[]{currentField, currentFieldContent, "    ", "keys"}));//@todo 精彩的写法
-                        allRowsStringbuffer.append(parseField.invoke(getInstance(), new Object[]{currentField, currentFieldContent, "  ", "keys"}));//@todo 精彩的写法
-                    } else if (paramType.size() == 5) {
-                        singleRowStringbuffer.append(parseField.invoke(getInstance(), new Object[]{currentField, currentFieldContent, "    ", "contentSplitFragment", "keys"}));//@todo 精彩的写法
-                        allRowsStringbuffer.append(parseField.invoke(getInstance(), new Object[]{currentField, currentFieldContent, "  ", "contentSplitFragment", "keys"}));//@todo 精彩的写法
-                    }
+                    
+                    singleRowStringbuffer.append("'").append(currentField).append("' => ").append(parseField.invoke(getInstance(), new Object[]{parseFieldFunctionInfo})).append(",\r\n");
+                    allRowsStringbuffer.append("'").append(currentField).append("' => ").append(parseField.invoke(getInstance(), new Object[]{parseFieldFunctionInfo})).append(",\r\n");
 
                 } catch (IllegalAccessException ex) {
                     System.out.println("IllegalAccessException:" + ex.getMessage());
@@ -142,10 +125,9 @@ public class BuildConfigContent {
         finalInfo.put("allRowsInfo", allRowsStringbuffer.toString());
         return finalInfo;
     }
-    
 
     /**
-     * 
+     *
      * @param singleRowInfoContent
      * @param modelInfo
      * @param lang
@@ -155,7 +137,7 @@ public class BuildConfigContent {
      * @param keys
      * @param contentSplitFragment
      * @param defaultValue
-     * @return 
+     * @return
      */
     public static Map buildSingleRowStr(String[] singleRowInfoContent, Map modelInfo, String lang, int idIndex, String idField, Map<String, String> specialField, String keys, String contentSplitFragment, Map<String, String> defaultValue) {
         Map<String, List<Integer>> fieldIndex = (Map<String, List<Integer>>) modelInfo.get("fieldIndex");
@@ -232,7 +214,7 @@ public class BuildConfigContent {
         finalInfo.put("allRowsInfo", allRowsStringbuffer.toString());
         return finalInfo;
     }
-    
+
     public static Map buildMissionSingleRowStr(String[] singleRowInfoContent, Map modelInfo, String lang, int idIndex, String idField, Map<String, String> specialField, String keys, String contentSplitFragment, Map combineFields) {
         Map<String, List<Integer>> fieldIndex = (Map<String, List<Integer>>) modelInfo.get("fieldIndex");
         Map<String, List<String>> fieldName = (Map<String, List<String>>) modelInfo.get("fieldName");

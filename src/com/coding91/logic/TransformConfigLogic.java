@@ -10,6 +10,7 @@ import com.coding91.parser.ConfigParser;
 import static com.coding91.parser.ConfigParser.getLangs;
 import static com.coding91.parser.ConfigParser.notifyMessage;
 import static com.coding91.parser.ConfigParser.showMessageDialogMessage;
+import com.coding91.transformRunable.TransformExRunable;
 import com.coding91.transformRunable.TransformRunable;
 import com.coding91.utils.DateTimeUtils;
 import com.coding91.utils.ExcelParser;
@@ -326,21 +327,11 @@ public class TransformConfigLogic {
      * @param sheetName
      * @param idField
      * @param specialField
-     * @param defaultValue
      */
-    public static void transformCommonContentEx(final String configFilePath, final String outputPath, final String fileName, final String sheetName, final String idField, final Map specialField, final Map defaultValue) {
+    public static void transformCommonContentEx(final String configFilePath, final String outputPath, final String fileName, final String sheetName, final String idField, final Map<String, Map<String, ?>> specialField) {
         final long startTime = System.currentTimeMillis();
-
-        TransformRunable transformRunable = new TransformRunable();
-        transformRunable.setConfigFilePath(configFilePath);
-        transformRunable.setOutputPath(outputPath);
-        transformRunable.setFileName(fileName);
-        transformRunable.setSheetName(sheetName);
-        transformRunable.setIdField(idField);
-        transformRunable.setSpecialField(specialField);
-        transformRunable.setStartTime(startTime);
-        transformRunable.setDefalutValue(defaultValue);
-        new Thread(transformRunable).start();
+        TransformExRunable transformRunExable = new TransformExRunable(configFilePath, sheetName, outputPath, fileName, idField, specialField, startTime);
+        new Thread(transformRunExable).start();
     }
     
     /**

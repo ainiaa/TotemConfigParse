@@ -7,6 +7,7 @@ package com.coding91.logic;
 
 import static com.coding91.parser.ConfigParser.getFieldIndexByFieldName;
 import com.coding91.utils.ArrayUtils;
+import com.coding91.utils.FileUtils;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -216,8 +217,7 @@ public class ParseConfigLogic {
     private static final String MISSION_REQUIRE_FIRST_FLOOR = "-##-";
 
     /**
-     * 使用 parseCommonMultipleEx 比较好。。
-     * 将 "a","b","c" 转换为 array( "a","b","c")
+     * 使用 parseCommonMultipleEx 比较好。。 将 "a","b","c" 转换为 array( "a","b","c")
      *
      * @param field
      * @param content
@@ -299,35 +299,37 @@ public class ParseConfigLogic {
         tmpContent.append(leadingString).append("),\r\n");
         return tmpContent.toString();
     }
-    
+
     /**
-     * 
-     *  String originContent = "115:49201:4:0,116:49202:4:0,113:50134:5:1,116:50135:5:1|117:49203:4:0,118:49204:4:0,119:50136:5:1,122:50137:5:1|119:49205:4:0,120:49206:4:0,125:50138:5:1,128:50139:5:1";
-        String[] flagment = new String[]{"|", ",", ":"};
-        //String[] contentKey = new String[]{"activate_id", "activate_item_id", "activate_num", "activate_type"};
-        String[] contentKey = new String[]{};
-        int index = 0;
-        String content = parseCommonMultipleEx(originContent, flagment, contentKey, index);
-     * 
-     * @param originContent    
-     * @param flagment
+     *
+     * String originContent =
+     * "115:49201:4:0,116:49202:4:0,113:50134:5:1,116:50135:5:1|117:49203:4:0,118:49204:4:0,119:50136:5:1,122:50137:5:1|119:49205:4:0,120:49206:4:0,125:50138:5:1,128:50139:5:1";
+     * String[] flagment = new String[]{"|", ",", ":"}; //String[] contentKey =
+     * new String[]{"activate_id", "activate_item_id", "activate_num",
+     * "activate_type"}; String[] contentKey = new String[]{}; int index = 0;
+     * String content = parseCommonMultipleEx(originContent, flagment,
+     * contentKey, index);
+     *
+     * @param fieldName
+     * @param fieldValue
+     * @param contentSeparator
      * @param contentKey
      * @param index
-     * @return 
+     * @return
      */
-    public static String parseCommonMultipleEx(String originContent, String[] flagment, String[] contentKey, int index) {
+    public static String parseCommonMultipleEx(String fieldName, String fieldValue, String[] contentSeparator, String[] contentKey, int index) {
         StringBuilder finalContent = new StringBuilder();
         finalContent.append("array(");
-        if (!originContent.isEmpty()) {//内容不为空
-            String[] contentChunk = originContent.split("\\" + flagment[index]);
-            if (flagment.length == index + 1) {//已经是最后一层了
+        if (!fieldValue.isEmpty()) {//内容不为空
+            String[] contentChunk = fieldValue.split("\\" + contentSeparator[index]);
+            if (contentSeparator.length == index + 1) {//已经是最后一层了
                 if (contentKey.length > 0) {//最后一层需要将内容和key对应起来 key1 => 'key1content',key2 => 'key1content2',...
                     for (int i = 0; i < contentKey.length; i++) {
                         String content = "";
                         if (i <= contentChunk.length - 1) {
                             content = contentChunk[i];
                         }
-                        finalContent.append(String.format("'%s'=>'%s',",  contentKey[i], content));
+                        finalContent.append(String.format("'%s'=>'%s',", contentKey[i], content));
                     }
                 } else {//直接使用逗号分割放入array()中即可
                     for (String content : contentChunk) {
@@ -337,7 +339,7 @@ public class ParseConfigLogic {
             } else {
                 ++index;
                 for (String currentChunk : contentChunk) {
-                    finalContent.append(parseCommonMultipleEx(currentChunk, flagment, contentKey, index)).append(",");
+                    finalContent.append(parseCommonMultipleEx(fieldName, currentChunk, contentSeparator, contentKey, index)).append(",");
                 }
             }
         }
@@ -345,6 +347,33 @@ public class ParseConfigLogic {
         return finalContent.toString();
     }
 
+    public static String parseCommonMultipleEx(String fieldName, String fieldValue, String flagment, String contentKey, String index) {
+        String[] flagmentArray = flagment.split(FileUtils.CONTENT_SEPARATOR);
+        String[] contentKeyArray = flagment.split(FileUtils.CONTENT_SEPARATOR);
+        int indexIntValue = Integer.valueOf(index);
+        return parseCommonMultipleEx(fieldName, fieldValue, flagmentArray, contentKeyArray, indexIntValue);
+    }
+    
+    public static String parseCommonMultipleEx(String fieldName, String fieldValue, Map<String, ?> parseFunctionParam, String index) {
+        String[] contentSeparator = (String[])parseFunctionParam.get("contentSeparator");
+        String[] contentKey = (String[])parseFunctionParam.get("contentKey");
+        int indexIntValue = Integer.valueOf(index);
+        return parseCommonMultipleEx(fieldName, fieldValue, contentSeparator, contentKey, indexIntValue);
+    }
+    
+    public static String parseCommonMultipleEx(Map parseFunctionParam, String index) {
+        String[] contentSeparator = (String[])parseFunctionParam.get("contentSeparator");
+        String[] contentKey = (String[])parseFunctionParam.get("contentKey");
+        int indexIntValue = Integer.valueOf(index);
+        String fieldName = (String)parseFunctionParam.get("fieldName");
+        String fieldValue = (String)parseFunctionParam.get("fieldValue");
+        return parseCommonMultipleEx(fieldName, fieldValue, contentSeparator, contentKey, indexIntValue);
+    }
+    
+    public static String parseCommonMultipleEx(Map parseFunctionParam) {
+        return parseCommonMultipleEx(parseFunctionParam, "0");
+    }
+    
     public static String parseGameRankScoreRewards(String field, String content, String leadingString) {
 
         String rewardStringFormat = "array('itemId' => %s, 'itemNum' => %s),";
@@ -381,7 +410,8 @@ public class ParseConfigLogic {
     /**
      * 将 1:12,2:22,3:33 转换为 array ( 0 => array('key' => 1,'value' => 12), 1 =>
      * array('key' => 2,'value' => 22), 2 => array('key' => 3,'value' => 33), )
-     * currentField, currentFieldContent, "    ", contentSplitFragment
+     * currentField, currentFieldContent, " ", contentSplitFragment
+     *
      * @param field
      * @param keys
      * @param content

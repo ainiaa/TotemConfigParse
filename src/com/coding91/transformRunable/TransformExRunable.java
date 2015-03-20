@@ -9,7 +9,7 @@ import static com.coding91.logic.TransformConfigLogic.getModel;
 import com.coding91.parser.ConfigParser;
 import static com.coding91.parser.ConfigParser.getLangs;
 import static com.coding91.parser.ConfigParser.showMessageDialogMessage;
-import com.coding91.transformThread.TransformCommonContentThread;
+import com.coding91.transformThread.TransformCommonContentExThread;
 import com.coding91.utils.DateTimeUtils;
 import com.coding91.utils.ExcelParser;
 import java.io.IOException;
@@ -24,6 +24,26 @@ import jxl.read.biff.BiffException;
  */
 public class TransformExRunable implements Runnable {
 
+    /**
+     *
+     * @param configFilePath
+     * @param sheetName
+     * @param outputPath
+     * @param fileName
+     * @param idField
+     * @param specialField
+     * @param startTime
+     */
+    public TransformExRunable(String configFilePath, String sheetName, String outputPath, String fileName, String idField, Map<String, Map<String, ?>> specialField, long startTime) {
+        this.configFilePath = configFilePath;
+        this.sheetName = sheetName;
+        this.outputPath = outputPath;
+        this.fileName = fileName;
+        this.idField = idField;
+        this.specialField = specialField;
+        this.startTime = startTime;
+    }
+
     @Override
     public void run() {
         try {
@@ -32,17 +52,10 @@ public class TransformExRunable implements Runnable {
 
             final Map<String, Map<String, List<String>>> modelInfo = getModel(commonContent[0]);
             String[] langList = getLangs();
-            TransformCommonContentThread transformCommonContentThread = new TransformCommonContentThread();
-            transformCommonContentThread.setCommonContent(commonContent);//commonContent
-            transformCommonContentThread.setDefaultValue(defalutValue);
-            transformCommonContentThread.setFileName(fileName);//fileName
-            transformCommonContentThread.setIdField(idField);//idField
-            transformCommonContentThread.setModelInfo(modelInfo);//modelInfo
-            transformCommonContentThread.setOutputPath(outputPath);//outputPath
-            transformCommonContentThread.setSpecialField(specialField);//specialField 
+            TransformCommonContentExThread transformCommonContentExThread = new TransformCommonContentExThread(outputPath, fileName, modelInfo, commonContent, idField, specialField);
             for (final String currentLang : langList) {
                 // start single lang 
-                Thread currentThread = transformCommonContentThread.transformCommonThread(currentLang);
+                Thread currentThread = transformCommonContentExThread.transformCommonThread(currentLang);
                 currentThread.start();
                 threadList.add(currentThread);
                 //end single lang
@@ -60,7 +73,7 @@ public class TransformExRunable implements Runnable {
                             allThreadFinished = true;
                         }
                     }
-                    Thread.sleep(1000);//停止1s再执行
+                    Thread.sleep(500);//停止0.5s再执行
                 } catch (InterruptedException ex) {
                     showMessageDialogMessage(ex);
                 }
@@ -82,7 +95,6 @@ public class TransformExRunable implements Runnable {
     private String fileName;
     private String idField;
     private Map specialField;
-    private Map defalutValue;
     private long startTime;
     private List<Thread> threadList = new ArrayList();
 
@@ -148,13 +160,5 @@ public class TransformExRunable implements Runnable {
 
     public void setThreadList(List<Thread> threadList) {
         this.threadList = threadList;
-    }
-
-    public Map getDefalutValue() {
-        return defalutValue;
-    }
-
-    public void setDefalutValue(Map defalutValue) {
-        this.defalutValue = defalutValue;
     }
 }
