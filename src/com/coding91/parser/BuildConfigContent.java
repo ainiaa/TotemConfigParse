@@ -96,8 +96,8 @@ public class BuildConfigContent {
                     Method parseField = ParseConfigLogic.class.getDeclaredMethod(parseFieldFunctionName, new Class[]{Map.class});//getMethod 方法 只能获取public 方法
                     parseField.setAccessible(true);
 
-                    singleRowStringbuffer.append("'").append(currentField).append("' => ").append(parseField.invoke(getInstance(), new Object[]{parseFieldFunctionInfo})).append(",\r\n");
-                    allRowsStringbuffer.append("'").append(currentField).append("' => ").append(parseField.invoke(getInstance(), new Object[]{parseFieldFunctionInfo})).append(",\r\n");
+                    singleRowStringbuffer.append("'").append(currentField).append("' => ").append(parseField.invoke(this, new Object[]{parseFieldFunctionInfo})).append(",\r\n");
+                    allRowsStringbuffer.append("'").append(currentField).append("' => ").append(parseField.invoke(this, new Object[]{parseFieldFunctionInfo})).append(",\r\n");
 
                 } catch (IllegalAccessException ex) {
                     System.out.println("IllegalAccessException:" + ex.getMessage());
