@@ -24,7 +24,6 @@ public class ConfigParserDispatch {
         String idField;
         String fileName;
         Map<String, Map<String, ?>> specialField = new HashMap();
-        Map defaultValue = new HashMap();
         if ("DS_SHOP_OBJ_ITEM".equals(func)) {//shopItem
             TransformConfigLogic.transformShopObjectItem(configFilePath, outputPath);
         } else if ("ACTIVITY_LIB".equals(func)) {//activityLibraryInfo @todo 看看是不是好用
