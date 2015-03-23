@@ -86,7 +86,12 @@ public class FileUtils {
         return itemIdAndItemName.get(itemId).get(lang);
     }
 
-    public static Map<String, String> loadSetting(String filePath, boolean extension) {
+    /**
+     * 
+     * @param filePath
+     * @return 
+     */
+    public static Map<String, String> loadFieldDefaultValueProperty(String filePath) {
         HashMap finalResult = new HashMap();
 
         String finalFilePath = FileUtils.class.getClassLoader().getResource(filePath).toString();

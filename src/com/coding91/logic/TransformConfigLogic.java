@@ -49,7 +49,7 @@ public class TransformConfigLogic {
                     final String[][] dsShopObjectContentArray = ExcelParser.parseXls(configFilePath, sheetIndex, true);
                     final Map<String, Map<String, List<String>>> modelInfo = TransformConfigLogic.getModel(dsShopObjectContentArray[0]);
                     String[] langList = getLangs();
-                    final Map<String, String> fieldDefaultPair = FileUtils.loadSetting("resources/data/config/defaultvalue/shopItem.properties", true);
+                    final Map<String, String> fieldDefaultPair = FileUtils.loadFieldDefaultValueProperty("resources/data/config/defaultvalue/shopItem.properties");
 
                     for (final String currentLang : langList) {
                         // start single lang 

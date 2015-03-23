@@ -373,6 +373,14 @@ public class ParseConfigLogic {
         return parseCommonMultipleEx(parseFunctionParam, "0");
     }
     
+    public static String parseCommonMultipleEx(Map parseFunctionParam, String fieldName, String fieldValue) {
+        
+        String[] contentSeparator = (String[])parseFunctionParam.get("contentSeparator");
+        String[] contentKey = (String[])parseFunctionParam.get("contentKey");
+        int indexIntValue = Integer.valueOf("0");
+        return parseCommonMultipleEx(fieldName, fieldValue, contentSeparator, contentKey, indexIntValue);
+    }
+    
     public static String parseGameRankScoreRewards(String field, String content, String leadingString) {
 
         String rewardStringFormat = "array('itemId' => %s, 'itemNum' => %s),";

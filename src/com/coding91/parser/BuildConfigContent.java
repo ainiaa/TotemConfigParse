@@ -50,9 +50,15 @@ public class BuildConfigContent {
         return null;
     }
 
-    public static String commonSingleFieldString(String field, String content, String leadingString) {
+    public static String commonSingleFieldString(String field, String content, String leadingString, boolean contentUseQuote) {
         content = content.replaceAll("<br>", "\r\n");//将<br>替换为\r\n
-        String contentFormat = "'%s' => '%s',\r\n";
+        String contentFormat;
+        if (contentUseQuote) {
+            contentFormat = "'%s' => '%s',\r\n";    
+        } else {
+            contentFormat = "'%s' => %s,\r\n";    
+        }
+        
         return leadingString + String.format(contentFormat, field, content);
     }
 
@@ -66,7 +72,7 @@ public class BuildConfigContent {
      * @param specialField
      * @return
      */
-    public Map buildSingleRowStrEx(String[] singleRowInfoContent, Map modelInfo, String lang, int idIndex, String idField, Map<String, Map<String, ?>> specialField) {
+    public static Map buildSingleRowStrEx(String[] singleRowInfoContent, Map modelInfo, String lang, int idIndex, String idField, Map<String, Map<String, ?>> specialField) {
         Map<String, List<Integer>> fieldIndex = (Map<String, List<Integer>>) modelInfo.get("fieldIndex");
         Map<String, List<String>> fieldName = (Map<String, List<String>>) modelInfo.get("fieldName");
         List<Integer> currentFieldIndexList = fieldIndex.get(lang);
@@ -85,19 +91,24 @@ public class BuildConfigContent {
             if (currentField.equals(idField)) {
                 id = currentFieldContent;
             }
-            if (specialField.containsKey(currentField)) {
+            
+            if (currentFieldContent.isEmpty()) {//内容为空
+                currentFieldContent = getDefaultValue(currentField);
+                singleRowStringbuffer.append(commonSingleFieldString(currentField, currentFieldContent, "    ", false));
+                allRowsStringbuffer.append(commonSingleFieldString(currentField, currentFieldContent, "  ", false));
+            } else if (specialField.containsKey(currentField)) {
                 try {
                     Map parseFieldFunctionInfo = specialField.get(currentField);
 
                     String parseFieldFunctionName = (String) parseFieldFunctionInfo.get("parseFunction");
-                    parseFieldFunctionInfo.put("fieldName", currentField);
-                    parseFieldFunctionInfo.put("fieldValue", currentFieldContent);
+//                    parseFieldFunctionInfo.put("fieldName", currentField);//直接传递过去 放置错乱
+//                    parseFieldFunctionInfo.put("fieldValue", currentFieldContent);
 
-                    Method parseField = ParseConfigLogic.class.getDeclaredMethod(parseFieldFunctionName, new Class[]{Map.class});//getMethod 方法 只能获取public 方法
+                    Method parseField = ParseConfigLogic.class.getDeclaredMethod(parseFieldFunctionName, new Class[]{Map.class, String.class, String.class});//getMethod 方法 只能获取public 方法
                     parseField.setAccessible(true);
 
-                    singleRowStringbuffer.append("'").append(currentField).append("' => ").append(parseField.invoke(this, new Object[]{parseFieldFunctionInfo})).append(",\r\n");
-                    allRowsStringbuffer.append("'").append(currentField).append("' => ").append(parseField.invoke(this, new Object[]{parseFieldFunctionInfo})).append(",\r\n");
+                    singleRowStringbuffer.append("'").append(currentField).append("' => ").append(parseField.invoke(getInstance(), new Object[]{parseFieldFunctionInfo, currentField, currentFieldContent})).append(",\r\n");
+                    allRowsStringbuffer.append("'").append(currentField).append("' => ").append(parseField.invoke(getInstance(), new Object[]{parseFieldFunctionInfo, currentField, currentFieldContent})).append(",\r\n");
 
                 } catch (IllegalAccessException ex) {
                     System.out.println("IllegalAccessException:" + ex.getMessage());
@@ -111,8 +122,8 @@ public class BuildConfigContent {
                     System.out.println("NoSuchMethodException:" + ex.getMessage());
                 }
             } else {
-                singleRowStringbuffer.append(commonSingleFieldString(currentField, currentFieldContent, "    "));
-                allRowsStringbuffer.append(commonSingleFieldString(currentField, currentFieldContent, "  "));
+                singleRowStringbuffer.append(commonSingleFieldString(currentField, currentFieldContent, "    ", true));
+                allRowsStringbuffer.append(commonSingleFieldString(currentField, currentFieldContent, "  ", true));
             }
         }
 
@@ -126,6 +137,11 @@ public class BuildConfigContent {
         return finalInfo;
     }
 
+    public static String getDefaultValue(String currentField) {
+        
+        return "null";
+    }
+    
     /**
      *
      * @param singleRowInfoContent
@@ -199,8 +215,8 @@ public class BuildConfigContent {
                     System.out.println("NoSuchMethodException:" + ex.getMessage());
                 }
             } else {
-                singleRowStringbuffer.append(commonSingleFieldString(currentField, currentFieldContent, "    "));
-                allRowsStringbuffer.append(commonSingleFieldString(currentField, currentFieldContent, "  "));
+                singleRowStringbuffer.append(commonSingleFieldString(currentField, currentFieldContent, "    ", true));
+                allRowsStringbuffer.append(commonSingleFieldString(currentField, currentFieldContent, "  ", true));
             }
         }
 
@@ -274,8 +290,8 @@ public class BuildConfigContent {
                     System.out.println("NoSuchMethodException:" + ex.getMessage());
                 }
             } else {
-                singleRowStringbuffer.append(commonSingleFieldString(currentField, currentFieldContent, "    "));
-                allRowsStringbuffer.append(commonSingleFieldString(currentField, currentFieldContent, "  "));
+                singleRowStringbuffer.append(commonSingleFieldString(currentField, currentFieldContent, "    ", true));
+                allRowsStringbuffer.append(commonSingleFieldString(currentField, currentFieldContent, "  ", true));
             }
         }
 

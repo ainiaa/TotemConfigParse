@@ -299,11 +299,11 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
         allInOnejPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("一次性全转换"));
 
         allInOnejbuttonGroup.add(allInOneYesjRadioButton);
-        allInOneYesjRadioButton.setSelected(true);
         allInOneYesjRadioButton.setText("是");
         allInOneYesjRadioButton.setActionCommand("YES");
 
         allInOnejbuttonGroup.add(allInOneNojRadioButton);
+        allInOneNojRadioButton.setSelected(true);
         allInOneNojRadioButton.setText("否");
         allInOneNojRadioButton.setActionCommand("NO");
 
