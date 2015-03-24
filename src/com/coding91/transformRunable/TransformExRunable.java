@@ -31,16 +31,16 @@ public class TransformExRunable implements Runnable {
      * @param outputPath
      * @param fileName
      * @param idField
-     * @param specialField
+     * @param extraParams
      * @param startTime
      */
-    public TransformExRunable(String configFilePath, String sheetName, String outputPath, String fileName, String idField, Map<String, Map<String, ?>> specialField, long startTime) {
+    public TransformExRunable(String configFilePath, String sheetName, String outputPath, String fileName, String idField, Map<String, Map> extraParams, long startTime) {
         this.configFilePath = configFilePath;
         this.sheetName = sheetName;
         this.outputPath = outputPath;
         this.fileName = fileName;
         this.idField = idField;
-        this.specialField = specialField;
+        this.extraParams = extraParams;
         this.startTime = startTime;
     }
 
@@ -52,10 +52,10 @@ public class TransformExRunable implements Runnable {
 
             final Map<String, Map<String, List<String>>> modelInfo = getModel(commonContent[0]);
             String[] langList = getLangs();
-            TransformCommonContentExThread transformCommonContentExThread = new TransformCommonContentExThread(outputPath, fileName, modelInfo, commonContent, idField, specialField);
+            TransformCommonContentExThread tcce = new TransformCommonContentExThread(outputPath, fileName, modelInfo, commonContent, idField, extraParams);
             for (final String currentLang : langList) {
                 // start single lang 
-                Thread currentThread = transformCommonContentExThread.transformCommonThread(currentLang);
+                Thread currentThread = tcce.transformCommonThread(currentLang);
                 currentThread.start();
                 threadList.add(currentThread);
                 //end single lang
@@ -94,7 +94,7 @@ public class TransformExRunable implements Runnable {
     private String outputPath;
     private String fileName;
     private String idField;
-    private Map specialField;
+    private Map extraParams;
     private long startTime;
     private List<Thread> threadList = new ArrayList();
 
@@ -139,11 +139,11 @@ public class TransformExRunable implements Runnable {
     }
 
     public Map getSpecialField() {
-        return specialField;
+        return extraParams;
     }
 
     public void setSpecialField(Map specialField) {
-        this.specialField = specialField;
+        this.extraParams = specialField;
     }
 
     public long getStartTime() {

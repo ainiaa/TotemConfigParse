@@ -16,6 +16,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -87,17 +88,15 @@ public class FileUtils {
     }
 
     /**
-     * 
+     *
      * @param filePath
-     * @return 
+     * @return
      */
     public static Map<String, String> loadFieldDefaultValueProperty(String filePath) {
         HashMap finalResult = new HashMap();
 
-        String finalFilePath = FileUtils.class.getClassLoader().getResource(filePath).toString();
-        finalFilePath = finalFilePath.substring(6);//删除字符串卡头的 file:/
-        File f = new File(finalFilePath);
-        if (f.exists()) {
+        URL url = FileUtils.class.getClassLoader().getResource(filePath);
+        if (url != null) {//resource存在
             Properties prop = new Properties();
             try {
                 prop.load(new InputStreamReader(FileUtils.class.getClassLoader().getResourceAsStream(filePath), "UTF-8"));
@@ -105,13 +104,13 @@ public class FileUtils {
                 //showMessageDialogMessage(ex);//todo
             }
             Set<Map.Entry<Object, Object>> propertyEntrySet = prop.entrySet();
-            for(Map.Entry<Object, Object> currentProperty : propertyEntrySet) {
+            for (Map.Entry<Object, Object> currentProperty : propertyEntrySet) {
                 finalResult.put(currentProperty.getKey().toString(), currentProperty.getValue().toString());
             }
         }
         return finalResult;
     }
-    
+
     public static Map<String, String> loadSetting(String filePath) {
         String configBaseDir = "", outputDirectory = "";
         HashMap finalResult = new HashMap();

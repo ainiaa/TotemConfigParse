@@ -9,6 +9,7 @@ import com.coding91.logic.ParseConfigLogic;
 import static com.coding91.parser.ConfigParser.itemLangInfoCfg;
 import static com.coding91.parser.ConfigParser.itemLangs;
 import com.coding91.utils.ArrayUtils;
+import com.coding91.utils.FileUtils;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -54,11 +55,11 @@ public class BuildConfigContent {
         content = content.replaceAll("<br>", "\r\n");//将<br>替换为\r\n
         String contentFormat;
         if (contentUseQuote) {
-            contentFormat = "'%s' => '%s',\r\n";    
+            contentFormat = "'%s' => '%s',\r\n";
         } else {
-            contentFormat = "'%s' => %s,\r\n";    
+            contentFormat = "'%s' => %s,\r\n";
         }
-        
+
         return leadingString + String.format(contentFormat, field, content);
     }
 
@@ -69,10 +70,10 @@ public class BuildConfigContent {
      * @param lang
      * @param idIndex
      * @param idField
-     * @param specialField
+     * @param extraParams
      * @return
      */
-    public static Map buildSingleRowStrEx(String[] singleRowInfoContent, Map modelInfo, String lang, int idIndex, String idField, Map<String, Map<String, ?>> specialField) {
+    public static Map buildSingleRowStrEx(String[] singleRowInfoContent, Map modelInfo, String lang, int idIndex, String idField, Map<String, Map> extraParams) {
         Map<String, List<Integer>> fieldIndex = (Map<String, List<Integer>>) modelInfo.get("fieldIndex");
         Map<String, List<String>> fieldName = (Map<String, List<String>>) modelInfo.get("fieldName");
         List<Integer> currentFieldIndexList = fieldIndex.get(lang);
@@ -81,9 +82,21 @@ public class BuildConfigContent {
         String[] currentFieldName = currentFieldNameList.toArray(new String[currentFieldNameList.size()]);
         StringBuilder singleRowStringbuffer = new StringBuilder();
         StringBuilder allRowsStringbuffer = new StringBuilder();
-        String id = singleRowInfoContent[idIndex];
+        boolean isNeedAllRows = true;
+        String id;
+        if (idIndex == -1) {//不需要idIndex
+            isNeedAllRows = false;
+            id = "";
+        } else {
+            id = singleRowInfoContent[idIndex];
+        }
         singleRowStringbuffer.append("array (").append("\r\n");
-        allRowsStringbuffer.append("  ").append(id).append(" => \r\n").append("  array (\r\n");
+        if (isNeedAllRows) {
+            allRowsStringbuffer.append("  ").append(id).append(" => \r\n").append("  array (\r\n");
+        }
+
+        Map defaultValueMap = extraParams.get("defaultValue");
+        Map globalDefaultValueMap = extraParams.get("globalDefaultValue");
         for (int i = 0; i < currentFieldIndex.length; i++) {
             int currentIndex = currentFieldIndex[i];
             String currentField = currentFieldName[i];
@@ -91,14 +104,16 @@ public class BuildConfigContent {
             if (currentField.equals(idField)) {
                 id = currentFieldContent;
             }
-            
-            if (currentFieldContent.isEmpty()) {//内容为空
-                currentFieldContent = getDefaultValue(currentField);
+
+            if (currentFieldContent.isEmpty() || currentFieldContent.equals("0")) {//内容为空 或者为 0 
+                currentFieldContent = getDefaultValue(currentField, defaultValueMap, globalDefaultValueMap);
                 singleRowStringbuffer.append(commonSingleFieldString(currentField, currentFieldContent, "    ", false));
-                allRowsStringbuffer.append(commonSingleFieldString(currentField, currentFieldContent, "  ", false));
-            } else if (specialField.containsKey(currentField)) {
+                if (isNeedAllRows) {
+                    allRowsStringbuffer.append(commonSingleFieldString(currentField, currentFieldContent, "  ", false));
+                }
+            } else if (extraParams.containsKey(currentField)) {
                 try {
-                    Map parseFieldFunctionInfo = specialField.get(currentField);
+                    Map parseFieldFunctionInfo = extraParams.get(currentField);
 
                     String parseFieldFunctionName = (String) parseFieldFunctionInfo.get("parseFunction");
 //                    parseFieldFunctionInfo.put("fieldName", currentField);//直接传递过去 放置错乱
@@ -108,7 +123,9 @@ public class BuildConfigContent {
                     parseField.setAccessible(true);
 
                     singleRowStringbuffer.append("'").append(currentField).append("' => ").append(parseField.invoke(getInstance(), new Object[]{parseFieldFunctionInfo, currentField, currentFieldContent})).append(",\r\n");
-                    allRowsStringbuffer.append("'").append(currentField).append("' => ").append(parseField.invoke(getInstance(), new Object[]{parseFieldFunctionInfo, currentField, currentFieldContent})).append(",\r\n");
+                    if (isNeedAllRows) {
+                        allRowsStringbuffer.append("'").append(currentField).append("' => ").append(parseField.invoke(getInstance(), new Object[]{parseFieldFunctionInfo, currentField, currentFieldContent})).append(",\r\n");
+                    }
 
                 } catch (IllegalAccessException ex) {
                     System.out.println("IllegalAccessException:" + ex.getMessage());
@@ -123,12 +140,16 @@ public class BuildConfigContent {
                 }
             } else {
                 singleRowStringbuffer.append(commonSingleFieldString(currentField, currentFieldContent, "    ", true));
-                allRowsStringbuffer.append(commonSingleFieldString(currentField, currentFieldContent, "  ", true));
+                if (isNeedAllRows) {
+                    allRowsStringbuffer.append(commonSingleFieldString(currentField, currentFieldContent, "  ", true));
+                }
             }
         }
 
         singleRowStringbuffer.append(");");
-        allRowsStringbuffer.append("  ),");
+        if (isNeedAllRows) {
+            allRowsStringbuffer.append("  ),");
+        }
 
         Map finalInfo = new HashMap();
         finalInfo.put(idField, id);
@@ -137,11 +158,29 @@ public class BuildConfigContent {
         return finalInfo;
     }
 
-    public static String getDefaultValue(String currentField) {
-        
-        return "null";
+    public static String getDefaultValue(String currentField, Map<String, String> defaultValueMap, Map<String, String> globalDefaultValueMap) {
+        String defalutValue = "''";
+        if (defaultValueMap.containsKey(currentField + ".default")) {//设置了默认值
+            defalutValue = defaultValueMap.get(currentField + ".default");
+        } else if (defaultValueMap.containsKey(currentField + ".type")) {//设置为当前类型 可以根据当前类型去的默认值  当前配置项的 该类型默认值  eg type.int='',没有 找找 global.properties 的  type.int=''
+            String specialType = defaultValueMap.get(currentField + ".type");//eg:  market_purchase_limit.type=array
+            String specialTypeDefalutKey = "type." + specialType;//type.array=array()
+            if (defaultValueMap.containsKey(specialTypeDefalutKey)) {
+                defalutValue = defaultValueMap.get(specialTypeDefalutKey);
+            } else if (globalDefaultValueMap.containsKey(specialTypeDefalutKey)) {
+                defalutValue = globalDefaultValueMap.get(specialTypeDefalutKey);
+            }
+        } else if (defaultValueMap.containsKey("common.default")) {// 如果设置了通用默认值 直接使用该默认值
+            defalutValue = defaultValueMap.get("common.default");
+        } else if (defaultValueMap.containsKey("type.default") && globalDefaultValueMap.containsKey(defaultValueMap.get("type.default"))) {//设置了默认类型，到 global.properties 找该类型的默认值
+            defalutValue = globalDefaultValueMap.get(defaultValueMap.get("type.default"));
+        }
+        if (defalutValue == null) {
+            defalutValue = "null";
+        }
+        return defalutValue;
     }
-    
+
     /**
      *
      * @param singleRowInfoContent

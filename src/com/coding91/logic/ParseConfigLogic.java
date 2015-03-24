@@ -381,12 +381,13 @@ public class ParseConfigLogic {
         return parseCommonMultipleEx(fieldName, fieldValue, contentSeparator, contentKey, indexIntValue);
     }
     
-    public static String parseGameRankScoreRewards(String field, String content, String leadingString) {
+    private String parseGameRankScoreRewards(Map parseFunctionParam, String fieldName, String fieldValue) {
 
-        String rewardStringFormat = "array('itemId' => %s, 'itemNum' => %s),";
+        String leadingString = "    ";
+        String rewardStringFormat = "array('itemId' => '%s', 'itemNum' => '%s'),";
         //500|1:5,56004:50,56001:5000;
-        String[] singleRankScore = content.split(";");
-        String test = leadingString + "'" + field + "' => array(\r\n";
+        String[] singleRankScore = fieldValue.split(";");
+        String test = leadingString + "'" + fieldName + "' => array(\r\n";
         for (int i = 0; i < singleRankScore.length; i++) {
             String currentSingleRankScore = singleRankScore[i];
             if (!currentSingleRankScore.isEmpty()) {

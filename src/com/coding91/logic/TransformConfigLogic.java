@@ -327,11 +327,11 @@ public class TransformConfigLogic {
      * @param fileName
      * @param sheetName
      * @param idField
-     * @param specialField
+     * @param extraParams
      */
-    public static void transformCommonContentEx(final String configFilePath, final String outputPath, final String fileName, final String sheetName, final String idField, final Map<String, Map<String, ?>> specialField) {
+    public static void transformCommonContentEx(final String configFilePath, final String outputPath, final String fileName, final String sheetName, final String idField, final Map<String, Map> extraParams) {
         final long startTime = System.currentTimeMillis();
-        TransformExRunable transformRunExable = new TransformExRunable(configFilePath, sheetName, outputPath, fileName, idField, specialField, startTime);
+        TransformExRunable transformRunExable = new TransformExRunable(configFilePath, sheetName, outputPath, fileName, idField, extraParams, startTime);
         new Thread(transformRunExable).start();
     }
     

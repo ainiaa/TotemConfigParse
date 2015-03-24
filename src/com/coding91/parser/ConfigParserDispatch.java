@@ -23,81 +23,139 @@ public class ConfigParserDispatch {
         String sheetName = "Worksheet";
         String idField;
         String fileName;
-        Map<String, Map<String, ?>> specialField = new HashMap();
-        if ("DS_SHOP_OBJ_ITEM".equals(func)) {//shopItem
-            TransformConfigLogic.transformShopObjectItem(configFilePath, outputPath);
-        } else if ("ACTIVITY_LIB".equals(func)) {//activityLibraryInfo @todo 看看是不是好用
+        Map<String, Map> extraParams = new HashMap();
+        Map globalDefaultValueMap = FileUtils.loadFieldDefaultValueProperty("resources/data/config/defaultvalue/global.properties");
+        extraParams.put("globalDefaultValue", globalDefaultValueMap);
+        if ("DS_SHOP_OBJ_ITEM".equals(func)) {//shopItem done
+            Map activityInfoParam = new HashMap();
+            activityInfoParam.put("contentKey", new String[]{"require_item_id", "require_item_num", "require_type", "require_id"});
+            activityInfoParam.put("contentSeparator", new String[]{",", ":"});
+            activityInfoParam.put("parseFunction", "parseCommonMultipleEx");
+            extraParams.put("item_property", activityInfoParam);
+
+            Map marketPurchaseLimitParam = new HashMap();
+            marketPurchaseLimitParam.put("contentKey", new String[]{"level", "purchase_limit_num"});
+            marketPurchaseLimitParam.put("contentSeparator", new String[]{",", ":"});
+            marketPurchaseLimitParam.put("parseFunction", "parseCommonMultipleEx");
+            extraParams.put("market_purchase_limit", marketPurchaseLimitParam);
+            
+            Map activateDataParam = new HashMap();
+            activateDataParam.put("contentKey", new String[]{"activate_id", "activate_item_id", "activate_num", "activate_type"});
+            activateDataParam.put("contentSeparator", new String[]{",", ":"});
+            activateDataParam.put("parseFunction", "parseCommonMultipleEx");
+            extraParams.put("activate_data", activateDataParam);
+            
+
+            Map recipeListParam = new HashMap();
+            recipeListParam.put("contentKey", new String[]{});
+            recipeListParam.put("contentSeparator", new String[]{","});
+            recipeListParam.put("parseFunction", "parseCommonMultipleEx");
+            extraParams.put("recipe_list", recipeListParam);
+
+            Map<String, String> fieldDefaultPair = FileUtils.loadFieldDefaultValueProperty("resources/data/config/defaultvalue/shopItem.properties");
+            extraParams.put("defaultValue", fieldDefaultPair);
+
+            fileName = "shopItem";
+            idField = "item_id";
+            TransformConfigLogic.transformCommonContentEx(configFilePath, outputPath, fileName, sheetName, idField, extraParams);
+
+//            TransformConfigLogic.transformShopObjectItem(configFilePath, outputPath);
+        } else if ("ACTIVITY_LIB".equals(func)) {//activityLibraryInfo done
             Map activityInfoParam = new HashMap();
             activityInfoParam.put("contentKey", new String[]{"activity_type", "activity_id"});
             activityInfoParam.put("contentSeparator", new String[]{",", ":"});
             activityInfoParam.put("parseFunction", "parseCommonMultipleEx");
-            specialField.put("activity_info", activityInfoParam);
+            extraParams.put("activity_info", activityInfoParam);
 
             Map unlockRecipeParam = new HashMap();
             unlockRecipeParam.put("contentKey", new String[]{});
             unlockRecipeParam.put("contentSeparator", new String[]{","});
             unlockRecipeParam.put("parseFunction", "parseCommonMultipleEx");
-            specialField.put("unlockRecipe", unlockRecipeParam);
+            extraParams.put("unlockRecipe", unlockRecipeParam);
+
+            Map<String, String> fieldDefaultPair = FileUtils.loadFieldDefaultValueProperty("resources/data/config/defaultvalue/activityLibraryInfo.properties");
+            extraParams.put("defaultValue", fieldDefaultPair);
 
             fileName = "activityLibraryInfo";
             idField = "id";
-            TransformConfigLogic.transformCommonContentEx(configFilePath, outputPath, fileName, sheetName, idField, specialField);
-        } else if ("AVATAR_ITEMS".equals(func)) {//avatarItems todo 有数据错乱的情况 需要后续处理
+            TransformConfigLogic.transformCommonContentEx(configFilePath, outputPath, fileName, sheetName, idField, extraParams);
+        } else if ("AVATAR_ITEMS".equals(func)) {//avatarItems done
             Map suiteArrayParam = new HashMap();
             suiteArrayParam.put("contentKey", new String[]{});
             suiteArrayParam.put("contentSeparator", new String[]{","});
             suiteArrayParam.put("parseFunction", "parseCommonMultipleEx");
-            specialField.put("suite_array", suiteArrayParam);
+            extraParams.put("suite_array", suiteArrayParam);
+
+            Map<String, String> fieldDefaultPair = FileUtils.loadFieldDefaultValueProperty("resources/data/config/defaultvalue/avatarItems.properties");
+            extraParams.put("defaultValue", fieldDefaultPair);
+
             fileName = "avatarItems";
             idField = "item_id";
-            TransformConfigLogic.transformCommonContentEx(configFilePath, outputPath, fileName, sheetName, idField, specialField);
+            TransformConfigLogic.transformCommonContentEx(configFilePath, outputPath, fileName, sheetName, idField, extraParams);
         } else if ("FEED_INFO".equals(func)) {//feedInfo done
             fileName = "feedInfo";
             idField = "feed_id";
-            TransformConfigLogic.transformCommonContentEx(configFilePath, outputPath, fileName, sheetName, idField, specialField);
+
+            Map<String, String> fieldDefaultPair = FileUtils.loadFieldDefaultValueProperty("resources/data/config/defaultvalue/feedInfo.properties");
+            extraParams.put("defaultValue", fieldDefaultPair);
+
+            TransformConfigLogic.transformCommonContentEx(configFilePath, outputPath, fileName, sheetName, idField, extraParams);
         } else if ("GOODS_ORDER".equals(func)) {//goodsOrder done
             fileName = "goodsOrder";
             idField = "id";
-            TransformConfigLogic.transformCommonContentEx(configFilePath, outputPath, fileName, sheetName, idField, specialField);
+            Map<String, String> fieldDefaultPair = FileUtils.loadFieldDefaultValueProperty("resources/data/config/defaultvalue/goodsOrder.properties");
+            extraParams.put("defaultValue", fieldDefaultPair);
+            TransformConfigLogic.transformCommonContentEx(configFilePath, outputPath, fileName, sheetName, idField, extraParams);
         } else if ("REQUEST_INFO".equals(func)) {//requestInfo done
             fileName = "requestInfo";
             idField = "request_id";
-            TransformConfigLogic.transformCommonContentEx(configFilePath, outputPath, fileName, sheetName, idField, specialField);
+
+            Map<String, String> fieldDefaultPair = FileUtils.loadFieldDefaultValueProperty("resources/data/config/defaultvalue/requestInfo.properties");
+            extraParams.put("defaultValue", fieldDefaultPair);
+
+            TransformConfigLogic.transformCommonContentEx(configFilePath, outputPath, fileName, sheetName, idField, extraParams);
         } else if ("BINDING_RECIPE".equals(func)) {//bindingRecipe @todo 有数据错乱的情况 需要后续处理
             Map recipesParam = new HashMap();
             recipesParam.put("contentKey", new String[]{});
             recipesParam.put("contentSeparator", new String[]{"|", ","});
             recipesParam.put("parseFunction", "parseCommonMultipleEx");
-            specialField.put("recipes", recipesParam);
+            extraParams.put("recipes", recipesParam);
 
             Map activateDataParam = new HashMap();
             activateDataParam.put("contentKey", new String[]{"activate_id", "activate_item_id", "activate_num", "activate_type"});
             activateDataParam.put("contentSeparator", new String[]{"|", ",", ":"});
             activateDataParam.put("parseFunction", "parseCommonMultipleEx");
-            specialField.put("activate_data", activateDataParam);
+            extraParams.put("activate_data", activateDataParam);
+
+            Map<String, String> fieldDefaultPair = FileUtils.loadFieldDefaultValueProperty("resources/data/config/defaultvalue/bindingRecipe.properties");
+            extraParams.put("defaultValue", fieldDefaultPair);
 
             fileName = "bindingRecipe";
             idField = "item_id";
 
-            TransformConfigLogic.transformCommonContentEx(configFilePath, outputPath, fileName, sheetName, idField, specialField);
+            TransformConfigLogic.transformCommonContentEx(configFilePath, outputPath, fileName, sheetName, idField, extraParams);
 
-        } else if ("GAME".equals(func)) {//game todo 还没有处理
+        } else if ("GAME".equals(func)) {//game done
             fileName = "game";
             Map randomShelfProductListParam = new HashMap();
             randomShelfProductListParam.put("contentKey", new String[]{});
-            randomShelfProductListParam.put("contentSeparator", new String[]{"|", ","});
+            randomShelfProductListParam.put("contentSeparator", new String[]{ ","});
             randomShelfProductListParam.put("parseFunction", "parseCommonMultipleEx");
-            specialField.put("randomShelfProductList", randomShelfProductListParam);
-            
+            extraParams.put("randomShelfProductList", randomShelfProductListParam);
+
             Map rankScoreRewardsParam = new HashMap();
             rankScoreRewardsParam.put("contentKey", new String[]{});
-            rankScoreRewardsParam.put("contentSeparator", new String[]{"|", ","});
+            rankScoreRewardsParam.put("contentSeparator", new String[]{"|", ",", ":"});
             rankScoreRewardsParam.put("parseFunction", "parseGameRankScoreRewards");
-            specialField.put("randomShelfProductList", randomShelfProductListParam);
-            
+            extraParams.put("rankScoreRewards", rankScoreRewardsParam);
+
+            Map<String, String> fieldDefaultPair = FileUtils.loadFieldDefaultValueProperty("resources/data/config/defaultvalue/game.properties");
+            extraParams.put("defaultValue", fieldDefaultPair);
+
 //            specialField.put("randomShelfProductList", "parseCommonMultiple@3");
 //            specialField.put("rankScoreRewards", "parseGameRankScoreRewards@3");
-            TransformConfigLogic.transformCommonSingleFileContent(configFilePath, outputPath, fileName, sheetName, specialField);
+            TransformConfigLogic.transformCommonContentEx(configFilePath, outputPath, fileName, sheetName, null, extraParams);
+            //TransformConfigLogic.transformCommonSingleFileContent(configFilePath, outputPath, fileName, sheetName, extraParams);
         } else if ("MISSION_INFO".equals(func)) {//mission Info  @todo 还有一写文件没有生成
 //            specialField.put("reward_data", "parseMissionInfoRewardData@3");
 //            specialField.put("mission_require", "parseMissionInfoMissionRequire@3");
