@@ -54,6 +54,7 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
         gamejRadioButton = new javax.swing.JRadioButton();
         missionInfojRadioButton = new javax.swing.JRadioButton();
         dessertInfojRadioButton = new javax.swing.JRadioButton();
+        giftPackagejRadioButton = new javax.swing.JRadioButton();
         selectConfgFilejPanel = new javax.swing.JPanel();
         configFilejLabel = new javax.swing.JLabel();
         configFilejTextField = new javax.swing.JTextField();
@@ -119,16 +120,20 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
         dessertInfojRadioButton.setText("dessertInfo");
         dessertInfojRadioButton.setActionCommand("DESSERT_INFO");
 
+        funcbuttonGroup.add(giftPackagejRadioButton);
+        giftPackagejRadioButton.setText("giftPackage");
+        giftPackagejRadioButton.setActionCommand("GIFT_PACKAGE");
+
         javax.swing.GroupLayout funjPanelLayout = new javax.swing.GroupLayout(funjPanel);
         funjPanel.setLayout(funjPanelLayout);
         funjPanelLayout.setHorizontalGroup(
             funjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(funjPanelLayout.createSequentialGroup()
-                .addGap(0, 0, 0)
                 .addGroup(funjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(bindingRecipejRadioButton)
-                    .addComponent(shopObjItemjRadioButton)
-                    .addComponent(missionInfojRadioButton))
+                    .addGroup(funjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(bindingRecipejRadioButton)
+                        .addComponent(shopObjItemjRadioButton))
+                    .addComponent(giftPackagejRadioButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(funjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(funjPanelLayout.createSequentialGroup()
@@ -138,13 +143,14 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(funjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(avatarItemsjRadioButton)
-                            .addComponent(requestInfojRadioButton))
-                        .addGap(27, 27, 27)
-                        .addGroup(funjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(gamejRadioButton)
-                            .addComponent(goodsOrderjRadioButton)))
+                            .addComponent(requestInfojRadioButton)))
                     .addComponent(dessertInfojRadioButton))
-                .addContainerGap(63, Short.MAX_VALUE))
+                .addGap(27, 27, 27)
+                .addGroup(funjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(missionInfojRadioButton)
+                    .addComponent(gamejRadioButton)
+                    .addComponent(goodsOrderjRadioButton))
+                .addContainerGap(57, Short.MAX_VALUE))
         );
         funjPanelLayout.setVerticalGroup(
             funjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -164,7 +170,8 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(funjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(missionInfojRadioButton)
-                    .addComponent(dessertInfojRadioButton))
+                    .addComponent(dessertInfojRadioButton)
+                    .addComponent(giftPackagejRadioButton))
                 .addContainerGap(57, Short.MAX_VALUE))
         );
 
@@ -687,6 +694,7 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
     private javax.swing.ButtonGroup funcbuttonGroup;
     private javax.swing.JPanel funjPanel;
     private javax.swing.JRadioButton gamejRadioButton;
+    private javax.swing.JRadioButton giftPackagejRadioButton;
     private javax.swing.JRadioButton goodsOrderjRadioButton;
     private javax.swing.JLayeredPane jLayeredPane;
     private javax.swing.JMenuBar jMenuBar;

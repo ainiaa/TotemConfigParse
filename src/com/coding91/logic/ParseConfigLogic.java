@@ -216,90 +216,6 @@ public class ParseConfigLogic {
     private static final String MISSION_REQUIRE_FIRST_FLOOR = "-##-";
 
     /**
-     * 使用 parseCommonMultipleEx 比较好。。 将 "a","b","c" 转换为 array( "a","b","c")
-     *
-     * @param field
-     * @param content
-     * @param leadingString
-     * @param contentSplitFragment
-     * @return
-     */
-    public static String parseCommonMultiple(String field, String content, String leadingString, String contentSplitFragment) {
-        content = content.replaceAll("<br>", "\r\n");//将<br>替换为\r\n '11:6,2:31
-        String[] contentSplitFragmentArray = contentSplitFragment.split("!");
-        StringBuilder tmpContent = new StringBuilder();
-        tmpContent.append(leadingString).append("'").append(field).append("' => array(\r\n");
-        //分隔内容
-        String firstSplitFragment, secondSplitFragment, thirdSplitFragment;
-        String[] firstContentArray, secondContentArray, thirdContentArray;
-        int firstIndex = 0, secondIndex = 0, thirdIndex = 0;
-        switch (contentSplitFragmentArray.length) {
-            case 1:
-                firstSplitFragment = contentSplitFragmentArray[0];
-                firstContentArray = content.split("\\" + firstSplitFragment);
-                for (String firstContentFragement : firstContentArray) {
-                    tmpContent.append(leadingString).append(leadingString).append(firstIndex++).append(" => '").append(firstContentFragement).append("',\r\n");
-                }
-                break;
-            case 2:
-                firstSplitFragment = contentSplitFragmentArray[0];
-                secondSplitFragment = contentSplitFragmentArray[1];
-                firstContentArray = content.split("\\" + firstSplitFragment);
-                for (String firstContentFragement : firstContentArray) {
-                    secondIndex = 0;
-                    thirdIndex = 0;
-                    if (!firstContentFragement.isEmpty()) {
-                        tmpContent.append(leadingString).append(leadingString).append(firstIndex++).append(" => array(\r\n");
-                        secondContentArray = firstContentFragement.split("\\" + secondSplitFragment);
-                        for (String secondContentFragement : secondContentArray) {
-                            tmpContent.append(leadingString).append(leadingString).append(leadingString).append(secondIndex++).append(" => '").append(secondContentFragement).append("',\r\n");
-                        }
-                        tmpContent.append(leadingString).append(leadingString).append("),\r\n");
-                    } else {
-                        tmpContent.append(leadingString).append(leadingString).append(firstIndex++).append(" => array(),\r\n");
-                    }
-                }
-                break;
-            case 3:
-                firstSplitFragment = contentSplitFragmentArray[0];
-                secondSplitFragment = contentSplitFragmentArray[1];
-                thirdSplitFragment = contentSplitFragmentArray[2];
-                firstContentArray = content.split("\\" + firstSplitFragment);
-                for (String firstContentFragement : firstContentArray) {
-                    secondIndex = 0;
-                    thirdIndex = 0;
-                    if (!firstContentFragement.isEmpty()) {
-                        tmpContent.append(leadingString).append(leadingString).append(firstIndex++).append(" => array(\r\n");
-                        secondContentArray = firstContentFragement.split("\\" + secondSplitFragment);
-                        for (String secondContentFragement : secondContentArray) {
-                            if (!secondContentFragement.isEmpty()) {
-                                tmpContent.append(leadingString).append(leadingString).append(leadingString).append(secondIndex++).append(" => array(\r\n");
-                                thirdContentArray = secondContentFragement.split("\\" + thirdSplitFragment);
-                                for (String thirdContentFragement : thirdContentArray) {
-                                    tmpContent.append(leadingString).append(leadingString).append(leadingString).append(leadingString).append(thirdIndex++).append(" => '").append(thirdContentFragement).append("',\r\n");
-                                }
-                                tmpContent.append(leadingString).append(leadingString).append(leadingString).append("),\r\n");
-                            } else {
-                                tmpContent.append(leadingString).append(leadingString).append(leadingString).append(secondIndex++).append(" => array(),\r\n");
-                            }
-                            //tmpContent.append(leadingString).append(leadingString).append(leadingString).append(secondIndex++).append(" => '").append(secondContentFragement).append("',\r\n");
-                        }
-                        tmpContent.append(leadingString).append(leadingString).append("),\r\n");
-                    } else {
-                        tmpContent.append(leadingString).append(leadingString).append(firstIndex++).append(" => array(),\r\n");
-                    }
-                }
-                break;
-            case 4:
-                break;
-            default://这么负载
-        }
-
-        tmpContent.append(leadingString).append("),\r\n");
-        return tmpContent.toString();
-    }
-
-    /**
      *
      * String originContent =
      * "115:49201:4:0,116:49202:4:0,113:50134:5:1,116:50135:5:1|117:49203:4:0,118:49204:4:0,119:50136:5:1,122:50137:5:1|119:49205:4:0,120:49206:4:0,125:50138:5:1,128:50139:5:1";
@@ -318,7 +234,7 @@ public class ParseConfigLogic {
      */
     public static String parseCommonMultipleEx(String fieldName, String fieldValue, String[] contentSeparator, String[] contentKey, int index) {
         StringBuilder finalContent = new StringBuilder();
-        finalContent.append("array(");
+        finalContent.append("\r\narray(\r\n");
         if (!fieldValue.isEmpty()) {//内容不为空
             String[] contentChunk = fieldValue.split("\\" + contentSeparator[index]);
             if (contentSeparator.length == index + 1) {//已经是最后一层了
@@ -328,73 +244,74 @@ public class ParseConfigLogic {
                         if (i <= contentChunk.length - 1) {
                             content = contentChunk[i];
                         }
-                        finalContent.append(String.format("'%s'=>'%s',", contentKey[i], content));
+                        finalContent.append(String.format("'%s' => '%s',\r\n", contentKey[i], content));
                     }
                 } else {//直接使用逗号分割放入array()中即可
-                    for (String content : contentChunk) {
-                        finalContent.append(String.format("'%s',", content));
+                    for (int i = 0; i < contentChunk.length; i++) {
+                        String content = contentChunk[i];
+                        if (i == 0) {//第一个要多添加一个\r\n
+                            finalContent.append("\r\n");
+                        }
+                        finalContent.append(String.format("%d => '%s',\r\n", i, content));
                     }
                 }
             } else {
                 ++index;
+                int currentIndex = 0;
                 for (String currentChunk : contentChunk) {
-                    finalContent.append(parseCommonMultipleEx(fieldName, currentChunk, contentSeparator, contentKey, index)).append(",");
+                    finalContent.append(currentIndex++).append(" => ").append(parseCommonMultipleEx(fieldName, currentChunk, contentSeparator, contentKey, index)).append(",\r\n");
                 }
             }
         }
         finalContent.append(")");
+        if (contentSeparator.length == index + 1) {
+            finalContent.append("");
+        }
         return finalContent.toString();
     }
 
-//    public static String parseCommonMultipleEx(String fieldName, String fieldValue, String flagment, String contentKey, String index) {
-//        String[] flagmentArray = flagment.split(FileUtils.CONTENT_SEPARATOR);
-//        String[] contentKeyArray = flagment.split(FileUtils.CONTENT_SEPARATOR);
-//        int indexIntValue = Integer.valueOf(index);
-//        return parseCommonMultipleEx(fieldName, fieldValue, flagmentArray, contentKeyArray, indexIntValue);
-//    }
-    
     public static String parseCommonMultipleEx(String fieldName, String fieldValue, Map<String, ?> parseFunctionParam, String index) {
-        String[] contentSeparator = (String[])parseFunctionParam.get("contentSeparator");
-        String[] contentKey = (String[])parseFunctionParam.get("contentKey");
+        String[] contentSeparator = (String[]) parseFunctionParam.get("contentSeparator");
+        String[] contentKey = (String[]) parseFunctionParam.get("contentKey");
         int indexIntValue = Integer.valueOf(index);
         return parseCommonMultipleEx(fieldName, fieldValue, contentSeparator, contentKey, indexIntValue);
     }
-    
+
     public static String parseCommonMultipleEx(Map parseFunctionParam, String index) {
-        String[] contentSeparator = (String[])parseFunctionParam.get("contentSeparator");
-        String[] contentKey = (String[])parseFunctionParam.get("contentKey");
+        String[] contentSeparator = (String[]) parseFunctionParam.get("contentSeparator");
+        String[] contentKey = (String[]) parseFunctionParam.get("contentKey");
         int indexIntValue = Integer.valueOf(index);
-        String fieldName = (String)parseFunctionParam.get("fieldName");
-        String fieldValue = (String)parseFunctionParam.get("fieldValue");
+        String fieldName = (String) parseFunctionParam.get("fieldName");
+        String fieldValue = (String) parseFunctionParam.get("fieldValue");
         return parseCommonMultipleEx(fieldName, fieldValue, contentSeparator, contentKey, indexIntValue);
     }
-    
+
     public static String parseCommonMultipleEx(Map parseFunctionParam) {
         return parseCommonMultipleEx(parseFunctionParam, "0");
     }
-    
+
     public static String parseCommonMultipleEx(Map parseFunctionParam, String fieldName, String fieldValue) {
-        
-        String[] contentSeparator = (String[])parseFunctionParam.get("contentSeparator");
-        String[] contentKey = (String[])parseFunctionParam.get("contentKey");
+
+        String[] contentSeparator = (String[]) parseFunctionParam.get("contentSeparator");
+        String[] contentKey = (String[]) parseFunctionParam.get("contentKey");
         int indexIntValue = Integer.valueOf("0");
         return parseCommonMultipleEx(fieldName, fieldValue, contentSeparator, contentKey, indexIntValue);
     }
-    
+
     private String parseGameRankScoreRewards(Map parseFunctionParam, String fieldName, String fieldValue) {
 
         String leadingString = "    ";
-        String rewardStringFormat = "array('itemId' => '%s', 'itemNum' => '%s'),";
+        String rewardStringFormat = "\r\n  %d => \r\n       array(\r\n        'itemId' => '%s',\r\n         'itemNum' => '%s',\r\n      ),";
         //500|1:5,56004:50,56001:5000;
         String[] singleRankScore = fieldValue.split(";");
-        String test = leadingString + "'" + fieldName + "' => array(\r\n";
+        String finalContent = "\r\n  array(\r\n";
         for (int i = 0; i < singleRankScore.length; i++) {
             String currentSingleRankScore = singleRankScore[i];
             if (!currentSingleRankScore.isEmpty()) {
                 String[] singleRankScoreItem = currentSingleRankScore.split("\\|");
-                test += leadingString + leadingString + "array(\r\n";
-                test += leadingString + leadingString + leadingString + "'score' => " + singleRankScoreItem[0] + ",\r\n";
-                test += leadingString + leadingString + leadingString + "'reward' => array(\r\n";
+                finalContent += leadingString + leadingString + i + " => \r\n      array(\r\n";
+                finalContent += leadingString + leadingString + leadingString + "'score' => " + singleRankScoreItem[0] + ",\r\n";
+                finalContent += leadingString + leadingString + leadingString + "'reward' => \r\n      array(\r\n";
                 String currentSingleRankScoreItem = singleRankScoreItem[1];
                 if (!currentSingleRankScoreItem.isEmpty()) {
                     String[] singleRankScoreItemReward = currentSingleRankScoreItem.split(",");
@@ -402,17 +319,100 @@ public class ParseConfigLogic {
                         String currentSingleRankScoreItemReward = singleRankScoreItemReward[j];
                         if (!currentSingleRankScoreItemReward.isEmpty()) {
                             String[] singleRankScoreItemRewardItem = currentSingleRankScoreItemReward.split(":");
-                            test += leadingString + leadingString + leadingString + leadingString + String.format(rewardStringFormat, singleRankScoreItemRewardItem[0], singleRankScoreItemRewardItem[1]) + "\r\n";
+                            finalContent += leadingString + leadingString + leadingString + leadingString + String.format(rewardStringFormat, j, singleRankScoreItemRewardItem[0], singleRankScoreItemRewardItem[1]) + "\r\n";
                         }
                     }
                 }
             }
-            test += leadingString + leadingString + leadingString + "),\r\n";
-            test += leadingString + "),\r\n";
+            finalContent += leadingString + leadingString + leadingString + "),\r\n";
+            finalContent += leadingString + "),\r\n";
         }
 
-        test += leadingString + "),";
-        return test;
+        finalContent += leadingString + ")";
+        return finalContent;
+    }
+
+    private String parseDessertInfoNormalDessertData(Map parseFunctionParam, String fieldName, String fieldValue) {
+        String contentFormat = "\r\n    array (\n"
+                + "      0 => \n"
+                + "      array (\n"
+                + "        'normal_dessert_id' => '%s',\n"
+                + "        'normal_dessert_num' => \n"
+                + "        array (\n"
+                + "          %s"
+                + "        ),\n"
+                + "      ),\n"
+                + "    )";
+        String[] singleContentFlagment = fieldValue.split(":");
+        String[] singleOuptputNum = singleContentFlagment[1].split("\\|");
+        String ouptputNumFormat = "          %d => '%s',\r\n";
+        StringBuilder ouptputNumContent = new StringBuilder();
+        for (int i = 0; i < singleOuptputNum.length; i++) {
+            ouptputNumContent.append(String.format(ouptputNumFormat, i, singleOuptputNum[i]));
+        }
+        return String.format(contentFormat, singleContentFlagment[0], ouptputNumContent.toString());
+    }
+
+    private String parseDessertInfoCondimentsDessertData(Map parseFunctionParam, String fieldName, String fieldValue) {
+        StringBuilder finalContent = new StringBuilder();
+        finalContent.append("\r\n    array (\r\n");
+        String contentFormat = "%d => \n"
+                + "      array (\n"
+                + "        'condiments_dessert_id' => '%s',\n"
+                + "        'condiments_dessert_num' => \n"
+                + "        array (\n"
+                + "         %s"
+                + "        ),\n"
+                + "        'level_up_cook_times' => '%s',\n"
+                + "        'unlock_pink_star_require' => %s,\n"
+                + "        'cook_success_rate' => '%s',\n"
+                + "      ),\r\n";
+        String[] contentFlagment = fieldValue.split(",");
+        for (int i = 0; i < contentFlagment.length; i++) {
+            String[] singleContentFlagment = contentFlagment[i].split(":");
+            String[] singleCondimentsDessertNum = singleContentFlagment[1].split("\\|");
+            String ouptputNumFormat = "          %d => '%s',\r\n";
+            StringBuilder ouptputNumContent = new StringBuilder();
+            for (int j = 0; j < singleCondimentsDessertNum.length; j++) {
+                ouptputNumContent.append(String.format(ouptputNumFormat, j, singleCondimentsDessertNum[j]));
+            }
+            finalContent.append(String.format(contentFormat, i, singleContentFlagment[0], ouptputNumContent.toString(), singleContentFlagment[2], singleContentFlagment[3], singleContentFlagment[4]));
+        }
+        finalContent.append("    )");
+        return finalContent.toString();
+    }
+
+    private String parseDessertInfoLevelUpCookTimes(Map parseFunctionParam, String fieldName, String fieldValue) {
+        String contentFormat = "\r\n    array (\n"
+                + "      %s"
+                + "    )";
+        String[] singleContentFlagment = fieldValue.split(",");
+        String ouptputNumFormat = "          %s => '%s',\r\n";
+        StringBuilder ouptputNumContent = new StringBuilder();
+        for (int i = 0; i < singleContentFlagment.length; i++) {
+            String[] singleOuptputNum = singleContentFlagment[i].split(":");
+            ouptputNumContent.append(String.format(ouptputNumFormat, singleOuptputNum[0], singleOuptputNum[1]));
+        }
+        return String.format(contentFormat, ouptputNumContent.toString());
+    }
+
+    private String parseGiftPackageFixData(Map parseFunctionParam, String fieldName, String fieldValue) {
+        String contentFormat = "\r\n    array (\n"
+                + "      %s"
+                + "    )";
+        String[] singleContentFlagment = fieldValue.split(",");
+        String ouptputNumFormat = "      %d => \n"
+                + "      array (\n"
+                + "        'index' => '%s',\n"
+                + "        'item_id' => '%s',\n"
+                + "        'num' => '%s',\n"
+                + "      ),\r\n";
+        StringBuilder ouptputNumContent = new StringBuilder();
+        for (int i = 0; i < singleContentFlagment.length; i++) {
+            String[] singleOuptputNum = singleContentFlagment[i].split(":");
+            ouptputNumContent.append(String.format(ouptputNumFormat, i, singleOuptputNum[0], singleOuptputNum[1], singleOuptputNum[2]));
+        }
+        return String.format(contentFormat, ouptputNumContent.toString());
     }
 
     /**

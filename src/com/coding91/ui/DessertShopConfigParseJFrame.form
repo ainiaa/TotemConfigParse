@@ -94,15 +94,16 @@
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="bindingRecipejRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="shopObjItemjRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="missionInfojRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="bindingRecipejRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="shopObjItemjRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Component id="giftPackagejRadioButton" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="feedInfojRadioButton" min="-2" max="-2" attributes="0"/>
                                   <Component id="activityLibraryjRadioButton" min="-2" max="-2" attributes="0"/>
@@ -112,15 +113,16 @@
                                   <Component id="avatarItemsjRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="requestInfojRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="gamejRadioButton" min="-2" max="-2" attributes="0"/>
-                                  <Component id="goodsOrderjRadioButton" min="-2" max="-2" attributes="0"/>
-                              </Group>
                           </Group>
-                          <Component id="dessertInfojRadioButton" min="-2" max="-2" attributes="0"/>
+                          <Component id="dessertInfojRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="63" max="32767" attributes="0"/>
+                      <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="missionInfojRadioButton" min="-2" max="-2" attributes="0"/>
+                          <Component id="gamejRadioButton" min="-2" max="-2" attributes="0"/>
+                          <Component id="goodsOrderjRadioButton" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace pref="57" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -145,6 +147,7 @@
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="missionInfojRadioButton" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="dessertInfojRadioButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="giftPackagejRadioButton" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace pref="57" max="32767" attributes="0"/>
                   </Group>
@@ -241,6 +244,15 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="dessertInfo"/>
                 <Property name="actionCommand" type="java.lang.String" value="DESSERT_INFO"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JRadioButton" name="giftPackagejRadioButton">
+              <Properties>
+                <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+                  <ComponentRef name="funcbuttonGroup"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="giftPackage"/>
+                <Property name="actionCommand" type="java.lang.String" value="GIFT_PACKAGE"/>
               </Properties>
             </Component>
           </SubComponents>
