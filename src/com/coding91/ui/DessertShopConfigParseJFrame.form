@@ -95,34 +95,28 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="bindingRecipejRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="shopObjItemjRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
-                          </Group>
+                          <Component id="bindingRecipejRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="shopObjItemjRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="giftPackagejRadioButton" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="feedInfojRadioButton" min="-2" max="-2" attributes="0"/>
-                                  <Component id="activityLibraryjRadioButton" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="avatarItemsjRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="requestInfojRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                          </Group>
+                          <Component id="feedInfojRadioButton" min="-2" max="-2" attributes="0"/>
+                          <Component id="activityLibraryjRadioButton" min="-2" max="-2" attributes="0"/>
                           <Component id="dessertInfojRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="missionInfojRadioButton" min="-2" max="-2" attributes="0"/>
+                          <Component id="avatarItemsjRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="requestInfojRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="missionInfojRadioButton" min="-2" max="-2" attributes="0"/>
                           <Component id="gamejRadioButton" min="-2" max="-2" attributes="0"/>
                           <Component id="goodsOrderjRadioButton" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="57" max="32767" attributes="0"/>
+                      <EmptySpace pref="63" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>

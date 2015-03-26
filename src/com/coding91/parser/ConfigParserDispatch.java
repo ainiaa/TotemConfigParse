@@ -149,16 +149,6 @@ public class ConfigParserDispatch {
             extraParams.put("defaultValue", fieldDefaultPair);
 
             TransformConfigLogic.transformCommonContentEx(configFilePath, outputPath, fileName, sheetName, null, extraParams);
-        } else if ("MISSION_INFO".equals(func)) {//mission Info  @todo 还有一写文件没有生成
-//            specialField.put("reward_data", "parseMissionInfoRewardData@3");
-//            specialField.put("mission_require", "parseMissionInfoMissionRequire@3");
-//            fileName = "missionInfo";
-//            idField = "mission_id";
-//            String keys = "activity_type,activity_id";
-//            String contentSplitFragment = "|!,";
-//            Map<String, String[]> combineFields = new HashMap();
-//            combineFields.put("mission_require", new String[]{"mission_sub_require", "mission_sub_require_desc", "mission_sub_require_tips"});
-//            TransformConfigLogic.transformMissionContent(configFilePath, outputPath, fileName, sheetName, idField, specialField, keys, contentSplitFragment, combineFields);
         } else if ("DESSERT_INFO".equals(func)) {//@dessertInfo done
             Map ingredientDataParam = new HashMap();
             ingredientDataParam.put("contentKey", new String[]{"ingredient_id", "ingredient_num", "require_type", "require_id", "is_skippable"});
@@ -211,6 +201,17 @@ public class ConfigParserDispatch {
             idField = "id";
 
             TransformConfigLogic.transformCommonContentEx(configFilePath, outputPath, fileName, sheetName, idField, extraParams);
+        } else if ("MISSION_INFO".equals(func)) {//mission Info  @todo 生成的文件有问题。。。。 有些数据乱掉了。
+            Map specialField = new HashMap();
+            specialField.put("reward_data", "parseMissionInfoRewardData@3");
+            specialField.put("mission_require", "parseMissionInfoMissionRequire@3");
+            fileName = "missionInfo";
+            idField = "mission_id";
+            String keys = "activity_type,activity_id";
+            String contentSplitFragment = "|!,";
+            Map<String, String[]> combineFields = new HashMap();
+            combineFields.put("mission_require", new String[]{"mission_sub_require", "mission_sub_require_desc", "mission_sub_require_tips"});
+            TransformConfigLogic.transformMissionContent(configFilePath, outputPath, fileName, sheetName, idField, specialField, keys, contentSplitFragment, combineFields);
         }
     }
 }
