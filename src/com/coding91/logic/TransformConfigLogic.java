@@ -183,6 +183,65 @@ public class TransformConfigLogic {
                     long endTime = System.currentTimeMillis();
                     long diff = endTime - startTime;
 //                    bottomStatusjLabel.setText("转换完成。耗时:" + DessertShopConfigParseJFrame.formatTimeDuration(diff));//todo 这个还没有实现
+//                    ConfigParser.transformFinish("完成转换!");
+                } catch (IOException ex) {
+                    showMessageDialogMessage(ex);
+                } catch (BiffException ex) {
+                    showMessageDialogMessage(ex);
+                }
+            }
+        }).start();
+    }
+    
+    /**
+     * mission 特例
+     *
+     * @param configFilePath
+     * @param outputPath
+     * @param fileName
+     * @param sheetName
+     */
+    public static void transformMissionTriggerContent(final String configFilePath, final String outputPath, final String fileName, final String sheetName) {
+        final long startTime = System.currentTimeMillis();
+        final List<Thread> threadList = new ArrayList();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    int sheetIndex = ExcelParser.getSheetIndexBySheetName(configFilePath, sheetName);
+                    final String[][] originContent = ExcelParser.parseXls(configFilePath, sheetIndex, true);
+
+                    String[] langList = getLangs();
+
+                    for (final String currentLang : langList) {
+                        // start single lang 
+                        Thread currentThread = transformMissionTriggerThread(currentLang, outputPath, fileName, originContent);
+                        currentThread.start();
+                        threadList.add(currentThread);
+                        //end single lang
+                    }
+
+                    boolean allThreadFinished;
+                    do {
+                        allThreadFinished = false;
+                        try {
+                            for (Thread t : threadList) {
+                                if (t.getState() != Thread.State.TERMINATED) {
+                                    allThreadFinished = false;
+                                    break;
+                                } else {
+                                    allThreadFinished = true;
+                                }
+                            }
+                            Thread.sleep(1000);//停止1s再执行
+                        } catch (InterruptedException ex) {
+                            showMessageDialogMessage(ex);
+                        }
+                    } while (!allThreadFinished);//
+                    long endTime = System.currentTimeMillis();
+                    long diff = endTime - startTime;
+//                    bottomStatusjLabel.setText("转换完成。耗时:" + DessertShopConfigParseJFrame.formatTimeDuration(diff));//todo 这个还没有实现
                     ConfigParser.transformFinish("完成转换!");
                 } catch (IOException ex) {
                     showMessageDialogMessage(ex);
@@ -493,6 +552,50 @@ public class TransformConfigLogic {
         return currentThread;
     }
 
+    public static Thread transformMissionTriggerThread(final String currentLang, final String outputPath, final String fileName, final String[][] commonContent) {
+        Thread currentThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                StringBuilder allContent = new StringBuilder();
+                allContent.append(" return array (\r\n");
+                int index = 0;
+                for (int i = 1; i < commonContent.length; i++) {
+                    Map<String, String> singleRowInfo = BuildConfigContent.buildMissionTriggerSingleRowStr(commonContent[i], index);
+                    String id = singleRowInfo.get("id");
+                    if (!id.isEmpty()) {//空id 直接无视
+                        index++;
+                        String singleItemInfo = singleRowInfo.get("singleRowInfo");
+                        String currentAllItemInfo = singleRowInfo.get("allRowsInfo");
+                        String descFile = BuildConfigLogic.buildSingleRowStoredPath(currentLang, id, outputPath, fileName, fileName);
+                        try {
+                            FileUtils.writeToFile("<?php\r\n return " + singleItemInfo, descFile, "UTF-8");
+                        } catch (FileNotFoundException ex) {
+                            showMessageDialogMessage(ex);
+                        } catch (IOException ex) {
+                            showMessageDialogMessage(ex);
+                        }
+                        if (i == 1) {//第一行 没有必要添加\r\n
+                            allContent.append(currentAllItemInfo);
+                        } else {
+                            allContent.append("\r\n").append(currentAllItemInfo);
+                        }
+                        ConfigParser.notifyMessage("语言：" + currentLang + "完成度:" + (i * 100 / commonContent.length) + "%|正在生成文件:" + outputPath);
+                    }
+                }
+                try {
+                    ConfigParser.notifyMessage("语言：" + currentLang + "完成度:" + "100%|正在生成文件:" + outputPath);
+                    String descFile = BuildConfigLogic.buildSingleRowStoredPath(currentLang, "", outputPath, fileName, fileName);
+                    FileUtils.writeToFile("<?php\r\n" + allContent.toString() + "\r\n);", descFile, "UTF-8");
+                } catch (FileNotFoundException ex) {
+                    showMessageDialogMessage(ex);
+                } catch (IOException ex) {
+                    showMessageDialogMessage(ex);
+                }
+            }
+        });
+        return currentThread;
+    }
+    
     private static Thread transformCommonThread(final String currentLang, final String outputPath, final String fileName, final Map<String, Map<String, List<String>>> modelInfo, final String[][] commonContent, final String idField, final Map specialField, final String keys, final String contentSplitFragment, final Map defaultValue) {
         Thread currentThread = new Thread(new Runnable() {
             @Override

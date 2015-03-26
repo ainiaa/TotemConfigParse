@@ -343,4 +343,22 @@ public class BuildConfigContent {
         finalInfo.put("allRowsInfo", allRowsStringbuffer.toString());
         return finalInfo;
     }
+
+    public static Map buildMissionTriggerSingleRowStr(String[] singleRowInfoContent, int index) {
+        Map finalInfo = new HashMap();
+        StringBuilder singleRowStringbuffer = new StringBuilder();
+        StringBuilder allRowsStringbuffer = new StringBuilder();
+        if (singleRowInfoContent[4].isEmpty() || singleRowInfoContent[4].equals("0")) {
+            singleRowStringbuffer.append(" '").append(singleRowInfoContent[0]).append("';");
+            allRowsStringbuffer.append("  ").append(index).append(" => '").append(singleRowInfoContent[0]).append("',");
+           finalInfo.put("id", String.valueOf(index));
+        } else {
+            finalInfo.put("id", "");
+        }
+        
+        finalInfo.put("singleRowInfo", singleRowStringbuffer.toString());
+        finalInfo.put("allRowsInfo", allRowsStringbuffer.toString());
+        return finalInfo;
+    }
+
 }

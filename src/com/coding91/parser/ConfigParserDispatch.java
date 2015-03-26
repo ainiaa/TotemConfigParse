@@ -212,6 +212,10 @@ public class ConfigParserDispatch {
             Map<String, String[]> combineFields = new HashMap();
             combineFields.put("mission_require", new String[]{"mission_sub_require", "mission_sub_require_desc", "mission_sub_require_tips"});
             TransformConfigLogic.transformMissionContent(configFilePath, outputPath, fileName, sheetName, idField, specialField, keys, contentSplitFragment, combineFields);
+            
+            fileName = "missionTrigger";
+            TransformConfigLogic.transformMissionTriggerContent(configFilePath, outputPath, fileName, sheetName);
+            
         }
     }
 }
