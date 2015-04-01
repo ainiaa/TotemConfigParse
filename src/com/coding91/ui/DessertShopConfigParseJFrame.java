@@ -1,15 +1,11 @@
 package com.coding91.ui;
 
 import com.coding91.parser.ConfigParserDispatch;
+import com.coding91.utils.FileUtils;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -26,9 +22,10 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
      * Creates new form TotemConfigParseJFrame
      */
     public DessertShopConfigParseJFrame() {
-        loadSetting("resources/data/setting.properties");
+        Map<String, String> configMap = FileUtils.loadSetting("resources/data/setting.properties");
+        configBaseDir = configMap.get("configMap");
+        outputDirectory = configMap.get("outputDirectory");
         initComponents();
-
     }
 
     /**
@@ -432,59 +429,24 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
         return funcList;
     }
 
-    public static String arrayImplode(String[] content, String implode) {
-        StringBuilder finalStringBuffer = new StringBuilder();
-        for (int index = 0; index < content.length; index++) {
-            if (index != 0) {
-                finalStringBuffer.append(implode);
-            }
-            finalStringBuffer.append(content[index]);
-        }
-        return finalStringBuffer.toString();
-    }
-
-    public static String[] arraySlice(String[] oldArrayContent, int startIndex) {
-        int length = getMinLength(oldArrayContent, startIndex, -1);
-        return arraySlice(oldArrayContent, startIndex, length);
-    }
-
-    public static int getMinLength(String[] oldArrayContent, int startIndex, int length) {
-        int arrayContentLength = oldArrayContent.length;
-        int minLength;
-        if (length < 0) {
-            minLength = arrayContentLength - startIndex;
-        } else if (startIndex > length) {
-            minLength = 0;
-        } else if (startIndex + length > arrayContentLength) {
-            minLength = arrayContentLength;
-        } else {
-            minLength = startIndex + length;
-        }
-        return minLength;
-    }
-
-    public static String[] arraySlice(String[] oldArrayContent, int startIndex, int length) {
-        String[] finalArrayContent = new String[length];
-        if (startIndex < 0) {
-            startIndex = oldArrayContent.length + startIndex;
-        }
-        int minLength = getMinLength(oldArrayContent, startIndex, length);
-        int index = 0;
-        while (startIndex < minLength) {
-            finalArrayContent[index++] = oldArrayContent[startIndex++];
-        }
-        return finalArrayContent;
-    }
-
-
     public static String getLineInfo() {
         StackTraceElement ste = new Throwable().getStackTrace()[1];
         return ste.getFileName() + ": Line " + ste.getLineNumber();
     }
 
     public static void showErrorMsg(String msg, String title) {
+        showErrorMsg(msg, title, true);
+    }
+
+    public static void showErrorMsg(String msg, String title, boolean needExit) {
         JOptionPane.showMessageDialog(null, msg, title, JOptionPane.ERROR_MESSAGE, null);
-        System.exit(0);
+        if (needExit) {
+            System.exit(0);
+        }
+    }
+
+    public static void showErrorMsgWithoutExit(String msg, String title) {
+        showErrorMsg( msg, title, false);
     }
 
     public void transformFinish(String message) {
@@ -493,12 +455,10 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
     }
 
     private void closejButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_closejButtonMouseClicked
-        // TODO add your handling code here:
         this.dispose();
     }//GEN-LAST:event_closejButtonMouseClicked
 
     private void settingjMenuItemMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_settingjMenuItemMouseClicked
-        // TODO add your handling code here:
     }//GEN-LAST:event_settingjMenuItemMouseClicked
 
     private void outputjButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_outputjButtonMouseClicked
@@ -591,26 +551,14 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(DessertShopConfigParseJFrame.class
-                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
             showMessageDialogMessage(ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(DessertShopConfigParseJFrame.class
-                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
             showMessageDialogMessage(ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(DessertShopConfigParseJFrame.class
-                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
             showMessageDialogMessage(ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(DessertShopConfigParseJFrame.class
-                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
             showMessageDialogMessage(ex);
         }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -619,17 +567,13 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
                 try {
                     UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
                 } catch (ClassNotFoundException ex) {
-                    Logger.getLogger(DessertShopConfigParseJFrame.class
-                            .getName()).log(Level.SEVERE, null, ex);
+                    showMessageDialogMessage(ex);
                 } catch (InstantiationException ex) {
-                    Logger.getLogger(DessertShopConfigParseJFrame.class
-                            .getName()).log(Level.SEVERE, null, ex);
+                    showMessageDialogMessage(ex);
                 } catch (IllegalAccessException ex) {
-                    Logger.getLogger(DessertShopConfigParseJFrame.class
-                            .getName()).log(Level.SEVERE, null, ex);
+                    showMessageDialogMessage(ex);
                 } catch (UnsupportedLookAndFeelException ex) {
-                    Logger.getLogger(DessertShopConfigParseJFrame.class
-                            .getName()).log(Level.SEVERE, null, ex);
+                    showMessageDialogMessage(ex);
                 }
                 JFrame totemCfgFrame = new DessertShopConfigParseJFrame();
                 totemCfgFrame.setLocationRelativeTo(null);
@@ -639,37 +583,15 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
         });
     }
 
-    private void loadSetting(String filePath) {
-        String finalFilePath = DessertShopConfigParseJFrame.class.getClassLoader().getResource(filePath).toString();
-        finalFilePath = finalFilePath.substring(6);//删除字符串卡头的 file:/
-        System.out.println("finalFilePath:" + finalFilePath);
-        File f = new File(finalFilePath);
-        if (f.exists()) {
-            Properties prop = new Properties();
-            try {
-                System.out.println("filePath:" + filePath);
-                prop.load(new InputStreamReader(DessertShopConfigParseJFrame.class.getClassLoader().getResourceAsStream(filePath), "UTF-8"));
-            } catch (IOException ex) {
-                showMessageDialogMessage(ex);
-            }
-            if (!prop.getProperty("configBaseDir", "").isEmpty()) {
-                configBaseDir = prop.getProperty("configBaseDir");
-                
-            }
-            if (!prop.getProperty("outputDirectory", "").isEmpty()) {
-                outputDirectory = prop.getProperty("outputDirectory");
-            }
-        }
-    }
-
     private static void showMessageDialogMessage(Exception ex) {
         String exMsg = ex.toString();
         JOptionPane.showMessageDialog(null, exMsg + new Throwable().getStackTrace()[1].toString(), "错误信息提示", JOptionPane.ERROR_MESSAGE);
     }
 
     private static Map< Object, Object> fileMapping;
-    private String configBaseDir;
-    private String outputDirectory;
+    private final String configBaseDir;
+    private final String outputDirectory;
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JRadioButton activityLibraryjRadioButton;
     private javax.swing.JRadioButton allInOneNojRadioButton;

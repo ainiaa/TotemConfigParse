@@ -18,7 +18,7 @@ import jxl.read.biff.BiffException;
  *
  * @author Administrator
  */
-public class ExcelParser {
+public class ExcelParserUtils {
 
     public static String[][] parseXls(String filePath) throws IOException, BiffException {
         //通过Workbook的静态方法getWorkbook选取Excel文件

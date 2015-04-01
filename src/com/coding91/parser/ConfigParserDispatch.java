@@ -19,7 +19,6 @@ public class ConfigParserDispatch {
      * @param outputPath
      */
     public static void transformSingleExcel(String func, String configFilePath, String outputPath) {
-        String msg = "";
         String sheetName = "Worksheet";
         String idField;
         String fileName;
@@ -187,7 +186,7 @@ public class ConfigParserDispatch {
             idField = "recipe_id";
 
             TransformConfigLogic.transformCommonContentEx(configFilePath, outputPath, fileName, sheetName, idField, extraParams);
-        } else if ("GIFT_PACKAGE".equals(func)) {//GIFT_PACKAGE
+        } else if ("GIFT_PACKAGE".equals(func)) {//gift package
             Map fixedDataParam = new HashMap();
             fixedDataParam.put("contentKey", new String[]{});
             fixedDataParam.put("contentSeparator", new String[]{",", ":"});
@@ -201,7 +200,7 @@ public class ConfigParserDispatch {
             idField = "id";
 
             TransformConfigLogic.transformCommonContentEx(configFilePath, outputPath, fileName, sheetName, idField, extraParams);
-        } else if ("MISSION_INFO".equals(func)) {//mission Info  @todo 生成的文件有问题。。。。 有些数据乱掉了。
+        } else if ("MISSION_INFO".equals(func)) {//mission Info done
             Map specialField = new HashMap();
             specialField.put("reward_data", "parseMissionInfoRewardData@3");
             specialField.put("mission_require", "parseMissionInfoMissionRequire@3");
@@ -215,7 +214,6 @@ public class ConfigParserDispatch {
             
             fileName = "missionTrigger";
             TransformConfigLogic.transformMissionTriggerContent(configFilePath, outputPath, fileName, sheetName);
-            
         }
     }
 }

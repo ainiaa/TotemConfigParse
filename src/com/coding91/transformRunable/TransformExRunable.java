@@ -11,7 +11,7 @@ import static com.coding91.parser.ConfigParser.getLangs;
 import static com.coding91.parser.ConfigParser.showMessageDialogMessage;
 import com.coding91.transformThread.TransformCommonContentExThread;
 import com.coding91.utils.DateTimeUtils;
-import com.coding91.utils.ExcelParser;
+import com.coding91.utils.ExcelParserUtils;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,12 +47,26 @@ public class TransformExRunable implements Runnable {
     @Override
     public void run() {
         try {
-            int sheetIndex = ExcelParser.getSheetIndexBySheetName(configFilePath, sheetName);
-            final String[][] commonContent = ExcelParser.parseXls(configFilePath, sheetIndex, true);
+            int sheetIndex = ExcelParserUtils.getSheetIndexBySheetName(configFilePath, sheetName);
+            final String[][] originContent = ExcelParserUtils.parseXls(configFilePath, sheetIndex, true);
 
-            final Map<String, Map<String, List<String>>> modelInfo = getModel(commonContent[0]);
+            Map<String, String[]> combineFields;
+            if (extraParams.containsKey("combineFields")) {
+                combineFields = (Map<String, String[]>)extraParams.get("combineFields");
+            } else {
+                combineFields = null;
+            }
+            
+            final Map<String, Map<String, List<String>>> modelInfo = getModel(originContent[0], combineFields);
+            final Map<String, Map<String, List<String>>> fullModelInfo;
+            if (combineFields != null) {
+                fullModelInfo = getModel(originContent[0]);
+            } else {
+                fullModelInfo = modelInfo;
+            }
             String[] langList = getLangs();
-            TransformCommonContentExThread tcce = new TransformCommonContentExThread(outputPath, fileName, modelInfo, commonContent, idField, extraParams);
+            //todo 这个需要处理 多语言 originContent 应该怎么处理 
+            TransformCommonContentExThread tcce = new TransformCommonContentExThread(outputPath, fileName, modelInfo, fullModelInfo, originContent, idField, extraParams);
             for (final String currentLang : langList) {
                 // start single lang 
                 Thread currentThread = tcce.transformCommonThread(currentLang);

@@ -29,6 +29,8 @@ import javax.swing.JOptionPane;
  */
 public class FileUtils {
 
+    private static Map<String, Map<String, String>> loadSetting;
+
     /**
      * 写入文件
      *
@@ -112,30 +114,36 @@ public class FileUtils {
     }
 
     public static Map<String, String> loadSetting(String filePath) {
-        String configBaseDir = "", outputDirectory = "";
-        HashMap finalResult = new HashMap();
+        loadSetting = new HashMap<String, Map<String, String>>();
+        Map finalResult = new HashMap();
+        String filePathMD5 = MD5Utils.MD5(filePath);
+        if (!loadSetting.containsKey(filePathMD5)) {
+            String configBaseDir = "", outputDirectory = "";
+            String finalFilePath = FileUtils.class.getClassLoader().getResource(filePath).toString();
+            finalFilePath = finalFilePath.substring(6);//删除字符串卡头的 file:/
+            File f = new File(finalFilePath);
+            if (f.exists()) {
+                Properties prop = new Properties();
+                try {
+                    prop.load(new InputStreamReader(FileUtils.class.getClassLoader().getResourceAsStream(filePath), "UTF-8"));
+                } catch (IOException ex) {
+                    //showMessageDialogMessage(ex);//todo
+                }
+                if (!prop.getProperty("configBaseDir", "").isEmpty()) {
+                    configBaseDir = prop.getProperty("configBaseDir");
 
-        String finalFilePath = FileUtils.class.getClassLoader().getResource(filePath).toString();
-        finalFilePath = finalFilePath.substring(6);//删除字符串卡头的 file:/
-        File f = new File(finalFilePath);
-        if (f.exists()) {
-            Properties prop = new Properties();
-            try {
-                prop.load(new InputStreamReader(FileUtils.class.getClassLoader().getResourceAsStream(filePath), "UTF-8"));
-            } catch (IOException ex) {
-                //showMessageDialogMessage(ex);//todo
-            }
-            if (!prop.getProperty("configBaseDir", "").isEmpty()) {
-                configBaseDir = prop.getProperty("configBaseDir");
+                }
+                if (!prop.getProperty("outputDirectory", "").isEmpty()) {
+                    outputDirectory = prop.getProperty("outputDirectory");
+                }
 
+                finalResult.put("configBaseDir", configBaseDir);
+                finalResult.put("outputDirectory", outputDirectory);
             }
-            if (!prop.getProperty("outputDirectory", "").isEmpty()) {
-                outputDirectory = prop.getProperty("outputDirectory");
-            }
-
-            finalResult.put("configBaseDir", configBaseDir);
-            finalResult.put("outputDirectory", outputDirectory);
+        } else {
+            finalResult = loadSetting.get(filePathMD5);
         }
+
         return finalResult;
     }
 }

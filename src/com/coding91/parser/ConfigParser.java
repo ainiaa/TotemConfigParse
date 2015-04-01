@@ -7,7 +7,7 @@ import java.util.Map;
 import javax.swing.JOptionPane;
 import jxl.read.biff.BiffException;
 import com.coding91.utils.ArrayUtils;
-import com.coding91.utils.ExcelParser;
+import com.coding91.utils.ExcelParserUtils;
 import com.coding91.utils.FileUtils;
 
 /**
@@ -20,7 +20,7 @@ public class ConfigParser {
      * Creates new form TotemConfigParseJFrame
      */
     public ConfigParser() {
-        Map<String, String> configMap = FileUtils.loadSetting("./setting.properties");
+        Map<String, String> configMap = FileUtils.loadSetting("resources/data/setting.properties");
         configBaseDir = configMap.get("configMap");
         outputDirectory = configMap.get("outputDirectory");
     }
@@ -47,8 +47,8 @@ public class ConfigParser {
 
     public String[][] itemLangInfoCfg(String configFilePath) {
         try {
-            int langSheetIndex = ExcelParser.getSheetIndexBySheetName(configFilePath, "itemLang");
-            itemLangInfoCfg = ExcelParser.parseXls(configFilePath, langSheetIndex, true);
+            int langSheetIndex = ExcelParserUtils.getSheetIndexBySheetName(configFilePath, "itemLang");
+            itemLangInfoCfg = ExcelParserUtils.parseXls(configFilePath, langSheetIndex, true);
         } catch (IOException e) {
             itemLangInfoCfg = new String[0][0];
             showMessageDialogMessage(e);

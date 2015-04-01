@@ -11,7 +11,7 @@ import static com.coding91.parser.ConfigParser.getLangs;
 import static com.coding91.parser.ConfigParser.showMessageDialogMessage;
 import com.coding91.transformThread.TransformCommonContentThread;
 import com.coding91.utils.DateTimeUtils;
-import com.coding91.utils.ExcelParser;
+import com.coding91.utils.ExcelParserUtils;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,8 +27,8 @@ public class TransformRunable implements Runnable {
     @Override
     public void run() {
         try {
-            int sheetIndex = ExcelParser.getSheetIndexBySheetName(configFilePath, sheetName);
-            final String[][] commonContent = ExcelParser.parseXls(configFilePath, sheetIndex, true);
+            int sheetIndex = ExcelParserUtils.getSheetIndexBySheetName(configFilePath, sheetName);
+            final String[][] commonContent = ExcelParserUtils.parseXls(configFilePath, sheetIndex, true);
 
             final Map<String, Map<String, List<String>>> modelInfo = getModel(commonContent[0]);
             String[] langList = getLangs();

@@ -13,7 +13,7 @@ import static com.coding91.parser.ConfigParser.showMessageDialogMessage;
 import com.coding91.transformRunable.TransformExRunable;
 import com.coding91.transformRunable.TransformRunable;
 import com.coding91.utils.DateTimeUtils;
-import com.coding91.utils.ExcelParser;
+import com.coding91.utils.ExcelParserUtils;
 import com.coding91.utils.FileUtils;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -45,8 +45,8 @@ public class TransformConfigLogic {
             @Override
             public void run() {
                 try {
-                    int sheetIndex = ExcelParser.getSheetIndexBySheetName(configFilePath, "Worksheet");
-                    final String[][] dsShopObjectContentArray = ExcelParser.parseXls(configFilePath, sheetIndex, true);
+                    int sheetIndex = ExcelParserUtils.getSheetIndexBySheetName(configFilePath, "Worksheet");
+                    final String[][] dsShopObjectContentArray = ExcelParserUtils.parseXls(configFilePath, sheetIndex, true);
                     final Map<String, Map<String, List<String>>> modelInfo = TransformConfigLogic.getModel(dsShopObjectContentArray[0]);
                     String[] langList = getLangs();
                     final Map<String, String> fieldDefaultPair = FileUtils.loadFieldDefaultValueProperty("resources/data/config/defaultvalue/shopItem.properties");
@@ -147,8 +147,8 @@ public class TransformConfigLogic {
             @Override
             public void run() {
                 try {
-                    int sheetIndex = ExcelParser.getSheetIndexBySheetName(configFilePath, sheetName);
-                    final String[][] originContent = ExcelParser.parseXls(configFilePath, sheetIndex, true);
+                    int sheetIndex = ExcelParserUtils.getSheetIndexBySheetName(configFilePath, sheetName);
+                    final String[][] originContent = ExcelParserUtils.parseXls(configFilePath, sheetIndex, true);
 
                     final Map<String, Map<String, List>> modelInfo = getModel(originContent[0], combineFields);
                     final Map<String, Map<String, List>> fullModelInfo = getModel(originContent[0]);
@@ -192,7 +192,7 @@ public class TransformConfigLogic {
             }
         }).start();
     }
-    
+
     /**
      * mission 特例
      *
@@ -209,8 +209,8 @@ public class TransformConfigLogic {
             @Override
             public void run() {
                 try {
-                    int sheetIndex = ExcelParser.getSheetIndexBySheetName(configFilePath, sheetName);
-                    final String[][] originContent = ExcelParser.parseXls(configFilePath, sheetIndex, true);
+                    int sheetIndex = ExcelParserUtils.getSheetIndexBySheetName(configFilePath, sheetName);
+                    final String[][] originContent = ExcelParserUtils.parseXls(configFilePath, sheetIndex, true);
 
                     String[] langList = getLangs();
 
@@ -267,8 +267,8 @@ public class TransformConfigLogic {
             @Override
             public void run() {
                 try {
-                    int sheetIndex = ExcelParser.getSheetIndexBySheetName(configFilePath, "Worksheet");
-                    final String[][] activityLibCfg = ExcelParser.parseXls(configFilePath, sheetIndex, true);
+                    int sheetIndex = ExcelParserUtils.getSheetIndexBySheetName(configFilePath, "Worksheet");
+                    final String[][] activityLibCfg = ExcelParserUtils.parseXls(configFilePath, sheetIndex, true);
 
                     final Map<String, Map<String, List<String>>> modelInfo = getModel(activityLibCfg[0]);
                     String[] langList = getLangs();
@@ -393,7 +393,7 @@ public class TransformConfigLogic {
         TransformExRunable transformRunExable = new TransformExRunable(configFilePath, sheetName, outputPath, fileName, idField, extraParams, startTime);
         new Thread(transformRunExable).start();
     }
-    
+
     /**
      * 通用
      *
@@ -441,8 +441,8 @@ public class TransformConfigLogic {
             @Override
             public void run() {
                 try {
-                    int sheetIndex = ExcelParser.getSheetIndexBySheetName(configFilePath, sheetName);
-                    final String[][] commonContent = ExcelParser.parseXls(configFilePath, sheetIndex, true);
+                    int sheetIndex = ExcelParserUtils.getSheetIndexBySheetName(configFilePath, sheetName);
+                    final String[][] commonContent = ExcelParserUtils.parseXls(configFilePath, sheetIndex, true);
 
                     final Map<String, Map<String, List<String>>> modelInfo = getModel(commonContent[0]);
                     String[] langList = getLangs();
@@ -595,7 +595,7 @@ public class TransformConfigLogic {
         });
         return currentThread;
     }
-    
+
     private static Thread transformCommonThread(final String currentLang, final String outputPath, final String fileName, final Map<String, Map<String, List<String>>> modelInfo, final String[][] commonContent, final String idField, final Map specialField, final String keys, final String contentSplitFragment, final Map defaultValue) {
         Thread currentThread = new Thread(new Runnable() {
             @Override
@@ -648,19 +648,19 @@ public class TransformConfigLogic {
      */
     private static List<String> needSkipedFields(Map<String, String[]> combineFields) {
         List<String> needSkipedFields = new ArrayList();
-
-        for (String key : combineFields.keySet()) {
-            String[] value = combineFields.get(key);
-            int len = value.length;
-            for (int i = 0; i < len; i++) {
-                needSkipedFields.add(value[i]);
+        if (combineFields != null && combineFields.size() > 0) {
+            for (String key : combineFields.keySet()) {
+                String[] value = combineFields.get(key);
+                int len = value.length;
+                for (int i = 0; i < len; i++) {
+                    needSkipedFields.add(value[i]);
+                }
             }
         }
-
         return needSkipedFields;
     }
 
-    public static Map getModel(String[] dsOpengraphCfg, Map<String, String[]> combineFields) {
+    public static Map getModel(String[] originSingleContent, Map<String, String[]> combineFields) {
         Map<String, List<Integer>> fieldIndex = new HashMap();
         Map<String, List<String>> fieldName = new HashMap();
         String[] langList = getLangs();
@@ -671,8 +671,8 @@ public class TransformConfigLogic {
             fieldIndex.put(currentLang, new ArrayList());
             fieldName.put(currentLang, new ArrayList());
         }
-        for (int j = 0; j < dsOpengraphCfg.length; j++) {
-            String originField = dsOpengraphCfg[j];
+        for (int j = 0; j < originSingleContent.length; j++) {
+            String originField = originSingleContent[j];
             boolean currentPrefixIsLang = false;
             String prefix = "";
             if (!originField.trim().isEmpty()) {
@@ -710,48 +710,10 @@ public class TransformConfigLogic {
 
     /**
      *
-     * @param dsOpengraphCfg
+     * @param originSingleContent
      * @return
      */
-    public static Map getModel(String[] dsOpengraphCfg) {
-        Map<String, List<Integer>> fieldIndex = new HashMap();
-        Map<String, List<String>> fieldName = new HashMap();
-        String[] langList = getLangs();
-        for (int i = 0; i < langList.length; i++) {
-            String currentLang = langList[i];
-            fieldIndex.put(currentLang, new ArrayList());
-            fieldName.put(currentLang, new ArrayList());
-        }
-        for (int j = 0; j < dsOpengraphCfg.length; j++) {
-            String originField = dsOpengraphCfg[j];
-            boolean currentPrefixIsLang = false;
-            String prefix = "";
-            if (!originField.trim().isEmpty()) {
-                if (originField.length() >= 6) {
-                    prefix = originField.substring(0, 5);
-                    currentPrefixIsLang = Arrays.asList(langList).contains(prefix);
-                }
-                if (currentPrefixIsLang) {//当前field 只属于某一个lang
-                    List currentModelIndex = fieldIndex.get(prefix);
-                    List currentModelField = fieldName.get(prefix);
-                    currentModelIndex.add(j);
-                    String currentFiled = originField.substring(6);
-                    currentModelField.add(currentFiled);
-                } else {//当前field 属于所有lang
-                    for (int i = 0; i < langList.length; i++) {
-                        String currentLang = langList[i];
-                        List currentModelIndex = fieldIndex.get(currentLang);
-                        List currentModelField = fieldName.get(currentLang);
-                        currentModelIndex.add(j);
-                        currentModelField.add(originField);
-                    }
-                }
-            }
-        }
-
-        Map finalInfo = new HashMap();
-        finalInfo.put("fieldIndex", fieldIndex);
-        finalInfo.put("fieldName", fieldName);
-        return finalInfo;
+    public static Map getModel(String[] originSingleContent) {
+        return getModel(originSingleContent, null);
     }
 }
