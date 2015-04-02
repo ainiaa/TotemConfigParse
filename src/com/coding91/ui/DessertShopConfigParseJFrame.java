@@ -23,7 +23,7 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
      */
     public DessertShopConfigParseJFrame() {
         Map<String, String> configMap = FileUtils.loadSetting("resources/data/setting.properties");
-        configBaseDir = configMap.get("configMap");
+        configBaseDir = configMap.get("configBaseDir");
         outputDirectory = configMap.get("outputDirectory");
         initComponents();
     }

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.coding91.logic;
 
 import static com.coding91.parser.ConfigParser.getFieldIndexByFieldName;
@@ -123,7 +118,8 @@ public class ParseConfigLogic {
         return tmpContent.toString();
     }
 
-    public static String parseMissionInfoRewardData(String field, String content, String leadingString) {
+    public static String parseMissionInfoRewardData(Map parseFunctionParam, String field, String content) {
+        String leadingString = "    ";
         content = content.replaceAll("<br>", "\r\n");//将<br>替换为\r\n '11:6,2:31
         StringBuilder tmpContent = new StringBuilder();
         if (content.isEmpty() || content.equals("0")) {
@@ -140,7 +136,6 @@ public class ParseConfigLogic {
         } else {
             String[] contentArray = content.split(",");//第一层
 
-            tmpContent.append(leadingString).append("'").append(field).append("' => ");
             String leadingString2 = leadingString + leadingString;
             String leadingString3 = leadingString + leadingString + leadingString;
             String secondFloorContentFormat = "%s => \r\n    array (\r\n"
@@ -165,16 +160,15 @@ public class ParseConfigLogic {
             } else {
                 tmpContent.append("NULL");
             }
-            tmpContent.append(",\r\n");
         }
         return tmpContent.toString();
     }
 
-    public static String parseMissionInfoMissionRequire(String field, String content, String leadingString) {
+    public static String parseMissionInfoMissionRequire(Map parseFunctionParam, String field, String content) {
+        String leadingString = "    ";
         content = content.replaceAll("<br>", "\r\n");//将<br>替换为\r\n '11:6,2:31   //fck 这个太恶心了，  content 只有9项内容，其他的内容再另一个content中，且 还需要进行分割。。。 坑爹啊。。
         String[] contentArray = content.split(MISSION_REQUIRE_FIRST_FLOOR);//第一层
         StringBuilder tmpContent = new StringBuilder();
-        tmpContent.append(leadingString).append("'").append(field).append("' => ");
         String leadingString2 = leadingString + leadingString;
         String leadingString3 = leadingString + leadingString + leadingString;
         String secondFloorContentFormat = "%s%d => \r\n      array (\r\n"
@@ -221,8 +215,6 @@ public class ParseConfigLogic {
         } else {
             tmpContent.append("NULL");
         }
-        tmpContent.append(",\r\n");
-
         return tmpContent.toString();
     }
     private static final String MISSION_REQUIRE_SECOND_FLOOR = "!@@@@!";
@@ -509,7 +501,6 @@ public class ParseConfigLogic {
                                 originColumnContentArray[originColumnContentIndex] = originColumnContentArray[originColumnContentIndex] + MISSION_REQUIRE_SECOND_FLOOR + " ";
                             }
                         }
-
                     }
                     //combineColumnArray
                     finalContent[rowCount][columnCount] = ArrayUtils.arrayImplode(originColumnContentArray, MISSION_REQUIRE_FIRST_FLOOR);

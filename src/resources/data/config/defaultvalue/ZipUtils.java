@@ -1,7 +1,7 @@
-package totemconfigparse;
+package resources.data.config.defaultvalue;
 
 /*   
- * 文件名:     ZipUtil.java   
+ * 文件名:     ZipUtils.java   
  * 版权：        xxxxxxxx.com. Copyright 1999-2010, All rights reserved   
  * 描述：       是压缩工具类,此类根据com.jcraft.jzlib地三方提供的核心类进行.压缩和解压缩。   
  * 修改人：        
@@ -39,7 +39,7 @@ import javax.swing.JOptionPane;
 /**
  * 压缩工具包
  */
-public class ZipUtil {
+public class ZipUtils {
 
     public static byte[] deflate(byte[] bContent) {
         try {
@@ -47,11 +47,11 @@ public class ZipUtil {
             byte[] temp = null;
 
             if ("LZIP".equals(sys_compress)) {
-                temp = ZipUtil.zLib(bContent);
+                temp = ZipUtils.zLib(bContent);
             } else if ("GZIP".equals(sys_compress)) {
-                temp = ZipUtil.gZip(bContent);
+                temp = ZipUtils.gZip(bContent);
             } else if ("ZIP".equals(sys_compress)) {
-                temp = ZipUtil.zip(bContent);
+                temp = ZipUtils.zip(bContent);
             }
             return temp;
         } catch (IOException e) {
@@ -65,11 +65,11 @@ public class ZipUtil {
             String sys_compress = "LZIP";
             byte[] temp = null;
             if ("LZIP".equals(sys_compress)) {
-                temp = ZipUtil.unZLib(bContent);
+                temp = ZipUtils.unZLib(bContent);
             } else if ("GZIP".equals(sys_compress)) {
-                temp = ZipUtil.unGZip(bContent);
+                temp = ZipUtils.unGZip(bContent);
             } else if ("ZIP".equals(sys_compress)) {
-                temp = ZipUtil.unZip(bContent);
+                temp = ZipUtils.unZip(bContent);
             }
             return temp;
         } catch (IOException e) {

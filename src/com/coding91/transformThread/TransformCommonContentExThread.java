@@ -21,14 +21,13 @@ import java.util.Map;
  */
 public class TransformCommonContentExThread extends Thread {
 
-    public TransformCommonContentExThread(String outputPath, String fileName, Map<String, Map<String, List<String>>> modelInfo, Map<String, Map<String, List<String>>> fullModelInfo, String[][] commonContent, String idField, Map<String, Map<String, String>> extraParams) {
+    public TransformCommonContentExThread(String outputPath, String fileName, Map<String, Map<String, List>> modelInfo, String[][] commonContent, String idField, Map<String, Map<String, String>> extraParams) {
         this.outputPath = outputPath;
         this.fileName = fileName;
         this.modelInfo = modelInfo;
         this.commonContent = commonContent;
         this.idField = idField;
         this.extraParams = extraParams;
-        this.fullModelInfo = fullModelInfo;
     }
 
     public Thread transformCommonThread(final String currentLang) {
@@ -95,14 +94,6 @@ public class TransformCommonContentExThread extends Thread {
         return currentThread;
     }
 
-    public Map<String, Map<String, List<String>>> getFullModelInfo() {
-        return fullModelInfo;
-    }
-
-    public void setFullModelInfo(Map<String, Map<String, List<String>>> fullModelInfo) {
-        this.fullModelInfo = fullModelInfo;
-    }
-
     public Map getExtraParams() {
         return extraParams;
     }
@@ -113,8 +104,7 @@ public class TransformCommonContentExThread extends Thread {
 
     private String outputPath;
     private String fileName;
-    private Map<String, Map<String, List<String>>> modelInfo;
-    private Map<String, Map<String, List<String>>> fullModelInfo;
+    private Map<String, Map<String, List>> modelInfo;
     private String[][] commonContent;
     private String idField;
     private Map extraParams;
@@ -135,11 +125,11 @@ public class TransformCommonContentExThread extends Thread {
         this.fileName = fileName;
     }
 
-    public Map<String, Map<String, List<String>>> getModelInfo() {
+    public Map<String, Map<String, List>> getModelInfo() {
         return modelInfo;
     }
 
-    public void setModelInfo(Map<String, Map<String, List<String>>> modelInfo) {
+    public void setModelInfo(Map<String, Map<String, List>> modelInfo) {
         this.modelInfo = modelInfo;
     }
 

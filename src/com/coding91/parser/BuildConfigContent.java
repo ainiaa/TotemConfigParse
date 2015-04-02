@@ -92,7 +92,20 @@ public class BuildConfigContent {
         }
         singleRowStringbuffer.append("array (").append("\r\n");
         if (isNeedAllRows) {
-            allRowsStringbuffer.append("  ").append(id).append(" => \r\n").append("  array (\r\n");
+            Map idFieldInfo;
+            String needWrap = null;
+            if (extraParams.containsKey("idFieldInfo")) {
+                idFieldInfo = extraParams.get("idFieldInfo");
+                if (idFieldInfo.containsKey("needWrap")) {
+                    needWrap = (String) idFieldInfo.get("needWrap");
+                }
+            }
+            if (needWrap != null && needWrap.equals("1")) {
+                allRowsStringbuffer.append("  '").append(id).append("' => \r\n").append("  array (\r\n");
+            } else {
+                allRowsStringbuffer.append("  ").append(id).append(" => \r\n").append("  array (\r\n");
+            }
+
         }
 
         Map defaultValueMap = extraParams.get("defaultValue");
@@ -351,11 +364,11 @@ public class BuildConfigContent {
         if (singleRowInfoContent[4].isEmpty() || singleRowInfoContent[4].equals("0")) {
             singleRowStringbuffer.append(" '").append(singleRowInfoContent[0]).append("';");
             allRowsStringbuffer.append("  ").append(index).append(" => '").append(singleRowInfoContent[0]).append("',");
-           finalInfo.put("id", String.valueOf(index));
+            finalInfo.put("id", String.valueOf(index));
         } else {
             finalInfo.put("id", "");
         }
-        
+
         finalInfo.put("singleRowInfo", singleRowStringbuffer.toString());
         finalInfo.put("allRowsInfo", allRowsStringbuffer.toString());
         return finalInfo;

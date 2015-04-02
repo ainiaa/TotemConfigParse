@@ -5,6 +5,7 @@
  */
 package com.coding91.transformRunable;
 
+import com.coding91.logic.ParseConfigLogic;
 import static com.coding91.logic.TransformConfigLogic.getModel;
 import com.coding91.parser.ConfigParser;
 import static com.coding91.parser.ConfigParser.getLangs;
@@ -52,27 +53,30 @@ public class TransformExRunable implements Runnable {
 
             Map<String, String[]> combineFields;
             if (extraParams.containsKey("combineFields")) {
-                combineFields = (Map<String, String[]>)extraParams.get("combineFields");
+                combineFields = (Map<String, String[]>) extraParams.get("combineFields");
             } else {
                 combineFields = null;
             }
-            
-            final Map<String, Map<String, List<String>>> modelInfo = getModel(originContent[0], combineFields);
-            final Map<String, Map<String, List<String>>> fullModelInfo;
+
+            final Map<String, Map<String, List>> modelInfo = getModel(originContent[0], combineFields);
+            final Map<String, Map<String, List>> fullModelInfo;
             if (combineFields != null) {
                 fullModelInfo = getModel(originContent[0]);
             } else {
                 fullModelInfo = modelInfo;
             }
             String[] langList = getLangs();
-            //todo 这个需要处理 多语言 originContent 应该怎么处理 
-            TransformCommonContentExThread tcce = new TransformCommonContentExThread(outputPath, fileName, modelInfo, fullModelInfo, originContent, idField, extraParams);
             for (final String currentLang : langList) {
-                // start single lang 
+                final String[][] singleLangContent;
+                if (combineFields != null) {
+                    singleLangContent = ParseConfigLogic.cleanupOriginContent(originContent, currentLang, fullModelInfo, combineFields);//todo 不同的配置项逻辑可以不同， 这个可以整理出来
+                } else {
+                    singleLangContent = originContent;
+                }
+                TransformCommonContentExThread tcce = new TransformCommonContentExThread(outputPath, fileName, modelInfo, singleLangContent, idField, extraParams);
                 Thread currentThread = tcce.transformCommonThread(currentLang);
                 currentThread.start();
                 threadList.add(currentThread);
-                //end single lang
             }
 
             boolean allThreadFinished;

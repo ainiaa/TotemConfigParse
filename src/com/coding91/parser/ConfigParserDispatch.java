@@ -201,17 +201,35 @@ public class ConfigParserDispatch {
 
             TransformConfigLogic.transformCommonContentEx(configFilePath, outputPath, fileName, sheetName, idField, extraParams);
         } else if ("MISSION_INFO".equals(func)) {//mission Info done
-            Map specialField = new HashMap();
-            specialField.put("reward_data", "parseMissionInfoRewardData@3");
-            specialField.put("mission_require", "parseMissionInfoMissionRequire@3");
+
+            Map rewardDataParam = new HashMap();
+            rewardDataParam.put("contentKey", new String[]{});
+            rewardDataParam.put("contentSeparator", new String[]{",", ":"});
+            rewardDataParam.put("parseFunction", "parseMissionInfoRewardData");
+            extraParams.put("reward_data", rewardDataParam);
+
+            Map missionRequireParam = new HashMap();
+            missionRequireParam.put("contentKey", new String[]{});
+            missionRequireParam.put("contentSeparator", new String[]{",", ":"});
+            missionRequireParam.put("parseFunction", "parseMissionInfoMissionRequire");
+            extraParams.put("mission_require", missionRequireParam);
+
+            Map<String, String> fieldDefaultPair = FileUtils.loadFieldDefaultValueProperty("resources/data/config/defaultvalue/missionInfo.properties");
+            extraParams.put("defaultValue", fieldDefaultPair);
+
             fileName = "missionInfo";
             idField = "mission_id";
             String keys = "activity_type,activity_id";
-            String contentSplitFragment = "|!,";
             Map<String, String[]> combineFields = new HashMap();
             combineFields.put("mission_require", new String[]{"mission_sub_require", "mission_sub_require_desc", "mission_sub_require_tips"});
-            TransformConfigLogic.transformMissionContent(configFilePath, outputPath, fileName, sheetName, idField, specialField, keys, contentSplitFragment, combineFields);
-            
+            extraParams.put("combineFields", combineFields);
+
+            Map idFieldInfo = new HashMap();
+            idFieldInfo.put("needWrap", "1");
+            extraParams.put("idFieldInfo", idFieldInfo);
+
+            TransformConfigLogic.transformCommonContentEx(configFilePath, outputPath, fileName, sheetName, idField, extraParams);
+
             fileName = "missionTrigger";
             TransformConfigLogic.transformMissionTriggerContent(configFilePath, outputPath, fileName, sheetName);
         }
