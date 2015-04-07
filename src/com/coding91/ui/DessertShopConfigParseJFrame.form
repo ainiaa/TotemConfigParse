@@ -156,7 +156,7 @@
                 </Property>
                 <Property name="selected" type="boolean" value="true"/>
                 <Property name="text" type="java.lang.String" value="shopItem"/>
-                <Property name="actionCommand" type="java.lang.String" value="DS_SHOP_OBJ_ITEM"/>
+                <Property name="actionCommand" type="java.lang.String" value="SHOP_ITEM"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JRadioButton" name="activityLibraryjRadioButton">

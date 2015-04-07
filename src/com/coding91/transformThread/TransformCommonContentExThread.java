@@ -9,6 +9,7 @@ import com.coding91.logic.BuildConfigLogic;
 import com.coding91.parser.BuildConfigContent;
 import com.coding91.parser.ConfigParser;
 import static com.coding91.parser.ConfigParser.showMessageDialogMessage;
+import com.coding91.ui.NoticeMessageJFrame;
 import com.coding91.utils.FileUtils;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -55,9 +56,9 @@ public class TransformCommonContentExThread extends Thread {
                         try {
                             FileUtils.writeToFile("<?php\r\n return " + singleItemInfo, descFile, "UTF-8");
                         } catch (FileNotFoundException ex) {
-                            showMessageDialogMessage(ex);
+                            NoticeMessageJFrame.noticeMessage(ex.getClass() + ":" + ex.getMessage());
                         } catch (IOException ex) {
-                            showMessageDialogMessage(ex);
+                            NoticeMessageJFrame.noticeMessage(ex.getClass() + ":" + ex.getMessage());
                         }
                         if (i == 1) {//第一行 没有必要添加\r\n
                             allContent.append(currentAllItemInfo);
@@ -71,9 +72,9 @@ public class TransformCommonContentExThread extends Thread {
                         try {
                             FileUtils.writeToFile("<?php\r\n return " + singleItemInfo, descFile, "UTF-8");
                         } catch (FileNotFoundException ex) {
-                            showMessageDialogMessage(ex);
+                            NoticeMessageJFrame.noticeMessage(ex.getClass() + ":" + ex.getMessage());
                         } catch (IOException ex) {
-                            showMessageDialogMessage(ex);
+                            NoticeMessageJFrame.noticeMessage(ex.getClass() + ":" + ex.getMessage());
                         }
                         ConfigParser.notifyMessage("语言：" + currentLang + "完成度:" + (i * 100 / commonContent.length) + "%|正在生成文件:" + outputPath);
                     }
@@ -85,9 +86,9 @@ public class TransformCommonContentExThread extends Thread {
                         FileUtils.writeToFile("<?php\r\n" + allContent.toString() + "\r\n);", descFile, "UTF-8");
                     }
                 } catch (FileNotFoundException ex) {
-                    showMessageDialogMessage(ex);
+                    NoticeMessageJFrame.noticeMessage(ex.getClass() + ":" + ex.getMessage());
                 } catch (IOException ex) {
-                    showMessageDialogMessage(ex);
+                    NoticeMessageJFrame.noticeMessage(ex.getClass() + ":" + ex.getMessage());
                 }
             }
         });

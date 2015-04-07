@@ -7,6 +7,7 @@ package com.coding91.utils;
 
 import com.coding91.parser.BuildConfigContent;
 import static com.coding91.parser.ConfigParser.itemIdAndItemName;
+import com.coding91.ui.NoticeMessageJFrame;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -78,10 +79,10 @@ public class FileUtils {
         if (!descFile.exists()) {
             descFile.createNewFile();
         }
-        Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(descFile), encoding));
-        writer.write(contents);
-        writer.flush();
-        writer.close();
+        try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(descFile), encoding))) {
+            writer.write(contents);
+            writer.flush();
+        }
     }
 
     public String getItemName(String itemId, String lang) {
@@ -103,18 +104,18 @@ public class FileUtils {
             try {
                 prop.load(new InputStreamReader(FileUtils.class.getClassLoader().getResourceAsStream(filePath), "UTF-8"));
             } catch (IOException ex) {
-                //showMessageDialogMessage(ex);//todo
+                NoticeMessageJFrame.noticeMessage(ex.getClass() + ":" + ex.getMessage());
             }
             Set<Map.Entry<Object, Object>> propertyEntrySet = prop.entrySet();
-            for (Map.Entry<Object, Object> currentProperty : propertyEntrySet) {
+            propertyEntrySet.stream().forEach((currentProperty) -> {
                 finalResult.put(currentProperty.getKey().toString(), currentProperty.getValue().toString());
-            }
+            });
         }
         return finalResult;
     }
 
     public static Map<String, String> loadSetting(String filePath) {
-        loadSetting = new HashMap<String, Map<String, String>>();
+        loadSetting = new HashMap();
         Map finalResult = new HashMap();
         String filePathMD5 = MD5Utils.MD5(filePath);
         if (!loadSetting.containsKey(filePathMD5)) {
@@ -127,7 +128,7 @@ public class FileUtils {
                 try {
                     prop.load(new InputStreamReader(FileUtils.class.getClassLoader().getResourceAsStream(filePath), "UTF-8"));
                 } catch (IOException ex) {
-                    //showMessageDialogMessage(ex);//todo
+                    NoticeMessageJFrame.noticeMessage(ex.getClass() + ":" + ex.getMessage());
                 }
                 if (!prop.getProperty("configBaseDir", "").isEmpty()) {
                     configBaseDir = prop.getProperty("configBaseDir");

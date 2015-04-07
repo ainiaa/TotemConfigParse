@@ -8,10 +8,8 @@ package com.coding91.logic;
 import com.coding91.parser.BuildConfigContent;
 import com.coding91.parser.ConfigParser;
 import static com.coding91.parser.ConfigParser.getLangs;
-import static com.coding91.parser.ConfigParser.notifyMessage;
 import static com.coding91.parser.ConfigParser.showMessageDialogMessage;
 import com.coding91.transformRunable.TransformExRunable;
-import com.coding91.utils.DateTimeUtils;
 import com.coding91.utils.ExcelParserUtils;
 import com.coding91.utils.FileUtils;
 import java.io.FileNotFoundException;
@@ -21,7 +19,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.swing.JOptionPane;
 import jxl.read.biff.BiffException;
 
 /**
@@ -175,8 +172,7 @@ public class TransformConfigLogic {
         String[] langList = getLangs();
         List needSkipedFields = needSkipedFields(combineFields);
 
-        for (int i = 0; i < langList.length; i++) {
-            String currentLang = langList[i];
+        for (String currentLang : langList) {
             fieldIndex.put(currentLang, new ArrayList());
             fieldName.put(currentLang, new ArrayList());
         }
@@ -198,9 +194,8 @@ public class TransformConfigLogic {
                         currentModelField.add(currentFiled);
                     }
                 } else {//当前field 属于所有lang
-                    if (!needSkipedFields.contains(originField)) {//需要掉过的field不需要出现在最终的model中
-                        for (int i = 0; i < langList.length; i++) {
-                            String currentLang = langList[i];
+                    if (!needSkipedFields.contains(originField)) { //需要掉过的field不需要出现在最终的model中
+                        for (String currentLang : langList) {
                             List currentModelIndex = fieldIndex.get(currentLang);
                             List currentModelField = fieldName.get(currentLang);
                             currentModelIndex.add(j);

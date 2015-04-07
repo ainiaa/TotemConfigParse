@@ -84,7 +84,6 @@ public class ExcelParserUtils {
         Sheet sheet = workbook.getSheet(sheetNum);
         int rows = sheet.getRows();
         int cols = sheet.getColumns();
-        Cell cells[][] = new Cell[cols][rows];
         String[][] finalContents;
         if (reverse) {
             finalContents = new String[rows][cols];

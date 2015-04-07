@@ -5,7 +5,6 @@ import com.coding91.utils.FileUtils;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -17,6 +16,8 @@ import javax.swing.UnsupportedLookAndFeelException;
  * @author Administrator
  */
 public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * Creates new form TotemConfigParseJFrame
@@ -79,7 +80,7 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
         funcbuttonGroup.add(shopObjItemjRadioButton);
         shopObjItemjRadioButton.setSelected(true);
         shopObjItemjRadioButton.setText("shopItem");
-        shopObjItemjRadioButton.setActionCommand("DS_SHOP_OBJ_ITEM");
+        shopObjItemjRadioButton.setActionCommand("SHOP_ITEM");
 
         funcbuttonGroup.add(activityLibraryjRadioButton);
         activityLibraryjRadioButton.setText("activityLibraryInfo");
@@ -367,24 +368,26 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void parsejButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_parsejButtonMouseClicked
+        
+        ControllerJFrame.showNoticeMessageJFrame();
+        
         String allInOneFunc = "NO";
         if (funcbuttonGroup.getSelection() != null) {
             allInOneFunc = funcbuttonGroup.getSelection().getActionCommand();
         }
 
         String msg = "";
-
         if ("YES".equals(allInOneFunc)) {//全部转换
             //配置文件
             String configFilePath = configFilejTextField.getText();
             //输出路径
             String outputPath = outputjTextField.getText();
             Map<String, String> funcMap = initFuncList();
-            for (Entry<String, String> entry : funcMap.entrySet()) {
+            funcMap.entrySet().stream().forEach((entry) -> {
                 String func = entry.getKey();
                 String excelFileName = entry.getValue();
                 ConfigParserDispatch.transformSingleExcel(func, configFilePath + "/" + excelFileName, outputPath);
-            }
+            });
         } else {//转换某一个配置项
             String func = "";
             if (funcbuttonGroup.getSelection() != null) {
@@ -416,16 +419,17 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
 
     private Map<String, String> initFuncList() {
         Map funcList = new HashMap();
-        funcList.put("DS_SHOP_OBJ_ITEM", "shopItem.xls");
+        funcList.put("SHOP_ITEM", "shopItem.xls");
         funcList.put("ACTIVITY_LIB", "activityLibraryInfo.xls");
         funcList.put("AVATAR_ITEMS", "avatarItems.xls");
-        funcList.put("FEED_INFO", "feedInfo.xls");
         funcList.put("GOODS_ORDER", "goodsOrder.xls");
+        funcList.put("BINDING_RECIPE", "bindingRecipe.xls");
+        funcList.put("FEED_INFO", "feedInfo.xls");
         funcList.put("REQUEST_INFO", "requestInfo.xls");
         funcList.put("GAME", "game.xls");
-        funcList.put("MISSION_INFO", "missionInfo.xls");
-        funcList.put("BINDING_RECIPE", "bindingRecipe.xls");
+        funcList.put("GIFT_PACKAGE", "giftPackage.xls");
         funcList.put("DESSERT_INFO", "dessertInfo.xls");
+        funcList.put("MISSION_INFO", "missionInfo.xls");
         return funcList;
     }
 
@@ -446,7 +450,7 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
     }
 
     public static void showErrorMsgWithoutExit(String msg, String title) {
-        showErrorMsg( msg, title, false);
+        showErrorMsg(msg, title, false);
     }
 
     public void transformFinish(String message) {
@@ -493,102 +497,12 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_configFilejTextFieldMouseClicked
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-
-        fileMapping = new HashMap< Object, Object>();
-        fileMapping.put("TOTEM", "t图腾.xls");
-        fileMapping.put("UPGRADE_BUILDING", "j建筑升级.xls");
-        fileMapping.put("BIGPACK", "d大礼包.xls");
-        fileMapping.put("EXCHANGE", "e活动兑换--兑换任务.xls");
-        fileMapping.put("TIGERITEMINFO", "y游乐场老虎机--实验室种子机.xls");
-        fileMapping.put("FLOWERLAND_SPIN", "y游乐场老虎机--实验室种子机.xls");
-        fileMapping.put("KEYMAPPING", "key mapping.xls");
-        fileMapping.put("ADSGENERALIZE", "x小语种广告推广.xls");
-        fileMapping.put("FSGENERALIZE", "x小语种花店推广.xls");
-        fileMapping.put("SAPPHIREEXCHANGE", "b宝石兑换.xls");
-        fileMapping.put("FLOWERCRAFT", "h花艺品.xls");
-        fileMapping.put("FLORALBENCHUPRADE", "h花艺制作台升级.xls");
-        fileMapping.put("UNLOCKFLOWERCRAFT", "h花艺品解锁.xls");
-        fileMapping.put("FLORALBENCHGROUP", "h花艺制作台分组.xls");
-        fileMapping.put("FLORALBENCHMAKELIST", "h花艺制作台制作清单.xls");
-        fileMapping.put("GARDENEXPAND", "h后花园扩地.xls");
-        fileMapping.put("ITEMEXTEND", "w物品扩展.xls");
-        fileMapping.put("SLOTINFO", "l拉霸.xls");
-        fileMapping.put("DIVINATION_INFO", "p评比占卜.xls");
-        fileMapping.put("DIVINATION_EXCHANGE_INFO", "p评比兑换.xls");
-        fileMapping.put("DIVINATION_COMMON_INFO", "p评比占卜通用信息.xls");
-        fileMapping.put("VIRTUAL_CURRENCY", "x虚拟货币.xls");
-        fileMapping.put("SIMPLY_TASK", "j简易任务.xls");
-        fileMapping.put("FESTIVAL_ACTIVITY", "j节日活动.xls");
-        fileMapping.put("LOGIN_POP_CONTENT", "d登陆弹窗内容.xls");
-        fileMapping.put("ITEM", "w物品表.xls");
-        fileMapping.put("POPWINDOWOPT", "t弹窗优化.xls");
-        fileMapping.put("CASCA_AWARD", "j金币返还.xls");
-        fileMapping.put("FLORALSCULPTURECHMAKELIST", "h花雕制作清单.xls");
-        fileMapping.put("FLORALSCULPTURE", "h花雕底座配置&花雕解锁.xls");
-        fileMapping.put("REWARD_MACHINE", "m免费送机器.xls");
-        fileMapping.put("FLORALSCULPTURECOMMON", "h花雕产品.xls");
-        fileMapping.put("COLLECT_ACTIVITY", "s收集活动.xls");
-        fileMapping.put("FLOWER_CRAFT_UNLOCK_ACTIVITY", "h花艺解锁活动.xls");
-        fileMapping.put("PARTY_ACTIVITY", "party活动.xls");
-        fileMapping.put("FLORAL_SCULPTURE_CONVERT", "h花雕兑换活动.xls");
-        fileMapping.put("DS_SHOP_OBJ_ITEM", "opengraph.xls");
-
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            showMessageDialogMessage(ex);
-        } catch (InstantiationException ex) {
-            showMessageDialogMessage(ex);
-        } catch (IllegalAccessException ex) {
-            showMessageDialogMessage(ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            showMessageDialogMessage(ex);
-        }
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-                } catch (ClassNotFoundException ex) {
-                    showMessageDialogMessage(ex);
-                } catch (InstantiationException ex) {
-                    showMessageDialogMessage(ex);
-                } catch (IllegalAccessException ex) {
-                    showMessageDialogMessage(ex);
-                } catch (UnsupportedLookAndFeelException ex) {
-                    showMessageDialogMessage(ex);
-                }
-                JFrame totemCfgFrame = new DessertShopConfigParseJFrame();
-                totemCfgFrame.setLocationRelativeTo(null);
-                totemCfgFrame.setVisible(true);
-//                WindowsCenter.center(totemCfgFrame);
-            }
-        });
-    }
 
     private static void showMessageDialogMessage(Exception ex) {
         String exMsg = ex.toString();
         JOptionPane.showMessageDialog(null, exMsg + new Throwable().getStackTrace()[1].toString(), "错误信息提示", JOptionPane.ERROR_MESSAGE);
     }
 
-    private static Map< Object, Object> fileMapping;
     private final String configBaseDir;
     private final String outputDirectory;
 

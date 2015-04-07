@@ -465,7 +465,7 @@ public class ParseConfigLogic {
         List<String> fileNameInModelInfoList = modelInfo.get("fieldName").get(currentLang);
         List<Integer> fileIndexInModelInfoList = modelInfo.get("fieldIndex").get(currentLang);
         Map<Integer, Integer[]> finalIndexMap = new HashMap();
-        for (Map.Entry<String, String[]> entry : combineFields.entrySet()) {
+        combineFields.entrySet().stream().forEach((entry) -> {
             String key = entry.getKey();
             String[] value = entry.getValue();
             int valueLen = value.length;
@@ -476,7 +476,7 @@ public class ParseConfigLogic {
                 current.add(currentValueIndex);
             }
             finalIndexMap.put(keyIndex, current.toArray(new Integer[current.size()]));
-        }
+        });
         int rowNum = finalContent.length;
         for (int rowCount = 1; rowCount < rowNum; rowCount++) {
             int columnNum = finalContent[rowCount].length;

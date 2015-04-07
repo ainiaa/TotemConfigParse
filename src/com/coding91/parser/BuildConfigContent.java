@@ -8,8 +8,8 @@ package com.coding91.parser;
 import com.coding91.logic.ParseConfigLogic;
 import static com.coding91.parser.ConfigParser.itemLangInfoCfg;
 import static com.coding91.parser.ConfigParser.itemLangs;
+import com.coding91.ui.NoticeMessageJFrame;
 import com.coding91.utils.ArrayUtils;
-import com.coding91.utils.FileUtils;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -140,16 +140,8 @@ public class BuildConfigContent {
                         allRowsStringbuffer.append("'").append(currentField).append("' => ").append(parseField.invoke(getInstance(), new Object[]{parseFieldFunctionInfo, currentField, currentFieldContent})).append(",\r\n");
                     }
 
-                } catch (IllegalAccessException ex) {
-                    System.out.println("IllegalAccessException:" + ex.getMessage());
-                } catch (SecurityException ex) {
-                    System.out.println("SecurityException:" + ex.getMessage());
-                } catch (IllegalArgumentException ex) {
-                    System.out.println("IllegalArgumentException:" + ex.getMessage());
-                } catch (InvocationTargetException ex) {
-                    System.out.println("InvocationTargetException:" + ex.getMessage());
-                } catch (NoSuchMethodException ex) {
-                    System.out.println("NoSuchMethodException:" + ex.getMessage());
+                } catch (IllegalAccessException | SecurityException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException ex) {
+                    NoticeMessageJFrame.noticeMessage(ex.getClass() + ":" + ex.getMessage());
                 }
             } else {
                 singleRowStringbuffer.append(commonSingleFieldString(currentField, currentFieldContent, "    ", true));
