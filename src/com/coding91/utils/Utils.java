@@ -5,6 +5,7 @@
  */
 package com.coding91.utils;
 
+import com.coding91.ui.NoticeMessageJFrame;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,18 +24,9 @@ public class Utils {
         try {
             PRE_ARGS_NUM = obj.getClass().getDeclaredField("PRE_ARGS_NUM").getInt(obj);
             PRE_ARGS_TYPE = (Class<?>[]) obj.getClass().getDeclaredField("PRE_ARGS_TYPE").get(obj);
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | SecurityException | IllegalAccessException | NoSuchFieldException ex) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (SecurityException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (NoSuchFieldException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            NoticeMessageJFrame.noticeMessage(ex.getClass() + ":" + ex.getMessage());
         }
 
         List<String> funcs = getFunctions(funcStr);

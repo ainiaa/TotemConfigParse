@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.coding91.logic;
 
 import com.coding91.parser.BuildConfigContent;
@@ -10,6 +5,7 @@ import com.coding91.parser.ConfigParser;
 import static com.coding91.parser.ConfigParser.getLangs;
 import static com.coding91.parser.ConfigParser.showMessageDialogMessage;
 import com.coding91.transformRunable.TransformExRunable;
+import com.coding91.ui.NoticeMessageJFrame;
 import com.coding91.utils.ExcelParserUtils;
 import com.coding91.utils.FileUtils;
 import java.io.FileNotFoundException;
@@ -129,17 +125,17 @@ public class TransformConfigLogic {
                         } else {
                             allContent.append("\r\n").append(currentAllItemInfo);
                         }
-                        ConfigParser.notifyMessage("语言：" + currentLang + "完成度:" + (i * 100 / commonContent.length) + "%|正在生成文件:" + outputPath);
+                        NoticeMessageJFrame.noticeMessage("语言：" + currentLang + "完成度:" + (i * 100 / commonContent.length) + "%|正在生成文件:" + outputPath);
                     }
                 }
                 try {
-                    ConfigParser.notifyMessage("语言：" + currentLang + "完成度:" + "100%|正在生成文件:" + outputPath);
+                    NoticeMessageJFrame.noticeMessage("语言：" + currentLang + "完成度:" + "100%|正在生成文件:" + outputPath);
                     String descFile = BuildConfigLogic.buildSingleRowStoredPath(currentLang, "", outputPath, fileName, fileName);
                     FileUtils.writeToFile("<?php\r\n" + allContent.toString() + "\r\n);", descFile, "UTF-8");
                 } catch (FileNotFoundException ex) {
-                    showMessageDialogMessage(ex);
+                    NoticeMessageJFrame.noticeMessage(ex.getClass() + ":" + ex.getMessage());
                 } catch (IOException ex) {
-                    showMessageDialogMessage(ex);
+                    NoticeMessageJFrame.noticeMessage(ex.getClass() + ":" + ex.getMessage());
                 }
             }
         });
@@ -155,13 +151,12 @@ public class TransformConfigLogic {
     private static List<String> needSkipedFields(Map<String, String[]> combineFields) {
         List<String> needSkipedFields = new ArrayList();
         if (combineFields != null && combineFields.size() > 0) {
-            for (String key : combineFields.keySet()) {
-                String[] value = combineFields.get(key);
+            combineFields.keySet().stream().map((key) -> combineFields.get(key)).forEach((value) -> {
                 int len = value.length;
                 for (int i = 0; i < len; i++) {
                     needSkipedFields.add(value[i]);
                 }
-            }
+            });
         }
         return needSkipedFields;
     }

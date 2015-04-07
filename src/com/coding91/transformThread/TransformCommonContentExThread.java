@@ -1,14 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.coding91.transformThread;
 
 import com.coding91.logic.BuildConfigLogic;
 import com.coding91.parser.BuildConfigContent;
 import com.coding91.parser.ConfigParser;
-import static com.coding91.parser.ConfigParser.showMessageDialogMessage;
 import com.coding91.ui.NoticeMessageJFrame;
 import com.coding91.utils.FileUtils;
 import java.io.FileNotFoundException;

@@ -6,12 +6,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -112,7 +107,7 @@ public class Test {
         try {
             System.out.println("以行为单位读取文件内容，一次读一整行：");
             reader = new BufferedReader(new FileReader(file));
-            String tempString = null;
+            String tempString;
             int line = 1;
             // 一次读入一行，直到读入null为文件结束
             FileWriter deleteDoingWriter = null;

@@ -1,10 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.coding91.utils;
 
+import com.coding91.ui.NoticeMessageJFrame;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -23,10 +19,12 @@ public class FileReaderUtils {
 
     /**
      * 以字节为单位读取文件，常用于读二进制文件，如图片、声音、影像等文件。
+     *
+     * @param fileName
      */
     public static void readFileByBytes(String fileName) {
         File file = new File(fileName);
-        InputStream in = null;
+        InputStream in;
         try {
             System.out.println("以字节为单位读取文件内容，一次读一个字节：");
             // 一次读一个字节
@@ -36,8 +34,8 @@ public class FileReaderUtils {
                 System.out.write(tempbyte);
             }
             in.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            NoticeMessageJFrame.noticeMessage(ex.getClass() + ":" + ex.getMessage());
             return;
         }
         try {
@@ -51,14 +49,13 @@ public class FileReaderUtils {
             while ((byteread = in.read(tempbytes)) != -1) {
                 System.out.write(tempbytes, 0, byteread);
             }
-        } catch (Exception e1) {
-            e1.printStackTrace();
+        } catch (Exception ex) {
+            NoticeMessageJFrame.noticeMessage(ex.getClass() + ":" + ex.getMessage());
         } finally {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (IOException e1) {
-                }
+            try {
+                in.close();
+            } catch (IOException ex) {
+                NoticeMessageJFrame.noticeMessage(ex.getClass() + ":" + ex.getMessage());
             }
         }
     }

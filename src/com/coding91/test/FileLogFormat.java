@@ -27,7 +27,7 @@ import java.util.logging.Logger;
 public class FileLogFormat {
 
     public static void main(String[] args) {
-        BufferedReader reader = null;
+        BufferedReader reader;
         File file = new File("D:/www/tmp/10.183.131.236-20150309-php_2701sell.log");
         String root = "d:/www/tmp/";
         Map<String, FileWriter> fileWriteMap = new HashMap();
@@ -35,7 +35,7 @@ public class FileLogFormat {
         try {
             reader = new BufferedReader(new FileReader(file));
             String partter;
-            FileWriter currentWriter = null;
+            FileWriter currentWriter;
             while ((partter = reader.readLine()) != null) {
                 //act,value,value2,tid,item
                 Map<String, String> info = formatMsg(partter);
@@ -60,13 +60,13 @@ public class FileLogFormat {
         } catch (IOException ex) {
             Logger.getLogger(FileLogFormat.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            for (Map.Entry<String, FileWriter> entry : fileWriteMap.entrySet()) {
+            fileWriteMap.entrySet().stream().forEach((entry) -> {
                 try {
                     entry.getValue().close();
                 } catch (IOException ex) {
                     Logger.getLogger(FileLogFormat.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            }
+            });
         }
     }
 
@@ -149,9 +149,7 @@ public class FileLogFormat {
             // 要执行的SQL语句
             String sql = "select * from message";
 
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(FileLogFormat.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
+        } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(FileLogFormat.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

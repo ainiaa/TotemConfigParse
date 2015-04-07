@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.coding91.parser;
 
 import com.coding91.logic.ParseConfigLogic;
@@ -43,10 +38,8 @@ public class BuildConfigContent {
         try {
             invokertester = (ParseConfigLogic) classType.newInstance();
             return invokertester;
-        } catch (InstantiationException ex) {
-            Logger.getLogger(BuildConfigContent.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            Logger.getLogger(BuildConfigContent.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InstantiationException | IllegalAccessException ex) {
+            NoticeMessageJFrame.noticeMessage(ex.getClass() + ":" + ex.getMessage());
         }
         return null;
     }
@@ -247,16 +240,8 @@ public class BuildConfigContent {
                         singleRowStringbuffer.append(parseField.invoke(getInstance(), new Object[]{currentField, currentFieldContent, "    ", contentSplitFragment, keys}));//@todo 精彩的写法
                         allRowsStringbuffer.append(parseField.invoke(getInstance(), new Object[]{currentField, currentFieldContent, "  ", contentSplitFragment, keys}));//@todo 精彩的写法
                     }
-                } catch (IllegalAccessException ex) {
-                    System.out.println("IllegalAccessException:" + ex.getMessage());
-                } catch (SecurityException ex) {
-                    System.out.println("SecurityException:" + ex.getMessage());
-                } catch (IllegalArgumentException ex) {
-                    System.out.println("IllegalArgumentException:" + ex.getMessage());
-                } catch (InvocationTargetException ex) {
-                    System.out.println("InvocationTargetException:" + ex.getMessage());
-                } catch (NoSuchMethodException ex) {
-                    System.out.println("NoSuchMethodException:" + ex.getMessage());
+                } catch (IllegalAccessException | SecurityException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException ex) {
+                    NoticeMessageJFrame.noticeMessage(ex.getClass() + ":" + ex.getMessage());
                 }
             } else {
                 singleRowStringbuffer.append(commonSingleFieldString(currentField, currentFieldContent, "    ", true));
@@ -322,16 +307,8 @@ public class BuildConfigContent {
                         singleRowStringbuffer.append(parseField.invoke(getInstance(), new Object[]{currentField, keys, currentFieldContent, "    ", contentSplitFragment}));//@todo 精彩的写法
                         allRowsStringbuffer.append(parseField.invoke(getInstance(), new Object[]{currentField, keys, currentFieldContent, "  ", contentSplitFragment}));//@todo 精彩的写法
                     }
-                } catch (IllegalAccessException ex) {
-                    System.out.println("IllegalAccessException:" + ex.getMessage());
-                } catch (SecurityException ex) {
-                    System.out.println("SecurityException:" + ex.getMessage());
-                } catch (IllegalArgumentException ex) {
-                    System.out.println("IllegalArgumentException:" + ex.getMessage());
-                } catch (InvocationTargetException ex) {
-                    System.out.println("InvocationTargetException:" + ex.getMessage());
-                } catch (NoSuchMethodException ex) {
-                    System.out.println("NoSuchMethodException:" + ex.getMessage());
+                } catch (IllegalAccessException | SecurityException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException ex) {
+                    NoticeMessageJFrame.noticeMessage(ex.getClass() + ":" + ex.getMessage());
                 }
             } else {
                 singleRowStringbuffer.append(commonSingleFieldString(currentField, currentFieldContent, "    ", true));

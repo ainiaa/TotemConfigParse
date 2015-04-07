@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.coding91.utils;
 
 import java.util.ArrayList;
@@ -19,7 +14,7 @@ public class ArrayUtils {
     // 二维数组纵向合并  
     public static String[][] arrayUnite(String[][] content1, String[][] content2) {
         String[][] newArrey = new String[][]{};
-        List<String[]> list = new ArrayList<String[]>();
+        List<String[]> list = new ArrayList();
         list.addAll(Arrays.<String[]>asList(content1));
         list.addAll(Arrays.<String[]>asList(content2));
         return list.toArray(newArrey);
@@ -100,7 +95,7 @@ public class ArrayUtils {
     }
 
     public static HashMap<String, String> arrayCombine(String[] arrayKeys, String[] arrayValues) {
-        HashMap<String, String> hashMap = new HashMap<String, String>();
+        HashMap<String, String> hashMap = new HashMap();
         if (arrayKeys.length == arrayValues.length) {
             for (int i = 0; i < arrayKeys.length; i++) {
                 hashMap.put(arrayKeys[i], arrayValues[i]);
@@ -110,8 +105,7 @@ public class ArrayUtils {
     }
 
     public static String[] arrayTrim(String[] oldArrayContent) {
-        int cols = oldArrayContent.length;
-        ArrayList<String> tmpData = new ArrayList<String>();
+        ArrayList<String> tmpData = new ArrayList();
         for (String tmpContent : oldArrayContent) {
             String trimedContent = tmpContent.trim();
             if (!trimedContent.isEmpty()) {

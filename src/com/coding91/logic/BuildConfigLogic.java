@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.coding91.logic;
 
 import static com.coding91.parser.ConfigParser.collectActivityCommonConf;
@@ -23,8 +18,6 @@ public class BuildConfigLogic {
         List<String> currentFieldNameList = fieldName.get(lang);
         Integer[] currentFieldIndex = currentFieldIndexList.toArray(new Integer[currentFieldIndexList.size()]);
         String[] currentFieldName = currentFieldNameList.toArray(new String[currentFieldNameList.size()]);
-        currentFieldIndexList = null;
-        currentFieldNameList = null;
         StringBuilder singleItemStringbuffer = new StringBuilder();
         StringBuilder allItemsStringbuffer = new StringBuilder();
         String itemId = itemBaseInfoContent[itemIdIndex];

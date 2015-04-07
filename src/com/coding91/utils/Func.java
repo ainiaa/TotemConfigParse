@@ -10,10 +10,10 @@ import java.lang.reflect.Method;
 
 public class Func {
 
-    private Object _obj;
-    private Method _method;
-    private Object[] _args;  //函数需要的参数，包含两部分(1、默认的参数个数及类型；2、数据库配置中的参数个数及类型)
-    private int _preArgsNum;
+    private final Object _obj;
+    private final Method _method;
+    private final Object[] _args;  //函数需要的参数，包含两部分(1、默认的参数个数及类型；2、数据库配置中的参数个数及类型)
+    private final int _preArgsNum;
 
     public Func(Object obj, Method method, int preArgsNum, String... args) {
         this._obj = obj;

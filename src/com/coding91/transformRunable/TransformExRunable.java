@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.coding91.transformRunable;
 
 import com.coding91.logic.ParseConfigLogic;
@@ -11,6 +6,7 @@ import com.coding91.parser.ConfigParser;
 import static com.coding91.parser.ConfigParser.getLangs;
 import static com.coding91.parser.ConfigParser.showMessageDialogMessage;
 import com.coding91.transformThread.TransformCommonContentExThread;
+import com.coding91.ui.NoticeMessageJFrame;
 import com.coding91.utils.DateTimeUtils;
 import com.coding91.utils.ExcelParserUtils;
 import java.io.IOException;
@@ -100,10 +96,8 @@ public class TransformExRunable implements Runnable {
             long diff = endTime - startTime;
             ConfigParser.notifyMessage("转换完成。耗时:" + DateTimeUtils.formatTimeDuration(diff));
             ConfigParser.transformFinish("完成转换!");
-        } catch (IOException ex) {
-            showMessageDialogMessage(ex);
-        } catch (BiffException ex) {
-            showMessageDialogMessage(ex);
+        } catch (IOException | BiffException ex) {
+            NoticeMessageJFrame.noticeMessage(ex.getClass() + ":" + ex.getMessage());
         }
     }
 

@@ -1,7 +1,6 @@
 package com.coding91.utils;
 
-
-
+import com.coding91.ui.NoticeMessageJFrame;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -36,7 +35,7 @@ public class HttpPostUtils {
     }
 
     public static String httpPost(String urlAddress, String[] params) {
-        URL url = null;
+        URL url;
         HttpURLConnection con = null;
         BufferedReader in = null;
         StringBuilder result = new StringBuilder();
@@ -70,13 +69,8 @@ public class HttpPostUtils {
                     result.append(line);
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-            String fileName = "E:/recoverUserFailure.txt";
-            String content = HttpPostUtils.getParamStringFromParamArray(params);
-            //按方法A追加文件
-            //FileUtils.appendMethodA(fileName, content + "\r\n");
-
+        } catch (IOException ex) {
+            NoticeMessageJFrame.noticeMessage(ex.getClass() + ":" + ex.getMessage());
         } finally {
             try {
                 if (in != null) {
@@ -85,8 +79,8 @@ public class HttpPostUtils {
                 if (con != null) {
                     con.disconnect();
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (IOException ex) {
+                NoticeMessageJFrame.noticeMessage(ex.getClass() + ":" + ex.getMessage());
             }
         }
         return result.toString();

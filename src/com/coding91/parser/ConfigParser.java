@@ -1,5 +1,6 @@
 package com.coding91.parser;
 
+import com.coding91.ui.NoticeMessageJFrame;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -49,12 +50,9 @@ public class ConfigParser {
         try {
             int langSheetIndex = ExcelParserUtils.getSheetIndexBySheetName(configFilePath, "itemLang");
             itemLangInfoCfg = ExcelParserUtils.parseXls(configFilePath, langSheetIndex, true);
-        } catch (IOException e) {
+        } catch (IOException | BiffException ex) {
             itemLangInfoCfg = new String[0][0];
-            showMessageDialogMessage(e);
-        } catch (BiffException e) {
-            itemLangInfoCfg = new String[0][0];
-            showMessageDialogMessage(e);
+            NoticeMessageJFrame.noticeMessage(ex.getClass() + ":" + ex.getMessage());
         }
         return itemLangInfoCfg;
     }
@@ -65,9 +63,9 @@ public class ConfigParser {
             String[][] itemLangCfg = itemLangInfoCfg(configFilePath);
             String[] itemLangModelName = ArrayUtils.getModelFromStringArray(itemLangCfg);
             langs = ArrayUtils.arraySlice(itemLangModelName, 1);
-        } catch (Exception e) {
+        } catch (Exception ex) {
             langs = new String[0];
-            showMessageDialogMessage(e);
+            NoticeMessageJFrame.noticeMessage(ex.getClass() + ":" + ex.getMessage());
         }
         return langs;
     }
@@ -75,7 +73,7 @@ public class ConfigParser {
     public static String[] itemLangs;
 
     public String[] getItemLangFileNames(String configFilePath) {
-        Map<String, String> fileNameMap = new HashMap<String, String>();
+        Map<String, String> fileNameMap = new HashMap();
         fileNameMap.put("Chinese", "zh_tw");
         fileNameMap.put("English", "en_us");
         fileNameMap.put("German", "de_de");
@@ -178,18 +176,11 @@ public class ConfigParser {
         return sb.toString();
     }
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        System.out.println(" ==========");
-    }
-
     public static void showMessageDialogMessage(Exception ex) {
         String exMsg = ex.toString();
         JOptionPane.showMessageDialog(null, exMsg + new Throwable().getStackTrace()[1].toString(), "错误信息提示", JOptionPane.ERROR_MESSAGE);
     }
 
-    private String configBaseDir;
-    private String outputDirectory;
+    private final String configBaseDir;
+    private final String outputDirectory;
 }
