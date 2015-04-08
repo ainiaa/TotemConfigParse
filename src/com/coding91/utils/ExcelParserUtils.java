@@ -1,12 +1,15 @@
 package com.coding91.utils;
 
+import com.coding91.ui.NoticeMessageJFrame;
 import java.io.File;
 import java.io.IOException;
 import jxl.Cell;
 import jxl.CellType;
+import jxl.FormulaCell;
 import jxl.Sheet;
 import jxl.Workbook;
 import jxl.WorkbookSettings;
+import jxl.biff.formula.FormulaException;
 import jxl.read.biff.BiffException;
 
 /**
@@ -84,14 +87,14 @@ public class ExcelParserUtils {
             finalContents = new String[rows][cols];
             for (int i = 0; i < cols; i++) {
                 for (int j = 0; j < rows; j++) {
-                    finalContents[j][i] = getTmpContent(sheet, i, j, escapeSlash);
+                    finalContents[j][i] = getSingleCellContent(sheet, i, j, escapeSlash);
                 }
             }
         } else {
             finalContents = new String[cols][rows];
             for (int i = 0; i < cols; i++) {
                 for (int j = 0; j < rows; j++) {
-                    finalContents[i][j] = getTmpContent(sheet, i, j, escapeSlash);
+                    finalContents[i][j] = getSingleCellContent(sheet, i, j, escapeSlash);
                 }
             }
         }
@@ -100,20 +103,35 @@ public class ExcelParserUtils {
         return finalContents;
     }
 
-    public static String getTmpContent(Sheet sheet, int i, int j, boolean escapeSlash) {
-        Cell cells = sheet.getCell(i, j);
-        String finalContents;
-        if (cells.getType() == CellType.DATE) {//对日期数据进行特殊处理，如果不处理的话 默认24h制会变成12小时制
-            finalContents = DateTimeUtils.formatTime(sheet.getCell(i, j));
+    public static String getSingleCellContent(Sheet sheet, int i, int j, boolean escapeSlash) {
+        Cell currentCell = sheet.getCell(i, j);
+        String finalCellContent;
+        CellType cellType = currentCell.getType();
+        if (cellType == CellType.DATE) {//对日期数据进行特殊处理，如果不处理的话 默认24h制会变成12小时制
+            finalCellContent = DateTimeUtils.formatTime(currentCell);
+        } else if (cellType == CellType.NUMBER_FORMULA || cellType == CellType.BOOLEAN_FORMULA || cellType == CellType.DATE_FORMULA || cellType == CellType.FORMULA_ERROR || cellType == CellType.STRING_FORMULA) {//todo 这个估计还是有问题。。
+            FormulaCell currentFormulaCell = (FormulaCell) currentCell;
+            String cellContent = currentFormulaCell.getContents();
+            if (!StringUtils.isNumeric(cellContent) && escapeSlash) {
+                cellContent = cellContent.replace("\\'", "\'");//防止单引号已经被转义了 如果没有这一步骤的话 被转义的单引号就会出现问题
+                cellContent = cellContent.replace("\'", "\\'");
+            }
+            finalCellContent = cellContent;
+            try {
+                NoticeMessageJFrame.noticeMessage(i + " line " + j + "column  is formula:" + currentFormulaCell.getFormula());
+            } catch (FormulaException ex) {
+                NoticeMessageJFrame.noticeMessage(ex.getClass() + ":" + ex.getMessage());
+            }
+
         } else {
-            String tmpContent = sheet.getCell(i, j).getContents();
+            String tmpContent = currentCell.getContents();
             if (!StringUtils.isNumeric(tmpContent) && escapeSlash) {
                 tmpContent = tmpContent.replace("\\'", "\'");//防止单引号已经被转义了 如果没有这一步骤的话 被转义的单引号就会出现问题
                 tmpContent = tmpContent.replace("\'", "\\'");
             }
-            finalContents = tmpContent;
+            finalCellContent = tmpContent;
         }
-        return finalContents;
+        return finalCellContent;
     }
 
     public static String getSheetNameBySheetIndex(String filePath, int sheetIndex) throws IOException, BiffException {
