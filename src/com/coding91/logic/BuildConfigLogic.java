@@ -81,8 +81,6 @@ public class BuildConfigLogic {
      * @return 
      */
     public static String buildSingleRowStoredPath(String lang, String itemId, String outputPath, String dirName, String fileName) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(outputPath).append("/").append(lang).append("/").append(dirName).append("/").append(fileName).append(itemId).append(".php");
         String format = "%s/%s/%s/%s%s.php";
         return String.format(format, outputPath, lang, dirName, fileName, itemId);
     }
