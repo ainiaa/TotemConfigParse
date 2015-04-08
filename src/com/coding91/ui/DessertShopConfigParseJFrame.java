@@ -373,7 +373,7 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
             allInOneFunc = funcbuttonGroup.getSelection().getActionCommand();
         }
 
-        String msg = "";
+        String msg = null;
         if ("YES".equals(allInOneFunc)) {//全部转换
             //配置文件
             String configFilePath = configFilejTextField.getText();
@@ -403,7 +403,7 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
             } else if (outputPath.isEmpty()) {
                 msg = "请选择输出路径";
             }
-            if (!msg.isEmpty()) {
+            if (msg != null && !msg.isEmpty()) {
                 JOptionPane.showMessageDialog(null, msg, "信息提示", JOptionPane.ERROR_MESSAGE);
                 System.exit(0);
             }

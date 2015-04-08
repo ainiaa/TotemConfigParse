@@ -5,8 +5,6 @@
  */
 package com.coding91.utils;
 
-import com.coding91.parser.BuildConfigContent;
-import static com.coding91.parser.ConfigParser.itemIdAndItemName;
 import com.coding91.ui.NoticeMessageJFrame;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -83,11 +81,6 @@ public class FileUtils {
             writer.write(contents);
             writer.flush();
         }
-    }
-
-    public String getItemName(String itemId, String lang) {
-        itemIdAndItemName = BuildConfigContent.buildItemIdAndItemName();
-        return itemIdAndItemName.get(itemId).get(lang);
     }
 
     /**

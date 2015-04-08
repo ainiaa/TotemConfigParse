@@ -1,36 +1,19 @@
 package com.coding91.parser;
 
 import com.coding91.logic.ParseConfigLogic;
-import static com.coding91.parser.ConfigParser.itemLangInfoCfg;
-import static com.coding91.parser.ConfigParser.itemLangs;
 import com.coding91.ui.NoticeMessageJFrame;
-import com.coding91.utils.ArrayUtils;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  * @author Administrator
  */
 public class BuildConfigContent {
-
-    public static HashMap buildItemIdAndItemName() {
-        HashMap finalInfo = new HashMap();
-        HashMap itemNameInfo;
-        int rows = itemLangInfoCfg.length;
-        for (int rowNum = 1; rowNum < rows; rowNum++) {
-            String[] itemNameInfoArray = ArrayUtils.arraySlice(itemLangInfoCfg[rowNum], 1);
-            itemNameInfo = ArrayUtils.arrayCombine(itemLangs, itemNameInfoArray);
-            finalInfo.put(itemLangInfoCfg[rowNum][0], itemNameInfo);
-        }
-        return finalInfo;
-    }
 
     public static ParseConfigLogic getInstance() {
         Class classType = ParseConfigLogic.class;
@@ -66,7 +49,7 @@ public class BuildConfigContent {
      * @param extraParams
      * @return
      */
-    public static Map buildSingleRowStrEx(String[] singleRowInfoContent, Map modelInfo, String lang, int idIndex, String idField, Map<String, Map> extraParams) {
+    public static Map buildSingleRowString(String[] singleRowInfoContent, Map modelInfo, String lang, int idIndex, String idField, Map<String, Map> extraParams) {
         Map<String, List<Integer>> fieldIndex = (Map<String, List<Integer>>) modelInfo.get("fieldIndex");
         Map<String, List<String>> fieldName = (Map<String, List<String>>) modelInfo.get("fieldName");
         List<Integer> currentFieldIndexList = fieldIndex.get(lang);

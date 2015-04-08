@@ -1,4 +1,4 @@
-package resources.data.config.defaultvalue;
+package com.coding91.utils;
 
 /*   
  * 文件名:     ZipUtils.java   
@@ -46,12 +46,16 @@ public class ZipUtils {
             String sys_compress = "LZIP";
             byte[] temp = null;
 
-            if ("LZIP".equals(sys_compress)) {
-                temp = ZipUtils.zLib(bContent);
-            } else if ("GZIP".equals(sys_compress)) {
-                temp = ZipUtils.gZip(bContent);
-            } else if ("ZIP".equals(sys_compress)) {
-                temp = ZipUtils.zip(bContent);
+            switch (sys_compress) {
+                case "LZIP":
+                    temp = ZipUtils.zLib(bContent);
+                    break;
+                case "GZIP":
+                    temp = ZipUtils.gZip(bContent);
+                    break;
+                case "ZIP":
+                    temp = ZipUtils.zip(bContent);
+                    break;
             }
             return temp;
         } catch (IOException e) {
@@ -64,12 +68,16 @@ public class ZipUtils {
         try {
             String sys_compress = "LZIP";
             byte[] temp = null;
-            if ("LZIP".equals(sys_compress)) {
-                temp = ZipUtils.unZLib(bContent);
-            } else if ("GZIP".equals(sys_compress)) {
-                temp = ZipUtils.unGZip(bContent);
-            } else if ("ZIP".equals(sys_compress)) {
-                temp = ZipUtils.unZip(bContent);
+            switch (sys_compress) {
+                case "LZIP":
+                    temp = ZipUtils.unZLib(bContent);
+                    break;
+                case "GZIP":
+                    temp = ZipUtils.unGZip(bContent);
+                    break;
+                case "ZIP":
+                    temp = ZipUtils.unZip(bContent);
+                    break;
             }
             return temp;
         } catch (IOException e) {
@@ -192,7 +200,9 @@ public class ZipUtils {
     /**
      * GZip解压数据
      *
-     * @param object
+     * @param bContent
+     * @return
+     * @throws java.io.IOException
      * @returnException
      */
     public static byte[] unGZip(byte[] bContent) throws IOException {
@@ -204,7 +214,7 @@ public class ZipUtils {
             DataInputStream objIn = new DataInputStream(pIn);
 
             int len = 0;
-            int count = 0;
+            int count;
             while ((count = objIn.read(data, len, len + BUFFERSIZE)) != - 1) {
                 len = len + count;
             }
@@ -228,7 +238,7 @@ public class ZipUtils {
      * *
      * 压缩Zip
      *
-     * @param data
+     * @param bContent
      * @return
      * @throws IOException
      */
@@ -256,7 +266,7 @@ public class ZipUtils {
      * *
      * . * 解压Zip
      *
-     * @param data
+     * @param bContent
      * @return
      * @throws IOException
      */
@@ -267,7 +277,7 @@ public class ZipUtils {
             ZipInputStream zip = new ZipInputStream(bis);
             while (zip.getNextEntry() != null) {
                 byte[] buf = new byte[1024];
-                int num = - 1;
+                int num;
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 while ((num = zip.read(buf, 0, buf.length)) != - 1) {
                     baos.write(buf, 0, num);
@@ -314,9 +324,7 @@ public class ZipUtils {
     }
 
     public static void main(String[] args) {
-        String newContent = "";
         try {
-            String content = "水电费his大家fks打飞机速度快放假了速度快放假速度发生的飞机上的考虑防静电速度开飞机上打开了房间速度快让他文件";
             String input = "水电费his大家fks打飞机速度快放假了速度快放假速度发生的飞机上的考虑防静电速度开飞机上打开了房间速度快让他文件";
             byte[] compressed = new byte[100];
             Deflater compresser = new Deflater();
@@ -342,7 +350,7 @@ public class ZipUtils {
                 e.printStackTrace();
             }
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
 
     }

@@ -25,7 +25,6 @@ public class Utils {
             PRE_ARGS_NUM = obj.getClass().getDeclaredField("PRE_ARGS_NUM").getInt(obj);
             PRE_ARGS_TYPE = (Class<?>[]) obj.getClass().getDeclaredField("PRE_ARGS_TYPE").get(obj);
         } catch (IllegalArgumentException | SecurityException | IllegalAccessException | NoSuchFieldException ex) {
-            // TODO Auto-generated catch block
             NoticeMessageJFrame.noticeMessage(ex.getClass() + ":" + ex.getMessage());
         }
 
@@ -42,22 +41,51 @@ public class Utils {
                 Method method = obj.getClass().getMethod(funcName, paramsType);  //根据函数名 && 参数类型，找到对应的函数
 
                 dst.add(new Func(obj, method, PRE_ARGS_NUM, funcParams));
-            } catch (SecurityException e) {
-				// TODO Auto-generated catch block
-                //LOG.error("Error when parse method " + funcName, e);
+            } catch (SecurityException | NoSuchMethodException ex) {
+                NoticeMessageJFrame.noticeMessage(ex.getClass() + ":" + ex.getMessage());
                 return false;
-            } catch (NoSuchMethodException e) {
-				// TODO Auto-generated catch block
-                //LOG.error("Error when parse method " + funcName, e);
-                return false;
-            } catch (IllegalArgumentException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+            } catch (IllegalArgumentException ex) {
+                NoticeMessageJFrame.noticeMessage(ex.getClass() + ":" + ex.getMessage());
             }
         }
 
         return dst.size() > 0;
     }
+
+    public static String getInitials(String s, boolean withFirstLetter) {
+        if (s == null) {
+            return null;
+        }
+        StringBuilder sb = new StringBuilder(s.length());
+        boolean upperCase = false;
+
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (c == '_') {
+                upperCase = true;
+            } else if (upperCase) {
+                sb.append(Character.toUpperCase(c));
+                upperCase = false;
+            } else {
+                sb.append(c);
+            }
+        }
+        s = sb.toString();
+        sb = new StringBuilder();
+
+        if (withFirstLetter) {
+            sb.append(s.charAt(0));
+        }
+
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (Character.isUpperCase(c)) {
+                sb.append(Character.toLowerCase(c));
+            }
+        }
+        return sb.toString();
+    }
+            
     
     public static Func getCallableSingleFunctions(Object obj, String funcStr) {
 
@@ -69,18 +97,8 @@ public class Utils {
         try {
             PRE_ARGS_NUM = obj.getClass().getDeclaredField("PRE_ARGS_NUM").getInt(obj);
             PRE_ARGS_TYPE = (Class<?>[]) obj.getClass().getDeclaredField("PRE_ARGS_TYPE").get(obj);
-        } catch (IllegalArgumentException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (SecurityException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (NoSuchFieldException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        } catch (IllegalArgumentException | SecurityException | IllegalAccessException | NoSuchFieldException ex) {
+            NoticeMessageJFrame.noticeMessage(ex.getClass() + ":" + ex.getMessage());
         }
 
         List<String> funcs = getFunctions(funcStr);
@@ -96,24 +114,18 @@ public class Utils {
                 Method method = obj.getClass().getMethod(funcName, paramsType);  //根据函数名 && 参数类型，找到对应的函数
 
                 return new Func(obj, method, PRE_ARGS_NUM, funcParams);
-            } catch (SecurityException e) {
-				// TODO Auto-generated catch block
-                //LOG.error("Error when parse method " + funcName, e);
+            } catch (SecurityException | NoSuchMethodException ex) {
+                NoticeMessageJFrame.noticeMessage(ex.getClass() + ":" + ex.getMessage());
                 return null;
-            } catch (NoSuchMethodException e) {
-				// TODO Auto-generated catch block
-                //LOG.error("Error when parse method " + funcName, e);
-                return null;
-            } catch (IllegalArgumentException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+            } catch (IllegalArgumentException ex) {
+                NoticeMessageJFrame.noticeMessage(ex.getClass() + ":" + ex.getMessage());
             }
         }
         return null;
     }
 
     public static List<String> getFunctions(String funcStr) {
-        List<String> ret = new ArrayList<String>();
+        List<String> ret = new ArrayList();
         if (StringUtils.isEmpty(funcStr) || StringUtils.isBlank(funcStr)) {
             return ret;
         }

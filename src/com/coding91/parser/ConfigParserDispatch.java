@@ -57,7 +57,7 @@ public class ConfigParserDispatch {
                     extraParams.put("defaultValue", fieldDefaultPair);
                     fileName = "shopItem";
                     idField = "item_id";
-                    TransformConfigLogic.transformCommonContentEx(configFilePath, outputPath, fileName, sheetName, idField, extraParams);
+                    TransformConfigLogic.transformCommonContent(configFilePath, outputPath, fileName, sheetName, idField, extraParams);
                     break;
                 }
                 case "ACTIVITY_LIB": {
@@ -78,7 +78,7 @@ public class ConfigParserDispatch {
                     extraParams.put("defaultValue", fieldDefaultPair);
                     fileName = "activityLibraryInfo";
                     idField = "id";
-                    TransformConfigLogic.transformCommonContentEx(configFilePath, outputPath, fileName, sheetName, idField, extraParams);
+                    TransformConfigLogic.transformCommonContent(configFilePath, outputPath, fileName, sheetName, idField, extraParams);
                     break;
                 }
                 case "AVATAR_ITEMS": {
@@ -93,7 +93,7 @@ public class ConfigParserDispatch {
                     extraParams.put("defaultValue", fieldDefaultPair);
                     fileName = "avatarItems";
                     idField = "item_id";
-                    TransformConfigLogic.transformCommonContentEx(configFilePath, outputPath, fileName, sheetName, idField, extraParams);
+                    TransformConfigLogic.transformCommonContent(configFilePath, outputPath, fileName, sheetName, idField, extraParams);
                     break;
                 }
                 case "FEED_INFO": {
@@ -103,7 +103,7 @@ public class ConfigParserDispatch {
                     Map<String, String> fieldDefaultPair = FileUtils.loadFieldDefaultValueProperty("resources/data/config/defaultvalue/feedInfo.properties");
                     
                     extraParams.put("defaultValue", fieldDefaultPair);
-                    TransformConfigLogic.transformCommonContentEx(configFilePath, outputPath, fileName, sheetName, idField, extraParams);
+                    TransformConfigLogic.transformCommonContent(configFilePath, outputPath, fileName, sheetName, idField, extraParams);
                     break;
                 }
                 case "GOODS_ORDER": {
@@ -113,7 +113,7 @@ public class ConfigParserDispatch {
                     Map<String, String> fieldDefaultPair = FileUtils.loadFieldDefaultValueProperty("resources/data/config/defaultvalue/goodsOrder.properties");
                     
                     extraParams.put("defaultValue", fieldDefaultPair);
-                    TransformConfigLogic.transformCommonContentEx(configFilePath, outputPath, fileName, sheetName, idField, extraParams);
+                    TransformConfigLogic.transformCommonContent(configFilePath, outputPath, fileName, sheetName, idField, extraParams);
                     break;
                 }
                 case "REQUEST_INFO": {
@@ -123,7 +123,7 @@ public class ConfigParserDispatch {
                     Map<String, String> fieldDefaultPair = FileUtils.loadFieldDefaultValueProperty("resources/data/config/defaultvalue/requestInfo.properties");
                     
                     extraParams.put("defaultValue", fieldDefaultPair);
-                    TransformConfigLogic.transformCommonContentEx(configFilePath, outputPath, fileName, sheetName, idField, extraParams);
+                    TransformConfigLogic.transformCommonContent(configFilePath, outputPath, fileName, sheetName, idField, extraParams);
                     break;
                 }
                 case "BINDING_RECIPE": {
@@ -144,7 +144,7 @@ public class ConfigParserDispatch {
                     extraParams.put("defaultValue", fieldDefaultPair);
                     fileName = "bindingRecipe";
                     idField = "item_id";
-                    TransformConfigLogic.transformCommonContentEx(configFilePath, outputPath, fileName, sheetName, idField, extraParams);
+                    TransformConfigLogic.transformCommonContent(configFilePath, outputPath, fileName, sheetName, idField, extraParams);
                     break;
                 }
                 case "GAME": {
@@ -164,7 +164,7 @@ public class ConfigParserDispatch {
                     
                     Map<String, String> fieldDefaultPair = FileUtils.loadFieldDefaultValueProperty("resources/data/config/defaultvalue/game.properties");
                     extraParams.put("defaultValue", fieldDefaultPair);
-                    TransformConfigLogic.transformCommonContentEx(configFilePath, outputPath, fileName, sheetName, null, extraParams);
+                    TransformConfigLogic.transformCommonContent(configFilePath, outputPath, fileName, sheetName, null, extraParams);
                     break;
                 }
                 case "DESSERT_INFO": {
@@ -203,7 +203,7 @@ public class ConfigParserDispatch {
                     extraParams.put("defaultValue", fieldDefaultPair);
                     fileName = "dessertInfo";
                     idField = "recipe_id";
-                    TransformConfigLogic.transformCommonContentEx(configFilePath, outputPath, fileName, sheetName, idField, extraParams);
+                    TransformConfigLogic.transformCommonContent(configFilePath, outputPath, fileName, sheetName, idField, extraParams);
                     break;
                 }
                 case "GIFT_PACKAGE": {
@@ -218,7 +218,7 @@ public class ConfigParserDispatch {
                     extraParams.put("defaultValue", fieldDefaultPair);
                     fileName = "giftPackage";
                     idField = "id";
-                    TransformConfigLogic.transformCommonContentEx(configFilePath, outputPath, fileName, sheetName, idField, extraParams);
+                    TransformConfigLogic.transformCommonContent(configFilePath, outputPath, fileName, sheetName, idField, extraParams);
                     break;
                 }
                 case "MISSION_INFO": {
@@ -247,7 +247,7 @@ public class ConfigParserDispatch {
                     Map idFieldInfo = new HashMap();
                     idFieldInfo.put("needWrap", "1");
                     extraParams.put("idFieldInfo", idFieldInfo);
-                    TransformConfigLogic.transformCommonContentEx(configFilePath, outputPath, fileName, sheetName, idField, extraParams);
+                    TransformConfigLogic.transformCommonContent(configFilePath, outputPath, fileName, sheetName, idField, extraParams);
                     
                     
                     fileName = "missionTrigger";

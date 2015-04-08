@@ -394,8 +394,8 @@ public class ParseConfigLogic {
         String[] singleContentFlagment = fieldValue.split(",");
         String ouptputNumFormat = "          %s => '%s',\r\n";
         StringBuilder ouptputNumContent = new StringBuilder();
-        for (int i = 0; i < singleContentFlagment.length; i++) {
-            String[] singleOuptputNum = singleContentFlagment[i].split(":");
+        for (String singleContentFlagment1 : singleContentFlagment) {
+            String[] singleOuptputNum = singleContentFlagment1.split(":");
             ouptputNumContent.append(String.format(ouptputNumFormat, singleOuptputNum[0], singleOuptputNum[1]));
         }
         return String.format(contentFormat, ouptputNumContent.toString());

@@ -1,11 +1,10 @@
-package com.coding91.transformRunable;
+package com.coding91.transform.runable;
 
 import com.coding91.logic.ParseConfigLogic;
 import static com.coding91.logic.TransformConfigLogic.getModel;
 import com.coding91.parser.ConfigParser;
 import static com.coding91.parser.ConfigParser.getLangs;
-import static com.coding91.parser.ConfigParser.showMessageDialogMessage;
-import com.coding91.transformThread.TransformCommonContentExThread;
+import com.coding91.transform.thread.TransformCommonContentThread;
 import com.coding91.ui.NoticeMessageJFrame;
 import com.coding91.utils.DateTimeUtils;
 import com.coding91.utils.ExcelParserUtils;
@@ -19,7 +18,7 @@ import jxl.read.biff.BiffException;
  *
  * @author Administrator
  */
-public class TransformExRunable implements Runnable {
+public class TransformRunable implements Runnable {
 
     /**
      *
@@ -31,7 +30,7 @@ public class TransformExRunable implements Runnable {
      * @param extraParams
      * @param startTime
      */
-    public TransformExRunable(String configFilePath, String sheetName, String outputPath, String fileName, String idField, Map<String, Map> extraParams, long startTime) {
+    public TransformRunable(String configFilePath, String sheetName, String outputPath, String fileName, String idField, Map<String, Map> extraParams, long startTime) {
         this.configFilePath = configFilePath;
         this.sheetName = sheetName;
         this.outputPath = outputPath;
@@ -65,36 +64,27 @@ public class TransformExRunable implements Runnable {
             for (final String currentLang : langList) {
                 final String[][] singleLangContent;
                 if (combineFields != null) {
-                    singleLangContent = ParseConfigLogic.cleanupOriginContent(originContent, currentLang, fullModelInfo, combineFields);//todo 不同的配置项逻辑可以不同， 这个可以整理出来
+                    singleLangContent = ParseConfigLogic.cleanupOriginContent(originContent, currentLang, fullModelInfo, combineFields);
                 } else {
                     singleLangContent = originContent;
                 }
-                TransformCommonContentExThread tcce = new TransformCommonContentExThread(outputPath, fileName, modelInfo, singleLangContent, idField, extraParams);
+                TransformCommonContentThread tcce = new TransformCommonContentThread(outputPath, fileName, modelInfo, singleLangContent, idField, extraParams);
                 Thread currentThread = tcce.transformCommonThread(currentLang);
                 currentThread.start();
                 threadList.add(currentThread);
             }
 
-            boolean allThreadFinished;
-            do {
-                allThreadFinished = false;
+            threadList.stream().forEach((Thread thread) -> { //等待所有线程结束
                 try {
-                    for (Thread t : threadList) {
-                        if (t.getState() != Thread.State.TERMINATED) {
-                            allThreadFinished = false;
-                            break;
-                        } else {
-                            allThreadFinished = true;
-                        }
-                    }
-                    Thread.sleep(500);//停止0.5s再执行
+                    thread.join();
                 } catch (InterruptedException ex) {
-                    showMessageDialogMessage(ex);
+                    NoticeMessageJFrame.noticeMessage(ex.getClass() + ":" + ex.getMessage());
                 }
-            } while (!allThreadFinished);//
+            });
+            
             long endTime = System.currentTimeMillis();
             long diff = endTime - startTime;
-            ConfigParser.notifyMessage("转换完成。耗时:" + DateTimeUtils.formatTimeDuration(diff));
+            NoticeMessageJFrame.noticeMessage("转换完成。耗时:" + DateTimeUtils.formatTimeDuration(diff));
             ConfigParser.transformFinish("完成转换!");
         } catch (IOException | BiffException ex) {
             NoticeMessageJFrame.noticeMessage(ex.getClass() + ":" + ex.getMessage());

@@ -1,4 +1,4 @@
-package com.coding91.transformThread;
+package com.coding91.transform.thread;
 
 import com.coding91.logic.BuildConfigLogic;
 import com.coding91.parser.BuildConfigContent;
@@ -14,9 +14,9 @@ import java.util.Map;
  *
  * @author Administrator
  */
-public class TransformCommonContentExThread extends Thread {
+public class TransformCommonContentThread extends Thread {
 
-    public TransformCommonContentExThread(String outputPath, String fileName, Map<String, Map<String, List>> modelInfo, String[][] commonContent, String idField, Map<String, Map<String, String>> extraParams) {
+    public TransformCommonContentThread(String outputPath, String fileName, Map<String, Map<String, List>> modelInfo, String[][] commonContent, String idField, Map<String, Map<String, String>> extraParams) {
         this.outputPath = outputPath;
         this.fileName = fileName;
         this.modelInfo = modelInfo;
@@ -41,7 +41,7 @@ public class TransformCommonContentExThread extends Thread {
                 allContent.append(" return array (\r\n");
                 for (int i = 1; i < commonContent.length; i++) {
 //                    BuildConfigContent bcc = new BuildConfigContent();
-                    Map<String, String> singleRowInfo = BuildConfigContent.buildSingleRowStrEx(commonContent[i], modelInfo, currentLang, idIndex, idField, extraParams);
+                    Map<String, String> singleRowInfo = BuildConfigContent.buildSingleRowString(commonContent[i], modelInfo, currentLang, idIndex, idField, extraParams);
                     String id = singleRowInfo.get(idField);
                     if (!id.isEmpty() && idField != null) {//空id 直接无视
                         String singleItemInfo = singleRowInfo.get("singleRowInfo");
@@ -59,7 +59,7 @@ public class TransformCommonContentExThread extends Thread {
                         } else {
                             allContent.append("\r\n").append(currentAllItemInfo);
                         }
-                        ConfigParser.notifyMessage("语言：" + currentLang + "完成度:" + (i * 100 / commonContent.length) + "%|正在生成文件:" + outputPath);
+                        NoticeMessageJFrame.noticeMessage("语言：" + currentLang + "完成度:" + (i * 100 / commonContent.length) + "%|正在生成文件:" + outputPath);
                     } else if (idField == null) {
                         String singleItemInfo = singleRowInfo.get("singleRowInfo");
                         String descFile = BuildConfigLogic.buildSingleRowStoredPath(currentLang, id, outputPath, fileName, fileName);
@@ -70,11 +70,11 @@ public class TransformCommonContentExThread extends Thread {
                         } catch (IOException ex) {
                             NoticeMessageJFrame.noticeMessage(ex.getClass() + ":" + ex.getMessage());
                         }
-                        ConfigParser.notifyMessage("语言：" + currentLang + "完成度:" + (i * 100 / commonContent.length) + "%|正在生成文件:" + outputPath);
+                        NoticeMessageJFrame.noticeMessage("语言：" + currentLang + "完成度:" + (i * 100 / commonContent.length) + "%|正在生成文件:" + outputPath);
                     }
                 }
                 try {
-                    ConfigParser.notifyMessage("语言：" + currentLang + "完成度:" + "100%|正在生成文件:" + outputPath);
+                    NoticeMessageJFrame.noticeMessage("语言：" + currentLang + "完成度:" + "100%|正在生成文件:" + outputPath);
                     if (idField != null) {
                         String descFile = BuildConfigLogic.buildSingleRowStoredPath(currentLang, "", outputPath, fileName, fileName);
                         FileUtils.writeToFile("<?php\r\n" + allContent.toString() + "\r\n);", descFile, "UTF-8");

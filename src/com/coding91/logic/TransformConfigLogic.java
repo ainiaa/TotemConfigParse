@@ -4,8 +4,9 @@ import com.coding91.parser.BuildConfigContent;
 import com.coding91.parser.ConfigParser;
 import static com.coding91.parser.ConfigParser.getLangs;
 import static com.coding91.parser.ConfigParser.showMessageDialogMessage;
-import com.coding91.transformRunable.TransformExRunable;
+import com.coding91.transform.runable.TransformRunable;
 import com.coding91.ui.NoticeMessageJFrame;
+import com.coding91.utils.DateTimeUtils;
 import com.coding91.utils.ExcelParserUtils;
 import com.coding91.utils.FileUtils;
 import java.io.FileNotFoundException;
@@ -15,6 +16,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import jxl.read.biff.BiffException;
 
 /**
@@ -52,30 +55,20 @@ public class TransformConfigLogic {
                         //end single lang
                     }
 
-                    boolean allThreadFinished;
-                    do {
-                        allThreadFinished = false;
+                    threadList.stream().forEach((t) -> {
                         try {
-                            for (Thread t : threadList) {
-                                if (t.getState() != Thread.State.TERMINATED) {
-                                    allThreadFinished = false;
-                                    break;
-                                } else {
-                                    allThreadFinished = true;
-                                }
-                            }
-                            Thread.sleep(1000);//停止1s再执行
+                            t.join();
                         } catch (InterruptedException ex) {
-                            showMessageDialogMessage(ex);
+                            Logger.getLogger(TransformConfigLogic.class.getName()).log(Level.SEVERE, null, ex);
                         }
-                    } while (!allThreadFinished);//
+                    });
+
                     long endTime = System.currentTimeMillis();
                     long diff = endTime - startTime;
 //                    bottomStatusjLabel.setText("转换完成。耗时:" + DessertShopConfigParseJFrame.formatTimeDuration(diff));//todo 这个还没有实现
+                    NoticeMessageJFrame.noticeMessage("转换完成。耗时:" + DateTimeUtils.formatTimeDuration(diff));
                     ConfigParser.transformFinish("完成转换!");
-                } catch (IOException ex) {
-                    showMessageDialogMessage(ex);
-                } catch (BiffException ex) {
+                } catch (IOException | BiffException ex) {
                     showMessageDialogMessage(ex);
                 }
             }
@@ -92,9 +85,9 @@ public class TransformConfigLogic {
      * @param idField
      * @param extraParams
      */
-    public static void transformCommonContentEx(final String configFilePath, final String outputPath, final String fileName, final String sheetName, final String idField, final Map<String, Map> extraParams) {
+    public static void transformCommonContent(final String configFilePath, final String outputPath, final String fileName, final String sheetName, final String idField, final Map<String, Map> extraParams) {
         final long startTime = System.currentTimeMillis();
-        TransformExRunable transformRunExable = new TransformExRunable(configFilePath, sheetName, outputPath, fileName, idField, extraParams, startTime);
+        TransformRunable transformRunExable = new TransformRunable(configFilePath, sheetName, outputPath, fileName, idField, extraParams, startTime);
         new Thread(transformRunExable).start();
     }
 

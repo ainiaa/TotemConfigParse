@@ -1,6 +1,5 @@
 package com.coding91.logic;
 
-import static com.coding91.parser.ConfigParser.collectActivityCommonConf;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -73,65 +72,31 @@ public class BuildConfigLogic {
     }
 
     /**
-     * ds opengraph
-     *
-     * @param func
-     * @param sheetNum
-     * @param content
-     * @return
+     * 
+     * @param lang
+     * @param itemId
+     * @param outputPath
+     * @param dirName
+     * @param fileName
+     * @return 
      */
-    public static String buildFinalDsOpengraphStringFromStringArray(String func, int sheetNum, String[][] content) {
-        int rows = content.length;
-        String buildedContent = "";
-        buildedContent += "//******************************************************************************************************************\r\n//ds opengraph\r\n";
-
-        buildedContent += "$J7CONFIG['collectActivityItemExtend'] = array(\r\n";
-        String collectActivityItemExtendFormat = "    '%s' => array(\r\n"
-                + "        'iExtraOutput' => array(\r\n"
-                + "            '%s' => array(\r\n"
-                + "                'iActiveStartTime' =>  strtotime('%s'),\r\n"
-                + "                'iActiveEndTime' =>  strtotime('%s'),\r\n"
-                + "                'iRate' =>  '%s',\r\n"
-                + "                'iOutputNum' =>  '%s',\r\n"
-                + "            ),\r\n"
-                + "        ),\r\n"
-                + "    ),\r\n";
-        for (int rowNum = 1; rowNum < rows; rowNum++) {
-            if (!content[rowNum][0].isEmpty()) {
-                String period = content[rowNum][1];
-                HashMap<String, String> singleCollectActivityCommonConf = collectActivityCommonConf.get(period);
-                String iActiveStartTime = singleCollectActivityCommonConf.get("startTime");
-                String iActiveEndTime = singleCollectActivityCommonConf.get("endTime");
-                String iOutputItemId = singleCollectActivityCommonConf.get("scoreId");
-                String iRate = content[rowNum][2];
-                String iOutputNum = content[rowNum][3];
-                String itemId = content[rowNum][0];
-                buildedContent += String.format(collectActivityItemExtendFormat, itemId, iOutputItemId, iActiveStartTime, iActiveEndTime, iRate, iOutputNum);
-            } else {
-                break;
-            }
-        }
-        buildedContent += ");";
-        return buildedContent;
-    }
-
-    public static String buildStringFromStringArray(String func, int sheetNum, String[][] content) {
-        String buildedContent = "";
-        if ("DS_SHOP_OBJ_ITEM".equals(func)) {//ds shop object item
-            buildedContent += BuildConfigLogic.buildFinalDsOpengraphStringFromStringArray(func, sheetNum, content);
-        }
-        return buildedContent;
-    }
-
     public static String buildSingleRowStoredPath(String lang, String itemId, String outputPath, String dirName, String fileName) {
-        return outputPath + "/" + lang + "/" + dirName + "/" + fileName + itemId + ".php";
+        StringBuilder sb = new StringBuilder();
+        sb.append(outputPath).append("/").append(lang).append("/").append(dirName).append("/").append(fileName).append(itemId).append(".php");
+        String format = "%s/%s/%s/%s%s.php";
+        return String.format(format, outputPath, lang, dirName, fileName, itemId);
     }
 
+    /**
+     * 
+     * @param lang
+     * @param itemId
+     * @param outputPath
+     * @param fileName
+     * @return 
+     */
     public static String buildSingleRowStoredPath(String lang, String itemId, String outputPath, String fileName) {
-        return outputPath + "/" + lang + "/" + fileName + itemId + ".php";
-    }
-
-    public static String buildSingleItemStoredPath(String lang, String itemId, String outputPath) {
-        return outputPath + "/" + lang + "/shopItem/shopItem" + itemId + ".php";
+        String format = "%s/%s/%s%s.php";
+        return String.format(format, outputPath, lang, fileName, itemId);
     }
 }

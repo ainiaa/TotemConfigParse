@@ -1,6 +1,7 @@
 package com.coding91.ui;
 
 import java.io.IOException;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -8,9 +9,6 @@ import java.io.IOException;
  */
 public class NoticeMessageJFrame extends javax.swing.JFrame {
 
-    /**
-     * Creates new form NoticeMessageJFrame
-     */
     public NoticeMessageJFrame() {
         initComponents();
         try {
@@ -19,9 +17,27 @@ public class NoticeMessageJFrame extends javax.swing.JFrame {
 
         }
     }
-    
+
+    /**
+     * 
+     * @param msg 
+     */
     public static void noticeMessage(String msg) {
         System.out.println(msg);
+    }
+
+    /**
+     * 
+     * @param ex 
+     */
+    public static void noticeMessage(Exception ex) {
+        String exMsg = ex.toString();
+        System.out.println(exMsg + new Throwable().getStackTrace()[1].toString());
+    }
+
+    public static void showMessageDialogMessage(Exception ex) {
+        String exMsg = ex.toString();
+        JOptionPane.showMessageDialog(null, exMsg + new Throwable().getStackTrace()[1].toString(), "错误信息提示", JOptionPane.ERROR_MESSAGE);
     }
 
     /**

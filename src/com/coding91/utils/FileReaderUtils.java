@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.RandomAccessFile;
 import java.io.Reader;
+import java.util.Arrays;
 
 /**
  *
@@ -42,7 +43,7 @@ public class FileReaderUtils {
             System.out.println("以字节为单位读取文件内容，一次读多个字节：");
             // 一次读多个字节
             byte[] tempbytes = new byte[100];
-            int byteread = 0;
+            int byteread;
             in = new FileInputStream(fileName);
             FileReaderUtils.showAvailableBytes(in);
             // 读入多个字节到字节数组中，byteread为一次读入的字节数
@@ -62,6 +63,7 @@ public class FileReaderUtils {
 
     /**
      * 以字符为单位读取文件，常用于读文本，数字等类型的文件
+     * @param fileName
      */
     public static void readFileByChars(String fileName) {
         File file = new File(fileName);
@@ -87,18 +89,17 @@ public class FileReaderUtils {
             System.out.println("以字符为单位读取文件内容，一次读多个字节：");
             // 一次读多个字符
             char[] tempchars = new char[30];
-            int charread = 0;
+            int charread;
             reader = new InputStreamReader(new FileInputStream(fileName));
             // 读入多个字符到字符数组中，charread为一次读取字符数
             while ((charread = reader.read(tempchars)) != -1) {
                 // 同样屏蔽掉\r不显示
                 if ((charread == tempchars.length)
                         && (tempchars[tempchars.length - 1] != '\r')) {
-                    System.out.print(tempchars);
+                    System.out.print(Arrays.toString(tempchars));
                 } else {
                     for (int i = 0; i < charread; i++) {
                         if (tempchars[i] == '\r') {
-                            continue;
                         } else {
                             System.out.print(tempchars[i]);
                         }
@@ -129,7 +130,7 @@ public class FileReaderUtils {
         try {
             System.out.println("以行为单位读取文件内容，一次读一整行：");
             reader = new BufferedReader(new FileReader(file));
-            String tempString = null;
+            String tempString;
             int line = 1;
             // 一次读入一行，直到读入null为文件结束
             while ((tempString = reader.readLine()) != null) {
