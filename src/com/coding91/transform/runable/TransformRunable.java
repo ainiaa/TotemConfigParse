@@ -47,23 +47,19 @@ public class TransformRunable implements Runnable {
             final String[][] originContent = ExcelParserUtils.parseXls(configFilePath, sheetIndex, true);
 
             Map<String, String[]> combineFields;
-            if (extraParams.containsKey("combineFields")) {
+            if (extraParams.containsKey("combineFields")) {//有些字段是有多个字段合并来的
                 combineFields = (Map<String, String[]>) extraParams.get("combineFields");
             } else {
                 combineFields = null;
             }
 
             final Map<String, Map<String, List>> modelInfo = getModel(originContent[0], combineFields);
-            final Map<String, Map<String, List>> fullModelInfo;
-            if (combineFields != null) {
-                fullModelInfo = getModel(originContent[0]);
-            } else {
-                fullModelInfo = modelInfo;
-            }
+
             String[] langList = getLangs();
             for (final String currentLang : langList) {
                 final String[][] singleLangContent;
                 if (combineFields != null) {
+                    Map<String, Map<String, List>> fullModelInfo = getModel(originContent[0]);
                     singleLangContent = ParseConfigLogic.cleanupOriginContent(originContent, currentLang, fullModelInfo, combineFields);
                 } else {
                     singleLangContent = originContent;
@@ -81,7 +77,7 @@ public class TransformRunable implements Runnable {
                     NoticeMessageJFrame.noticeMessage(ex.getClass() + ":" + ex.getMessage());
                 }
             });
-            
+
             long endTime = System.currentTimeMillis();
             long diff = endTime - startTime;
             NoticeMessageJFrame.noticeMessage("转换完成。耗时:" + DateTimeUtils.formatTimeDuration(diff));

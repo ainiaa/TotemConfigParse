@@ -456,6 +456,15 @@ public class ParseConfigLogic {
         return tmpContent.toString();
     }
 
+    /**
+     * todo 这个可以弄成一个通用的 (分隔符、层次)
+     *
+     * @param originContent
+     * @param currentLang
+     * @param modelInfo
+     * @param combineFields
+     * @return
+     */
     public static String[][] cleanupOriginContent(final String[][] originContent, String currentLang, Map<String, Map<String, List>> modelInfo, Map<String, String[]> combineFields) {
         String[][] finalContent = new String[originContent.length][originContent[0].length];
 //        System.arraycopy(originContent, 0, finalContent, 0, originContent.length);//这个会影响到 originContent 这个数组。。。。

@@ -35,7 +35,6 @@ public class BuildConfigContent {
         } else {
             contentFormat = "'%s' => %s,\r\n";
         }
-
         return leadingString + String.format(contentFormat, field, content);
     }
 
@@ -56,32 +55,33 @@ public class BuildConfigContent {
         List<String> currentFieldNameList = fieldName.get(lang);
         Integer[] currentFieldIndex = currentFieldIndexList.toArray(new Integer[currentFieldIndexList.size()]);
         String[] currentFieldName = currentFieldNameList.toArray(new String[currentFieldNameList.size()]);
-        StringBuilder singleRowStringbuffer = new StringBuilder();
-        StringBuilder allRowsStringbuffer = new StringBuilder();
-        boolean isNeedAllRows = true;
+        StringBuilder singleRowStringBuilder = new StringBuilder();
+        StringBuilder allRowsStringBuilder = new StringBuilder();
+        boolean isNeedAllRowsContent = true;
         String id;
-        if (idIndex == -1) {//不需要idIndex
-            isNeedAllRows = false;
+        if (-1 == idIndex) {//不需要idIndex
+            isNeedAllRowsContent = false;
             id = "";
         } else {
             id = singleRowInfoContent[idIndex];
         }
-        singleRowStringbuffer.append("array (").append("\r\n");
-        if (isNeedAllRows) {
+        singleRowStringBuilder.append("array (").append("\r\n");
+        if (isNeedAllRowsContent) {
             Map idFieldInfo;
-            String needWrap = null;
+            String idNeedWrapped = null;
             if (extraParams.containsKey("idFieldInfo")) {
                 idFieldInfo = extraParams.get("idFieldInfo");
-                if (idFieldInfo.containsKey("needWrap")) {
-                    needWrap = (String) idFieldInfo.get("needWrap");
+                if (idFieldInfo.containsKey("idNeedWrapped")) {
+                    idNeedWrapped = (String) idFieldInfo.get("idNeedWrapped");
                 }
             }
-            if (needWrap != null && needWrap.equals("1")) {
-                allRowsStringbuffer.append("  '").append(id).append("' => \r\n").append("  array (\r\n");
+            String format;
+            if (null != idNeedWrapped && idNeedWrapped.equals("1")) {
+                format = " '%s' => \r\n array(\r\n";
             } else {
-                allRowsStringbuffer.append("  ").append(id).append(" => \r\n").append("  array (\r\n");
+                format = " %s => \r\n array(\r\n";
             }
-
+            allRowsStringBuilder.append(String.format(format, id));
         }
 
         Map defaultValueMap = extraParams.get("defaultValue");
@@ -94,11 +94,14 @@ public class BuildConfigContent {
                 id = currentFieldContent;
             }
 
+            String currentFieldSingleContent;
+            String currentFieldAllRowsContent = "";
+
             if (currentFieldContent.isEmpty() || currentFieldContent.equals("0")) {//内容为空 或者为 0 
                 currentFieldContent = getDefaultValue(currentField, defaultValueMap, globalDefaultValueMap);
-                singleRowStringbuffer.append(commonSingleFieldString(currentField, currentFieldContent, "    ", false));
-                if (isNeedAllRows) {
-                    allRowsStringbuffer.append(commonSingleFieldString(currentField, currentFieldContent, "  ", false));
+                currentFieldSingleContent = commonSingleFieldString(currentField, currentFieldContent, "    ", false);
+                if (isNeedAllRowsContent) {
+                    currentFieldAllRowsContent = commonSingleFieldString(currentField, currentFieldContent, "  ", false);
                 }
             } else if (extraParams.containsKey(currentField)) {
                 try {
@@ -111,50 +114,103 @@ public class BuildConfigContent {
                     Method parseField = ParseConfigLogic.class.getDeclaredMethod(parseFieldFunctionName, new Class[]{Map.class, String.class, String.class});//getMethod 方法 只能获取public 方法
                     parseField.setAccessible(true);
 
-                    singleRowStringbuffer.append("'").append(currentField).append("' => ").append(parseField.invoke(getInstance(), new Object[]{parseFieldFunctionInfo, currentField, currentFieldContent})).append(",\r\n");
-                    if (isNeedAllRows) {
-                        allRowsStringbuffer.append("'").append(currentField).append("' => ").append(parseField.invoke(getInstance(), new Object[]{parseFieldFunctionInfo, currentField, currentFieldContent})).append(",\r\n");
+                    String format = "'%s' => %s,\r\n";
+                    currentFieldSingleContent = String.format(format, currentField, parseField.invoke(getInstance(), new Object[]{parseFieldFunctionInfo, currentField, currentFieldContent}));
+                    if (isNeedAllRowsContent) {
+                        currentFieldAllRowsContent = currentFieldSingleContent;
                     }
-
                 } catch (IllegalAccessException | SecurityException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException ex) {
+                    currentFieldSingleContent = "";
                     NoticeMessageJFrame.noticeMessage(ex.getClass() + ":" + ex.getMessage());
                 }
             } else {
-                singleRowStringbuffer.append(commonSingleFieldString(currentField, currentFieldContent, "    ", true));
-                if (isNeedAllRows) {
-                    allRowsStringbuffer.append(commonSingleFieldString(currentField, currentFieldContent, "  ", true));
+                currentFieldSingleContent = commonSingleFieldString(currentField, currentFieldContent, "    ", true);//singleRowStringBuilder.append(commonSingleFieldString(currentField, currentFieldContent, "    ", true));
+                if (isNeedAllRowsContent) {
+                    currentFieldAllRowsContent = commonSingleFieldString(currentField, currentFieldContent, "  ", true);
                 }
+            }
+
+            singleRowStringBuilder.append(currentFieldSingleContent);
+            if (isNeedAllRowsContent) {
+                allRowsStringBuilder.append(currentFieldAllRowsContent);
             }
         }
 
-        singleRowStringbuffer.append(");");
-        if (isNeedAllRows) {
-            allRowsStringbuffer.append("  ),");
+        singleRowStringBuilder.append(");");
+        if (isNeedAllRowsContent) {
+            allRowsStringBuilder.append("  ),");
         }
 
         Map finalInfo = new HashMap();
         finalInfo.put(idField, id);
-        finalInfo.put("singleRowInfo", singleRowStringbuffer.toString());
-        finalInfo.put("allRowsInfo", allRowsStringbuffer.toString());
+        finalInfo.put("singleRowInfo", singleRowStringBuilder.toString());
+        finalInfo.put("allRowsInfo", allRowsStringBuilder.toString());
         return finalInfo;
     }
 
+    /**
+     * todo 这个还需要处理
+     *
+     * @param currentField
+     * @param currentFieldValue
+     * @param defaultValueMap
+     * @param globalDefaultValueMap
+     * @return
+     */
+    public static boolean isContentEmpty(String currentField, String currentFieldValue, Map<String, String> defaultValueMap, Map<String, String> globalDefaultValueMap) {
+        boolean isContentEmpty = false;
+        String defalutValue = "|''|0|'0'";
+        String currentFieldDefaultKey = currentField + ".emptyValue";
+        String commonDefaultKey = "common.emptyValue";
+        if (defaultValueMap.containsKey(currentFieldDefaultKey)) {//设置了默认值
+            defalutValue = defaultValueMap.get(currentFieldDefaultKey);
+        } else if (defaultValueMap.containsKey(commonDefaultKey)) {// 如果设置了通用默认值 直接使用该默认值
+            defalutValue = defaultValueMap.get(commonDefaultKey);
+        }
+        if (defalutValue == null) {
+            defalutValue = "null";
+        }
+
+        String[] defalutValueArray = defalutValue.split("\\|");
+
+        for (String currentDefaultValue : defalutValueArray) {
+            if (currentDefaultValue.equals(currentFieldValue)) {
+                isContentEmpty = true;
+                break;
+            }
+        }
+
+        return isContentEmpty;
+    }
+
+    /**
+     * 获得默认值
+     *
+     * @param currentField
+     * @param defaultValueMap
+     * @param globalDefaultValueMap
+     * @return
+     */
     public static String getDefaultValue(String currentField, Map<String, String> defaultValueMap, Map<String, String> globalDefaultValueMap) {
         String defalutValue = "''";
-        if (defaultValueMap.containsKey(currentField + ".default")) {//设置了默认值
-            defalutValue = defaultValueMap.get(currentField + ".default");
-        } else if (defaultValueMap.containsKey(currentField + ".type")) {//设置为当前类型 可以根据当前类型去的默认值  当前配置项的 该类型默认值  eg type.int='',没有 找找 global.properties 的  type.int=''
-            String specialType = defaultValueMap.get(currentField + ".type");//eg:  market_purchase_limit.type=array
+        String currentFieldDefaultKey = currentField + ".default";
+        String currentFieldTypeKey = currentField + ".type";
+        String commonDefaultKey = "common.default";
+        String typeDefaultKey = "type.default";
+        if (defaultValueMap.containsKey(currentFieldDefaultKey)) {//设置了默认值
+            defalutValue = defaultValueMap.get(currentFieldDefaultKey);
+        } else if (defaultValueMap.containsKey(currentFieldTypeKey)) {//设置为当前类型 可以根据当前类型去的默认值  当前配置项的 该类型默认值  eg type.int='',没有 找找 global.properties 的  type.int=''
+            String specialType = defaultValueMap.get(currentFieldTypeKey);//eg:  market_purchase_limit.type=array
             String specialTypeDefalutKey = "type." + specialType;//type.array=array()
             if (defaultValueMap.containsKey(specialTypeDefalutKey)) {
                 defalutValue = defaultValueMap.get(specialTypeDefalutKey);
             } else if (globalDefaultValueMap.containsKey(specialTypeDefalutKey)) {
                 defalutValue = globalDefaultValueMap.get(specialTypeDefalutKey);
             }
-        } else if (defaultValueMap.containsKey("common.default")) {// 如果设置了通用默认值 直接使用该默认值
-            defalutValue = defaultValueMap.get("common.default");
-        } else if (defaultValueMap.containsKey("type.default") && globalDefaultValueMap.containsKey(defaultValueMap.get("type.default"))) {//设置了默认类型，到 global.properties 找该类型的默认值
-            defalutValue = globalDefaultValueMap.get(defaultValueMap.get("type.default"));
+        } else if (defaultValueMap.containsKey(commonDefaultKey)) {// 如果设置了通用默认值 直接使用该默认值
+            defalutValue = defaultValueMap.get(commonDefaultKey);
+        } else if (defaultValueMap.containsKey(typeDefaultKey) && globalDefaultValueMap.containsKey(defaultValueMap.get(typeDefaultKey))) {//设置了默认类型，到 global.properties 找该类型的默认值
+            defalutValue = globalDefaultValueMap.get(defaultValueMap.get(typeDefaultKey));
         }
         if (defalutValue == null) {
             defalutValue = "null";

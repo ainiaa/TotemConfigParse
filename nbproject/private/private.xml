@@ -3,7 +3,17 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/D:/www/GitHub/TotemConfigParse/src/com/coding91/ui/ControllerJFrame.java</file>
+            <file>file:/D:/www/GitHub/TotemConfigParse/src/resources/data/config/defaultvalue/activityLibraryInfo.properties</file>
+            <file>file:/D:/www/GitHub/TotemConfigParse/src/com/coding91/ui/NoticeMessageJFrame.java</file>
+            <file>file:/D:/www/GitHub/TotemConfigParse/src/com/coding91/transform/thread/TransformCommonContentThread.java</file>
+            <file>file:/D:/www/GitHub/TotemConfigParse/src/com/coding91/parser/ConfigParserDispatch.java</file>
+            <file>file:/D:/www/GitHub/TotemConfigParse/src/com/coding91/transform/runable/TransformRunable.java</file>
+            <file>file:/D:/www/GitHub/TotemConfigParse/src/com/coding91/logic/TransformConfigLogic.java</file>
+            <file>file:/D:/www/GitHub/TotemConfigParse/src/com/coding91/parser/BuildConfigContent.java</file>
             <file>file:/D:/www/GitHub/TotemConfigParse/src/com/coding91/ui/DessertShopConfigParseJFrame.java</file>
+            <file>file:/D:/www/GitHub/TotemConfigParse/src/com/coding91/utils/FileUtils.java</file>
+            <file>file:/D:/www/GitHub/TotemConfigParse/src/com/coding91/logic/ParseConfigLogic.java</file>
         </group>
     </open-files>
 </project-private>

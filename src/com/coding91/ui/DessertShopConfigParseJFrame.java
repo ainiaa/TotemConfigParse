@@ -71,6 +71,7 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
         editjMenu = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         funjPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("解析内容"));
 
@@ -386,9 +387,9 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
                 ConfigParserDispatch.transformSingleExcel(func, configFilePath + "/" + excelFileName, outputPath);
             });
         } else {//转换某一个配置项
-            String func = "";
+            String function = "";
             if (funcbuttonGroup.getSelection() != null) {
-                func = funcbuttonGroup.getSelection().getActionCommand();
+                function = funcbuttonGroup.getSelection().getActionCommand();
             }
 
             //配置文件
@@ -396,7 +397,7 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
             //输出路径
             String outputPath = outputjTextField.getText();
 
-            if (func.isEmpty()) {
+            if (function.isEmpty()) {
                 msg = "请选择解析内容 ";
             } else if (configFilePath.isEmpty()) {
                 msg = "请选择待解析文件(xls) ";
@@ -407,7 +408,7 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, msg, "信息提示", JOptionPane.ERROR_MESSAGE);
                 System.exit(0);
             }
-            ConfigParserDispatch.transformSingleExcel(func, configFilePath, outputPath);
+            ConfigParserDispatch.transformSingleExcel(function, configFilePath, outputPath);
         }
 
 //        JOptionPane.showMessageDialog(null, "转换成功");

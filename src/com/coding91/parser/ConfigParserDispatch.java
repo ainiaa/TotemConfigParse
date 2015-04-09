@@ -14,19 +14,19 @@ public class ConfigParserDispatch {
     /**
      * 转换单个excel
      *
-     * @param func
+     * @param function
      * @param configFilePath
      * @param outputPath
      */
-    public static void transformSingleExcel(String func, String configFilePath, String outputPath) {
+    public static void transformSingleExcel(String function, String configFilePath, String outputPath) {
         String sheetName = "Worksheet";
         String idField;
         String fileName;
         Map<String, Map> extraParams = new HashMap();
         Map globalDefaultValueMap = FileUtils.loadFieldDefaultValueProperty("resources/data/config/defaultvalue/global.properties");
         extraParams.put("globalDefaultValue", globalDefaultValueMap);
-        if (null != func) {
-            switch (func) {
+        if (null != function) {
+            switch (function) {
                 case "SHOP_ITEM": {
                     //shopItem done
                     Map activityInfoParam = new HashMap();
@@ -245,7 +245,7 @@ public class ConfigParserDispatch {
                     combineFields.put("mission_require", new String[]{"mission_sub_require", "mission_sub_require_desc", "mission_sub_require_tips"});
                     extraParams.put("combineFields", combineFields);
                     Map idFieldInfo = new HashMap();
-                    idFieldInfo.put("needWrap", "1");
+                    idFieldInfo.put("idNeedWrapped", "1");
                     extraParams.put("idFieldInfo", idFieldInfo);
                     TransformConfigLogic.transformCommonContent(configFilePath, outputPath, fileName, sheetName, idField, extraParams);
                     
