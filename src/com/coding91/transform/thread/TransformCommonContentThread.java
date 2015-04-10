@@ -59,7 +59,7 @@ public class TransformCommonContentThread extends Thread {
                         } else {
                             allContent.append("\r\n").append(currentAllItemInfo);
                         }
-                        NoticeMessageJFrame.noticeMessage("语言：" + currentLang + "完成度:" + (i * 100 / commonContent.length) + "%|正在生成文件:" + outputPath);
+                        NoticeMessageJFrame.noticeMessage("语言：" + currentLang + "完成度:" + (i * 100 / commonContent.length) + "%|正在生成文件:" + descFile);
                     } else if (idField == null) {
                         String singleItemInfo = singleRowInfo.get("singleRowInfo");
                         String descFile = BuildConfigLogic.buildSingleRowStoredPath(currentLang, id, outputPath, fileName, fileName);
@@ -70,13 +70,13 @@ public class TransformCommonContentThread extends Thread {
                         } catch (IOException ex) {
                             NoticeMessageJFrame.noticeMessage(ex.getClass() + ":" + ex.getMessage());
                         }
-                        NoticeMessageJFrame.noticeMessage("语言：" + currentLang + "完成度:" + (i * 100 / commonContent.length) + "%|正在生成文件:" + outputPath);
+                        NoticeMessageJFrame.noticeMessage("语言：" + currentLang + "完成度:" + (i * 100 / commonContent.length) + "%|正在生成文件:" + descFile);
                     }
                 }
                 try {
-                    NoticeMessageJFrame.noticeMessage("语言：" + currentLang + "完成度:" + "100%|正在生成文件:" + outputPath);
                     if (idField != null) {
                         String descFile = BuildConfigLogic.buildSingleRowStoredPath(currentLang, "", outputPath, fileName, fileName);
+                        NoticeMessageJFrame.noticeMessage("语言：" + currentLang + "完成度:" + "100%|正在生成文件:" + descFile);
                         FileUtils.writeToFile("<?php\r\n" + allContent.toString() + "\r\n);", descFile, "UTF-8");
                     }
                 } catch (FileNotFoundException ex) {

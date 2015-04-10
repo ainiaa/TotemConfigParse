@@ -1,7 +1,6 @@
 package com.coding91.logic;
 
 import com.coding91.parser.BuildConfigContent;
-import com.coding91.parser.ConfigParser;
 import static com.coding91.parser.ConfigParser.getLangs;
 import static com.coding91.parser.ConfigParser.showMessageDialogMessage;
 import com.coding91.transform.runable.TransformRunable;
@@ -16,8 +15,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import jxl.read.biff.BiffException;
 
 /**
@@ -59,15 +56,14 @@ public class TransformConfigLogic {
                         try {
                             t.join();
                         } catch (InterruptedException ex) {
-                            Logger.getLogger(TransformConfigLogic.class.getName()).log(Level.SEVERE, null, ex);
+                            NoticeMessageJFrame.noticeMessage(ex.getClass() + ":" + ex.getMessage());
                         }
                     });
 
                     long endTime = System.currentTimeMillis();
                     long diff = endTime - startTime;
-//                    bottomStatusjLabel.setText("转换完成。耗时:" + DessertShopConfigParseJFrame.formatTimeDuration(diff));//todo 这个还没有实现
                     NoticeMessageJFrame.noticeMessage("转换完成。耗时:" + DateTimeUtils.formatTimeDuration(diff));
-                    ConfigParser.transformFinish("完成转换!");
+//                    ConfigParser.transformFinish("完成转换!");
                 } catch (IOException | BiffException ex) {
                     showMessageDialogMessage(ex);
                 }
@@ -88,7 +84,8 @@ public class TransformConfigLogic {
     public static void transformCommonContent(final String configFilePath, final String outputPath, final String fileName, final String sheetName, final String idField, final Map<String, Map> extraParams) {
         final long startTime = System.currentTimeMillis();
         TransformRunable transformRunExable = new TransformRunable(configFilePath, sheetName, outputPath, fileName, idField, extraParams, startTime);
-        new Thread(transformRunExable).start();
+        Thread transformThread = new Thread(transformRunExable);
+        transformThread.start();
     }
 
     public static Thread transformMissionTriggerThread(final String currentLang, final String outputPath, final String fileName, final String[][] commonContent) {
@@ -118,12 +115,12 @@ public class TransformConfigLogic {
                         } else {
                             allContent.append("\r\n").append(currentAllItemInfo);
                         }
-                        NoticeMessageJFrame.noticeMessage("语言：" + currentLang + "完成度:" + (i * 100 / commonContent.length) + "%|正在生成文件:" + outputPath);
+                        NoticeMessageJFrame.noticeMessage("语言：" + currentLang + "完成度:" + (i * 100 / commonContent.length) + "%|正在生成文件:" + descFile);
                     }
                 }
                 try {
-                    NoticeMessageJFrame.noticeMessage("语言：" + currentLang + "完成度:" + "100%|正在生成文件:" + outputPath);
                     String descFile = BuildConfigLogic.buildSingleRowStoredPath(currentLang, "", outputPath, fileName, fileName);
+                    NoticeMessageJFrame.noticeMessage("语言：" + currentLang + "完成度:" + "100%|正在生成文件:" + descFile);
                     FileUtils.writeToFile("<?php\r\n" + allContent.toString() + "\r\n);", descFile, "UTF-8");
                 } catch (FileNotFoundException ex) {
                     NoticeMessageJFrame.noticeMessage(ex.getClass() + ":" + ex.getMessage());

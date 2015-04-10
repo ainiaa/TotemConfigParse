@@ -15,15 +15,6 @@ public class ConfigParser {
         return ste.getFileName() + ": Line " + ste.getLineNumber();
     }
 
-    public static void showErrorMsg(String msg, String title) {
-        JOptionPane.showMessageDialog(null, msg, title, JOptionPane.ERROR_MESSAGE, null);
-        System.exit(0);
-    }
-
-    public static void transformFinish(String message) {
-        JOptionPane.showMessageDialog(null, message);
-    }
-
     public static int getFieldIndexByFieldName(List<String> fileNameList, List<Integer> fileIndexList, String fieldName) {
         int finalIndex = -1;
         int len = fileNameList.size();

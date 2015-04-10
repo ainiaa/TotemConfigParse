@@ -19,16 +19,16 @@ public class NoticeMessageJFrame extends javax.swing.JFrame {
     }
 
     /**
-     * 
-     * @param msg 
+     *
+     * @param msg
      */
     public static void noticeMessage(String msg) {
         System.out.println(msg);
     }
 
     /**
-     * 
-     * @param ex 
+     *
+     * @param ex
      */
     public static void noticeMessage(Exception ex) {
         String exMsg = ex.toString();
@@ -38,6 +38,15 @@ public class NoticeMessageJFrame extends javax.swing.JFrame {
     public static void showMessageDialogMessage(Exception ex) {
         String exMsg = ex.toString();
         JOptionPane.showMessageDialog(null, exMsg + new Throwable().getStackTrace()[1].toString(), "错误信息提示", JOptionPane.ERROR_MESSAGE);
+    }
+
+    public static void showErrorMsg(String msg, String title) {
+        JOptionPane.showMessageDialog(null, msg, title, JOptionPane.ERROR_MESSAGE, null);
+        System.exit(0);
+    }
+
+    public static void showMessageDialogMessage(String message) {
+        JOptionPane.showMessageDialog(null, message);
     }
 
     /**

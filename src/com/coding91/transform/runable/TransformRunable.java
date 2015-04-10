@@ -80,8 +80,8 @@ public class TransformRunable implements Runnable {
 
             long endTime = System.currentTimeMillis();
             long diff = endTime - startTime;
-            NoticeMessageJFrame.noticeMessage("转换完成。耗时:" + DateTimeUtils.formatTimeDuration(diff));
-            ConfigParser.transformFinish("完成转换!");
+            NoticeMessageJFrame.noticeMessage(fileName + "转换完成。耗时:" + DateTimeUtils.formatTimeDuration(diff) + "\r\n\r\n");
+//            ConfigParser.transformFinish("完成转换!");
         } catch (IOException | BiffException ex) {
             NoticeMessageJFrame.noticeMessage(ex.getClass() + ":" + ex.getMessage());
         }

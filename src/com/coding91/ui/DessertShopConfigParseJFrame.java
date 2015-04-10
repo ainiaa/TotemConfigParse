@@ -366,9 +366,9 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void parsejButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_parsejButtonMouseClicked
-        
+//        long startTime = System.currentTimeMillis();
         ControllerJFrame.showNoticeMessageJFrame();
-        
+
         String allInOneFunc = "NO";
         if (funcbuttonGroup.getSelection() != null) {
             allInOneFunc = funcbuttonGroup.getSelection().getActionCommand();
@@ -411,6 +411,10 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
             ConfigParserDispatch.transformSingleExcel(function, configFilePath, outputPath);
         }
 
+//        long endTime = System.currentTimeMillis();
+//        long diff = endTime - startTime;
+//        NoticeMessageJFrame.noticeMessage("所有文件转换完成。耗时:" + DateTimeUtils.formatTimeDuration(diff));
+//        NoticeMessageJFrame.showMessageDialogMessage("完成转换!");
 //        JOptionPane.showMessageDialog(null, "转换成功");
 //        this.dispose();
     }//GEN-LAST:event_parsejButtonMouseClicked
@@ -494,7 +498,6 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
             configFilejTextField.setText(file.getPath());
         }
     }//GEN-LAST:event_configFilejTextFieldMouseClicked
-
 
     private static void showMessageDialogMessage(Exception ex) {
         String exMsg = ex.toString();
