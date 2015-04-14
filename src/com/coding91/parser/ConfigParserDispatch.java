@@ -249,7 +249,6 @@ public class ConfigParserDispatch {
                     extraParams.put("idFieldInfo", idFieldInfo);
                     TransformConfigLogic.transformCommonContent(configFilePath, outputPath, fileName, sheetName, idField, extraParams);
                     
-                    
                     fileName = "missionTrigger";
                     TransformConfigLogic.transformMissionTriggerContent(configFilePath, outputPath, fileName, sheetName);
                     break;

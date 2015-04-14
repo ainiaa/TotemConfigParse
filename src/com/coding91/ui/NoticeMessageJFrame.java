@@ -11,6 +11,7 @@ public class NoticeMessageJFrame extends javax.swing.JFrame {
 
     public NoticeMessageJFrame() {
         initComponents();
+        this.setDefaultCloseOperation(EXIT_ON_CLOSE);//点击窗口的关闭 退出程序
         try {
             printer();
         } catch (IOException ex) {

@@ -2,7 +2,6 @@ package com.coding91.transform.runable;
 
 import com.coding91.logic.ParseConfigLogic;
 import static com.coding91.logic.TransformConfigLogic.getModel;
-import com.coding91.parser.ConfigParser;
 import static com.coding91.parser.ConfigParser.getLangs;
 import com.coding91.transform.thread.TransformCommonContentThread;
 import com.coding91.ui.NoticeMessageJFrame;

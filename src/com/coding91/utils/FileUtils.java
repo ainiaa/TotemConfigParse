@@ -113,10 +113,8 @@ public class FileUtils {
         String filePathMD5 = MD5Utils.MD5(filePath);
         if (!loadSetting.containsKey(filePathMD5)) {
             String configBaseDir = "", outputDirectory = "";
-            String finalFilePath = FileUtils.class.getClassLoader().getResource(filePath).toString();
-            finalFilePath = finalFilePath.substring(6);//删除字符串卡头的 file:/
-            File f = new File(finalFilePath);
-            if (f.exists()) {
+            URL url = FileUtils.class.getClassLoader().getResource(filePath);
+            if (null != url) {
                 Properties prop = new Properties();
                 try {
                     prop.load(new InputStreamReader(FileUtils.class.getClassLoader().getResourceAsStream(filePath), "UTF-8"));

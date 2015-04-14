@@ -120,8 +120,8 @@ public class TransformConfigLogic {
                 }
                 try {
                     String descFile = BuildConfigLogic.buildSingleRowStoredPath(currentLang, "", outputPath, fileName, fileName);
-                    NoticeMessageJFrame.noticeMessage("语言：" + currentLang + "完成度:" + "100%|正在生成文件:" + descFile);
                     FileUtils.writeToFile("<?php\r\n" + allContent.toString() + "\r\n);", descFile, "UTF-8");
+                    NoticeMessageJFrame.noticeMessage("语言：" + currentLang + "完成度:" + "100%|正在生成文件:" + descFile + "\r\n\r\n");
                 } catch (FileNotFoundException ex) {
                     NoticeMessageJFrame.noticeMessage(ex.getClass() + ":" + ex.getMessage());
                 } catch (IOException ex) {
