@@ -76,7 +76,6 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
         funjPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("解析内容"));
 
         funcbuttonGroup.add(shopObjItemjRadioButton);
-        shopObjItemjRadioButton.setSelected(true);
         shopObjItemjRadioButton.setText("shopItem");
         shopObjItemjRadioButton.setActionCommand("SHOP_ITEM");
 
@@ -299,11 +298,11 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
         allInOnejPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("一次性全转换"));
 
         allInOnejbuttonGroup.add(allInOneYesjRadioButton);
+        allInOneYesjRadioButton.setSelected(true);
         allInOneYesjRadioButton.setText("是");
         allInOneYesjRadioButton.setActionCommand("YES");
 
         allInOnejbuttonGroup.add(allInOneNojRadioButton);
-        allInOneNojRadioButton.setSelected(true);
         allInOneNojRadioButton.setText("否");
         allInOneNojRadioButton.setActionCommand("NO");
 
@@ -371,7 +370,7 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
 
         String allInOneFunc = "NO";
         if (funcbuttonGroup.getSelection() != null) {
-            allInOneFunc = funcbuttonGroup.getSelection().getActionCommand();
+            allInOneFunc = allInOnejbuttonGroup.getSelection().getActionCommand();
         }
 
         String msg = null;
@@ -382,9 +381,9 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
             String outputPath = outputjTextField.getText();
             Map<String, String> funcMap = initFuncList();
             funcMap.entrySet().stream().forEach((entry) -> {
-                String func = entry.getKey();
+                String function = entry.getKey();
                 String excelFileName = entry.getValue();
-                ConfigParserDispatch.transformSingleExcel(func, configFilePath + "/" + excelFileName, outputPath);
+                ConfigParserDispatch.transformSingleExcel(function, configFilePath + "/" + excelFileName, outputPath);
             });
         } else {//转换某一个配置项
             String function = "";
