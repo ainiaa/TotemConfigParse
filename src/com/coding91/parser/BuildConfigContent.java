@@ -97,7 +97,9 @@ public class BuildConfigContent {
             String currentFieldSingleContent;
             String currentFieldAllRowsContent = "";
 
-            if (currentFieldContent.isEmpty() || currentFieldContent.equals("0")) {//内容为空 或者为 0 
+            if (isContentEmpty(currentField, currentFieldContent, defaultValueMap, globalDefaultValueMap)) {//为空
+
+                //} else if (currentFieldContent.isEmpty() || currentFieldContent.equals("0")) {//内容为空 或者为 0 
                 currentFieldContent = getDefaultValue(currentField, defaultValueMap, globalDefaultValueMap);
                 currentFieldSingleContent = commonSingleFieldString(currentField, currentFieldContent, "    ", false);
                 if (isNeedAllRowsContent) {
@@ -124,9 +126,10 @@ public class BuildConfigContent {
                     NoticeMessageJFrame.noticeMessage(ex.getClass() + ":" + ex.getMessage());
                 }
             } else {
-                currentFieldSingleContent = commonSingleFieldString(currentField, currentFieldContent, "    ", true);//singleRowStringBuilder.append(commonSingleFieldString(currentField, currentFieldContent, "    ", true));
+                boolean isContentNeedQuote = isContentNeedQuote(currentField, currentFieldContent, defaultValueMap, globalDefaultValueMap);
+                currentFieldSingleContent = commonSingleFieldString(currentField, currentFieldContent, "    ", isContentNeedQuote);//singleRowStringBuilder.append(commonSingleFieldString(currentField, currentFieldContent, "    ", true));
                 if (isNeedAllRowsContent) {
-                    currentFieldAllRowsContent = commonSingleFieldString(currentField, currentFieldContent, "  ", true);
+                    currentFieldAllRowsContent = commonSingleFieldString(currentField, currentFieldContent, "  ", isContentNeedQuote);
                 }
             }
 
@@ -181,6 +184,18 @@ public class BuildConfigContent {
         }
 
         return isContentEmpty;
+    }
+
+    public static boolean isContentNeedQuote(String currentField, String currentFieldValue, Map<String, String> defaultValueMap, Map<String, String> globalDefaultValueMap) {
+        String needQuote = "1";
+        String currentFieldDefaultKey = currentField + ".needQuote";
+        String commonDefaultKey = "common.needQuote";
+        if (defaultValueMap.containsKey(currentFieldDefaultKey)) {//设置了默认值
+            needQuote = defaultValueMap.get(currentFieldDefaultKey);
+        } else if (defaultValueMap.containsKey(commonDefaultKey)) {// 如果设置了通用默认值 直接使用该默认值
+            needQuote = defaultValueMap.get(commonDefaultKey);
+        }
+        return "1".equals(needQuote);
     }
 
     /**
