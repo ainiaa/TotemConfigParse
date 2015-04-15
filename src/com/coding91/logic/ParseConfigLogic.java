@@ -1,5 +1,6 @@
 package com.coding91.logic;
 
+import static com.coding91.parser.BuildConfigContent.commonSingleFieldString;
 import static com.coding91.parser.ConfigParser.getFieldIndexByFieldName;
 import com.coding91.utils.ArrayUtils;
 import java.util.ArrayList;
@@ -235,9 +236,10 @@ public class ParseConfigLogic {
      * @param contentSeparator
      * @param contentKey
      * @param index
+     * @param isContentNeedQuoteMap
      * @return
      */
-    public static String parseCommonMultipleEx(String fieldName, String fieldValue, String[] contentSeparator, String[] contentKey, int index) {
+    public static String parseCommonMultipleEx(String fieldName, String fieldValue, String[] contentSeparator, String[] contentKey, int index, Map isContentNeedQuoteMap) {
         StringBuilder finalContent = new StringBuilder();
         finalContent.append("\r\narray(\r\n");
         if (!fieldValue.isEmpty()) {//内容不为空
@@ -249,6 +251,13 @@ public class ParseConfigLogic {
                         if (i <= contentChunk.length - 1) {
                             content = contentChunk[i];
                         }
+                        boolean isContentNeedQuote;
+                        if (isContentNeedQuoteMap.containsKey(contentKey[i])) {
+                            isContentNeedQuote = (boolean) isContentNeedQuoteMap.get(contentKey[i]);
+                        } else {
+                            isContentNeedQuote = true;
+                        }
+                        String currentContent = commonSingleFieldString(fieldName, contentKey[i], "  ", isContentNeedQuote);
                         finalContent.append(String.format("'%s' => '%s',\r\n", contentKey[i], content));
                     }
                 } else {//直接使用逗号分割放入array()中即可
@@ -264,7 +273,7 @@ public class ParseConfigLogic {
                 ++index;
                 int currentIndex = 0;
                 for (String currentChunk : contentChunk) {
-                    finalContent.append(currentIndex++).append(" => ").append(parseCommonMultipleEx(fieldName, currentChunk, contentSeparator, contentKey, index)).append(",\r\n");
+                    finalContent.append(currentIndex++).append(" => ").append(parseCommonMultipleEx(fieldName, currentChunk, contentSeparator, contentKey, index, isContentNeedQuoteMap)).append(",\r\n");
                 }
             }
         }
@@ -275,34 +284,85 @@ public class ParseConfigLogic {
         return finalContent.toString();
     }
 
-    public static String parseCommonMultipleEx(String fieldName, String fieldValue, Map<String, ?> parseFunctionParam, String index) {
+    /**
+     * 
+     * @param fieldName
+     * @param fieldValue
+     * @param parseFunctionParam
+     * @param index
+     * @return 
+     */
+    public static String parseCommonMultipleEx(String fieldName, String fieldValue, Map parseFunctionParam, String index) {
         String[] contentSeparator = (String[]) parseFunctionParam.get("contentSeparator");
         String[] contentKey = (String[]) parseFunctionParam.get("contentKey");
         int indexIntValue = Integer.valueOf(index);
-        return parseCommonMultipleEx(fieldName, fieldValue, contentSeparator, contentKey, indexIntValue);
+        Map isContentNeedQuoteMap;
+        if (parseFunctionParam.containsKey("isContentNeedQuoteMap")) {
+            isContentNeedQuoteMap = (Map<String, Boolean>)parseFunctionParam.get("isContentNeedQuoteMap");
+        } else {
+            isContentNeedQuoteMap = new HashMap();
+        }
+        return parseCommonMultipleEx(fieldName, fieldValue, contentSeparator, contentKey, indexIntValue, isContentNeedQuoteMap);
     }
 
+    /**
+     * 
+     * @param parseFunctionParam
+     * @param index
+     * @return 
+     */
     public static String parseCommonMultipleEx(Map parseFunctionParam, String index) {
         String[] contentSeparator = (String[]) parseFunctionParam.get("contentSeparator");
         String[] contentKey = (String[]) parseFunctionParam.get("contentKey");
         int indexIntValue = Integer.valueOf(index);
         String fieldName = (String) parseFunctionParam.get("fieldName");
         String fieldValue = (String) parseFunctionParam.get("fieldValue");
-        return parseCommonMultipleEx(fieldName, fieldValue, contentSeparator, contentKey, indexIntValue);
+        Map isContentNeedQuoteMap;
+        if (parseFunctionParam.containsKey("isContentNeedQuoteMap")) {
+            isContentNeedQuoteMap = (Map<String, Boolean>)parseFunctionParam.get("isContentNeedQuoteMap");
+        } else {
+            isContentNeedQuoteMap = new HashMap();
+        }
+        return parseCommonMultipleEx(fieldName, fieldValue, contentSeparator, contentKey, indexIntValue, isContentNeedQuoteMap);
     }
 
+    /**
+     * 
+     * @param parseFunctionParam
+     * @return 
+     */
     public static String parseCommonMultipleEx(Map parseFunctionParam) {
         return parseCommonMultipleEx(parseFunctionParam, "0");
     }
 
+    /**
+     * 
+     * @param parseFunctionParam
+     * @param fieldName
+     * @param fieldValue
+     * @return 
+     */
     public static String parseCommonMultipleEx(Map parseFunctionParam, String fieldName, String fieldValue) {
 
         String[] contentSeparator = (String[]) parseFunctionParam.get("contentSeparator");
         String[] contentKey = (String[]) parseFunctionParam.get("contentKey");
         int indexIntValue = Integer.valueOf("0");
-        return parseCommonMultipleEx(fieldName, fieldValue, contentSeparator, contentKey, indexIntValue);
+        Map isContentNeedQuoteMap;
+        if (parseFunctionParam.containsKey("isContentNeedQuoteMap")) {
+            isContentNeedQuoteMap = (Map<String, Boolean>)parseFunctionParam.get("isContentNeedQuoteMap");
+        } else {
+            isContentNeedQuoteMap = new HashMap();
+        }
+        return parseCommonMultipleEx(fieldName, fieldValue, contentSeparator, contentKey, indexIntValue, isContentNeedQuoteMap);
     }
 
+    /**
+     * 
+     * @param parseFunctionParam
+     * @param fieldName
+     * @param fieldValue
+     * @return 
+     */
     private String parseGameRankScoreRewards(Map parseFunctionParam, String fieldName, String fieldValue) {
 
         String leadingString = "    ";
@@ -337,6 +397,13 @@ public class ParseConfigLogic {
         return finalContent;
     }
 
+    /**
+     * 
+     * @param parseFunctionParam
+     * @param fieldName
+     * @param fieldValue
+     * @return 
+     */
     private String parseDessertInfoNormalDessertData(Map parseFunctionParam, String fieldName, String fieldValue) {
         String contentFormat = "\r\n    array (\n"
                 + "      0 => \n"
@@ -358,6 +425,13 @@ public class ParseConfigLogic {
         return String.format(contentFormat, singleContentFlagment[0], ouptputNumContent.toString());
     }
 
+    /**
+     * 
+     * @param parseFunctionParam
+     * @param fieldName
+     * @param fieldValue
+     * @return 
+     */
     private String parseDessertInfoCondimentsDessertData(Map parseFunctionParam, String fieldName, String fieldValue) {
         StringBuilder finalContent = new StringBuilder();
         finalContent.append("\r\n    array (\r\n");
@@ -387,6 +461,13 @@ public class ParseConfigLogic {
         return finalContent.toString();
     }
 
+    /**
+     * 
+     * @param parseFunctionParam
+     * @param fieldName
+     * @param fieldValue
+     * @return 
+     */
     private String parseDessertInfoLevelUpCookTimes(Map parseFunctionParam, String fieldName, String fieldValue) {
         String contentFormat = "\r\n    array (\n"
                 + "      %s"
@@ -401,6 +482,13 @@ public class ParseConfigLogic {
         return String.format(contentFormat, ouptputNumContent.toString());
     }
 
+    /**
+     * 
+     * @param parseFunctionParam
+     * @param fieldName
+     * @param fieldValue
+     * @return 
+     */
     private String parseGiftPackageFixData(Map parseFunctionParam, String fieldName, String fieldValue) {
         String contentFormat = "\r\n    array (\n"
                 + "      %s"

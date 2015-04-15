@@ -96,14 +96,15 @@ public class BuildConfigContent {
 
             String currentFieldSingleContent;
             String currentFieldAllRowsContent = "";
-
+            
+            boolean isContentNeedQuote = isContentNeedQuote(currentField, currentFieldContent, defaultValueMap, globalDefaultValueMap); 
             if (isContentEmpty(currentField, currentFieldContent, defaultValueMap, globalDefaultValueMap)) {//为空
-
+                isContentNeedQuote = false;
                 //} else if (currentFieldContent.isEmpty() || currentFieldContent.equals("0")) {//内容为空 或者为 0 
                 currentFieldContent = getDefaultValue(currentField, defaultValueMap, globalDefaultValueMap);
-                currentFieldSingleContent = commonSingleFieldString(currentField, currentFieldContent, "    ", false);
+                currentFieldSingleContent = commonSingleFieldString(currentField, currentFieldContent, "    ", isContentNeedQuote);
                 if (isNeedAllRowsContent) {
-                    currentFieldAllRowsContent = commonSingleFieldString(currentField, currentFieldContent, "  ", false);
+                    currentFieldAllRowsContent = commonSingleFieldString(currentField, currentFieldContent, "  ", isContentNeedQuote);
                 }
             } else if (extraParams.containsKey(currentField)) {
                 try {
@@ -112,6 +113,14 @@ public class BuildConfigContent {
                     String parseFieldFunctionName = (String) parseFieldFunctionInfo.get("parseFunction");
 //                    parseFieldFunctionInfo.put("fieldName", currentField);//直接传递过去 放置错乱
 //                    parseFieldFunctionInfo.put("fieldValue", currentFieldContent);
+
+                    String[] contentKey = (String[]) parseFieldFunctionInfo.get("contentKey");
+                    Map isContentNeedQuoteMap = new HashMap();
+                    for(String currentContentKey : contentKey) {
+                        isContentNeedQuoteMap.put(currentContentKey, isContentNeedQuote(currentField, currentFieldContent, defaultValueMap, globalDefaultValueMap));
+                    }
+                    
+                    parseFieldFunctionInfo.put("isContentNeedQuoteMap", isContentNeedQuoteMap);
 
                     Method parseField = ParseConfigLogic.class.getDeclaredMethod(parseFieldFunctionName, new Class[]{Map.class, String.class, String.class});//getMethod 方法 只能获取public 方法
                     parseField.setAccessible(true);
@@ -126,7 +135,6 @@ public class BuildConfigContent {
                     NoticeMessageJFrame.noticeMessage(ex.getClass() + ":" + ex.getMessage());
                 }
             } else {
-                boolean isContentNeedQuote = isContentNeedQuote(currentField, currentFieldContent, defaultValueMap, globalDefaultValueMap);
                 currentFieldSingleContent = commonSingleFieldString(currentField, currentFieldContent, "    ", isContentNeedQuote);//singleRowStringBuilder.append(commonSingleFieldString(currentField, currentFieldContent, "    ", true));
                 if (isNeedAllRowsContent) {
                     currentFieldAllRowsContent = commonSingleFieldString(currentField, currentFieldContent, "  ", isContentNeedQuote);
