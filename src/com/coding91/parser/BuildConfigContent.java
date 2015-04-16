@@ -96,8 +96,8 @@ public class BuildConfigContent {
 
             String currentFieldSingleContent;
             String currentFieldAllRowsContent = "";
-            
-            boolean isContentNeedQuote = isContentNeedQuote(currentField, currentFieldContent, defaultValueMap, globalDefaultValueMap); 
+
+            boolean isContentNeedQuote = isContentNeedQuote(currentField, currentFieldContent, defaultValueMap, globalDefaultValueMap);
             if (isContentEmpty(currentField, currentFieldContent, defaultValueMap, globalDefaultValueMap)) {//为空
                 isContentNeedQuote = false;
                 //} else if (currentFieldContent.isEmpty() || currentFieldContent.equals("0")) {//内容为空 或者为 0 
@@ -116,11 +116,13 @@ public class BuildConfigContent {
 
                     String[] contentKey = (String[]) parseFieldFunctionInfo.get("contentKey");
                     Map isContentNeedQuoteMap = new HashMap();
-                    for(String currentContentKey : contentKey) {
-                        isContentNeedQuoteMap.put(currentContentKey, isContentNeedQuote(currentField, currentFieldContent, defaultValueMap, globalDefaultValueMap));
+                    for (String currentContentKey : contentKey) {
+                        isContentNeedQuoteMap.put(currentContentKey, isContentNeedQuote(currentContentKey, currentFieldContent, defaultValueMap, globalDefaultValueMap));
                     }
-                    
+
                     parseFieldFunctionInfo.put("isContentNeedQuoteMap", isContentNeedQuoteMap);
+                    parseFieldFunctionInfo.put("defaultValueMap", defaultValueMap);
+                    parseFieldFunctionInfo.put("globalDefaultValueMap", globalDefaultValueMap);
 
                     Method parseField = ParseConfigLogic.class.getDeclaredMethod(parseFieldFunctionName, new Class[]{Map.class, String.class, String.class});//getMethod 方法 只能获取public 方法
                     parseField.setAccessible(true);

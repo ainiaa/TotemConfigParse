@@ -369,7 +369,7 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
         ControllerJFrame.showNoticeMessageJFrame();
 
         String allInOneFunc = "NO";
-        if (funcbuttonGroup.getSelection() != null) {
+        if (allInOnejbuttonGroup.getSelection() != null) {
             allInOneFunc = allInOnejbuttonGroup.getSelection().getActionCommand();
         }
 

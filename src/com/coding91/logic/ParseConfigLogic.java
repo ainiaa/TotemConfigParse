@@ -1,6 +1,8 @@
 package com.coding91.logic;
 
 import static com.coding91.parser.BuildConfigContent.commonSingleFieldString;
+import static com.coding91.parser.BuildConfigContent.getDefaultValue;
+import static com.coding91.parser.BuildConfigContent.isContentEmpty;
 import static com.coding91.parser.ConfigParser.getFieldIndexByFieldName;
 import com.coding91.utils.ArrayUtils;
 import java.util.ArrayList;
@@ -236,10 +238,29 @@ public class ParseConfigLogic {
      * @param contentSeparator
      * @param contentKey
      * @param index
-     * @param isContentNeedQuoteMap
+     * @param parseFunctionParam
      * @return
      */
-    public static String parseCommonMultipleEx(String fieldName, String fieldValue, String[] contentSeparator, String[] contentKey, int index, Map isContentNeedQuoteMap) {
+    public static String parseCommonMultipleEx(String fieldName, String fieldValue, String[] contentSeparator, String[] contentKey, int index, Map parseFunctionParam) {
+        Map isContentNeedQuoteMap, defaultValueMap, globalDefaultValueMap;
+        if (parseFunctionParam.containsKey("isContentNeedQuoteMap")) {
+            isContentNeedQuoteMap = (Map<String, Boolean>) parseFunctionParam.get("isContentNeedQuoteMap");
+        } else {
+            isContentNeedQuoteMap = new HashMap();
+        }
+
+        if (parseFunctionParam.containsKey("defaultValueMap")) {
+            defaultValueMap = (Map) parseFunctionParam.get("defaultValueMap");
+        } else {
+            defaultValueMap = new HashMap();
+        }
+
+        if (parseFunctionParam.containsKey("globalDefaultValueMap")) {
+            globalDefaultValueMap = (Map) parseFunctionParam.get("globalDefaultValueMap");
+        } else {
+            globalDefaultValueMap = new HashMap();
+        }
+
         StringBuilder finalContent = new StringBuilder();
         finalContent.append("\r\narray(\r\n");
         if (!fieldValue.isEmpty()) {//内容不为空
@@ -257,8 +278,17 @@ public class ParseConfigLogic {
                         } else {
                             isContentNeedQuote = true;
                         }
-                        String currentContent = commonSingleFieldString(fieldName, contentKey[i], "  ", isContentNeedQuote);
-                        finalContent.append(String.format("'%s' => '%s',\r\n", contentKey[i], content));
+                        if (isContentEmpty(contentKey[i], content, defaultValueMap, globalDefaultValueMap)) {//为空
+                            isContentNeedQuote = false;
+                            String currentFieldContent = getDefaultValue(contentKey[i], defaultValueMap, globalDefaultValueMap);
+                            String currentContent = commonSingleFieldString(contentKey[i], currentFieldContent, "    ", isContentNeedQuote);
+                            finalContent.append(currentContent);
+                        } else {
+                            String currentContent = commonSingleFieldString(contentKey[i], content, "", isContentNeedQuote);
+                            finalContent.append(currentContent);
+                        }
+
+//                        finalContent.append(String.format("'%s' => '%s',\r\n", contentKey[i], content));
                     }
                 } else {//直接使用逗号分割放入array()中即可
                     for (int i = 0; i < contentChunk.length; i++) {
@@ -273,7 +303,7 @@ public class ParseConfigLogic {
                 ++index;
                 int currentIndex = 0;
                 for (String currentChunk : contentChunk) {
-                    finalContent.append(currentIndex++).append(" => ").append(parseCommonMultipleEx(fieldName, currentChunk, contentSeparator, contentKey, index, isContentNeedQuoteMap)).append(",\r\n");
+                    finalContent.append(currentIndex++).append(" => ").append(parseCommonMultipleEx(fieldName, currentChunk, contentSeparator, contentKey, index, parseFunctionParam)).append(",\r\n");
                 }
             }
         }
@@ -285,31 +315,25 @@ public class ParseConfigLogic {
     }
 
     /**
-     * 
+     *
      * @param fieldName
      * @param fieldValue
      * @param parseFunctionParam
      * @param index
-     * @return 
+     * @return
      */
     public static String parseCommonMultipleEx(String fieldName, String fieldValue, Map parseFunctionParam, String index) {
         String[] contentSeparator = (String[]) parseFunctionParam.get("contentSeparator");
         String[] contentKey = (String[]) parseFunctionParam.get("contentKey");
         int indexIntValue = Integer.valueOf(index);
-        Map isContentNeedQuoteMap;
-        if (parseFunctionParam.containsKey("isContentNeedQuoteMap")) {
-            isContentNeedQuoteMap = (Map<String, Boolean>)parseFunctionParam.get("isContentNeedQuoteMap");
-        } else {
-            isContentNeedQuoteMap = new HashMap();
-        }
-        return parseCommonMultipleEx(fieldName, fieldValue, contentSeparator, contentKey, indexIntValue, isContentNeedQuoteMap);
+        return parseCommonMultipleEx(fieldName, fieldValue, contentSeparator, contentKey, indexIntValue, parseFunctionParam);
     }
 
     /**
-     * 
+     *
      * @param parseFunctionParam
      * @param index
-     * @return 
+     * @return
      */
     public static String parseCommonMultipleEx(Map parseFunctionParam, String index) {
         String[] contentSeparator = (String[]) parseFunctionParam.get("contentSeparator");
@@ -317,51 +341,39 @@ public class ParseConfigLogic {
         int indexIntValue = Integer.valueOf(index);
         String fieldName = (String) parseFunctionParam.get("fieldName");
         String fieldValue = (String) parseFunctionParam.get("fieldValue");
-        Map isContentNeedQuoteMap;
-        if (parseFunctionParam.containsKey("isContentNeedQuoteMap")) {
-            isContentNeedQuoteMap = (Map<String, Boolean>)parseFunctionParam.get("isContentNeedQuoteMap");
-        } else {
-            isContentNeedQuoteMap = new HashMap();
-        }
-        return parseCommonMultipleEx(fieldName, fieldValue, contentSeparator, contentKey, indexIntValue, isContentNeedQuoteMap);
+        return parseCommonMultipleEx(fieldName, fieldValue, contentSeparator, contentKey, indexIntValue, parseFunctionParam);
     }
 
     /**
-     * 
+     *
      * @param parseFunctionParam
-     * @return 
+     * @return
      */
     public static String parseCommonMultipleEx(Map parseFunctionParam) {
         return parseCommonMultipleEx(parseFunctionParam, "0");
     }
 
     /**
-     * 
+     *
      * @param parseFunctionParam
      * @param fieldName
      * @param fieldValue
-     * @return 
+     * @return
      */
     public static String parseCommonMultipleEx(Map parseFunctionParam, String fieldName, String fieldValue) {
 
         String[] contentSeparator = (String[]) parseFunctionParam.get("contentSeparator");
         String[] contentKey = (String[]) parseFunctionParam.get("contentKey");
         int indexIntValue = Integer.valueOf("0");
-        Map isContentNeedQuoteMap;
-        if (parseFunctionParam.containsKey("isContentNeedQuoteMap")) {
-            isContentNeedQuoteMap = (Map<String, Boolean>)parseFunctionParam.get("isContentNeedQuoteMap");
-        } else {
-            isContentNeedQuoteMap = new HashMap();
-        }
-        return parseCommonMultipleEx(fieldName, fieldValue, contentSeparator, contentKey, indexIntValue, isContentNeedQuoteMap);
+        return parseCommonMultipleEx(fieldName, fieldValue, contentSeparator, contentKey, indexIntValue, parseFunctionParam);
     }
 
     /**
-     * 
+     *
      * @param parseFunctionParam
      * @param fieldName
      * @param fieldValue
-     * @return 
+     * @return
      */
     private String parseGameRankScoreRewards(Map parseFunctionParam, String fieldName, String fieldValue) {
 
@@ -398,11 +410,11 @@ public class ParseConfigLogic {
     }
 
     /**
-     * 
+     *
      * @param parseFunctionParam
      * @param fieldName
      * @param fieldValue
-     * @return 
+     * @return
      */
     private String parseDessertInfoNormalDessertData(Map parseFunctionParam, String fieldName, String fieldValue) {
         String contentFormat = "\r\n    array (\n"
@@ -426,11 +438,11 @@ public class ParseConfigLogic {
     }
 
     /**
-     * 
+     *
      * @param parseFunctionParam
      * @param fieldName
      * @param fieldValue
-     * @return 
+     * @return
      */
     private String parseDessertInfoCondimentsDessertData(Map parseFunctionParam, String fieldName, String fieldValue) {
         StringBuilder finalContent = new StringBuilder();
@@ -462,11 +474,11 @@ public class ParseConfigLogic {
     }
 
     /**
-     * 
+     *
      * @param parseFunctionParam
      * @param fieldName
      * @param fieldValue
-     * @return 
+     * @return
      */
     private String parseDessertInfoLevelUpCookTimes(Map parseFunctionParam, String fieldName, String fieldValue) {
         String contentFormat = "\r\n    array (\n"
@@ -483,11 +495,11 @@ public class ParseConfigLogic {
     }
 
     /**
-     * 
+     *
      * @param parseFunctionParam
      * @param fieldName
      * @param fieldValue
-     * @return 
+     * @return
      */
     private String parseGiftPackageFixData(Map parseFunctionParam, String fieldName, String fieldValue) {
         String contentFormat = "\r\n    array (\n"

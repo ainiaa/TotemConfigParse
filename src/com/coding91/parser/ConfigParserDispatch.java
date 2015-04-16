@@ -31,7 +31,7 @@ public class ConfigParserDispatch {
                     //shopItem done
                     Map activityInfoParam = new HashMap();
                     activityInfoParam.put("contentKey", new String[]{"require_item_id", "require_item_num", "require_type", "require_id"});
-                    activityInfoParam.put("contentSeparator", new String[]{",", ":"});
+                    activityInfoParam.put("contentSeparator", new String[]{","});
                     activityInfoParam.put("parseFunction", "parseCommonMultipleEx");
                     extraParams.put("item_property", activityInfoParam);
                     
