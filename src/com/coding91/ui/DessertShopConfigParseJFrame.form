@@ -4,7 +4,7 @@
   <NonVisualComponents>
     <Component class="javax.swing.ButtonGroup" name="funcbuttonGroup">
     </Component>
-    <Component class="javax.swing.ButtonGroup" name="allInOnejbuttonGroup">
+    <Component class="javax.swing.ButtonGroup" name="langjbuttonGroup">
     </Component>
     <Menu class="javax.swing.JMenuBar" name="jMenuBar">
       <SubComponents>
@@ -19,6 +19,7 @@
               </Properties>
               <Events>
                 <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="settingjMenuItemMouseClicked"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="settingjMenuItemActionPerformed"/>
               </Events>
             </MenuItem>
           </SubComponents>
@@ -55,16 +56,13 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
-              <Component id="jLayeredPane" min="-2" pref="535" max="-2" attributes="0"/>
-              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-          </Group>
+          <Component id="jLayeredPane" alignment="0" pref="535" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <Component id="jLayeredPane" min="-2" pref="400" max="-2" attributes="0"/>
+              <Component id="jLayeredPane" min="-2" pref="448" max="-2" attributes="0"/>
               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
           </Group>
       </Group>
@@ -99,6 +97,7 @@
                           <Component id="bindingRecipejRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="shopObjItemjRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="giftPackagejRadioButton" min="-2" max="-2" attributes="0"/>
+                          <Component id="allInOneYesjRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
@@ -116,6 +115,7 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="gamejRadioButton" min="-2" max="-2" attributes="0"/>
                           <Component id="goodsOrderjRadioButton" min="-2" max="-2" attributes="0"/>
+                          <Component id="objItemjRadioButton" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace pref="63" max="32767" attributes="0"/>
                   </Group>
@@ -126,10 +126,10 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="shopObjItemjRadioButton" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="activityLibraryjRadioButton" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="avatarItemsjRadioButton" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="goodsOrderjRadioButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="allInOneYesjRadioButton" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
@@ -143,8 +143,11 @@
                           <Component id="missionInfojRadioButton" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="dessertInfojRadioButton" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="giftPackagejRadioButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="objItemjRadioButton" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="57" max="32767" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="shopObjItemjRadioButton" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace pref="32" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -249,6 +252,25 @@
                 <Property name="actionCommand" type="java.lang.String" value="GIFT_PACKAGE"/>
               </Properties>
             </Component>
+            <Component class="javax.swing.JRadioButton" name="objItemjRadioButton">
+              <Properties>
+                <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+                  <ComponentRef name="funcbuttonGroup"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="objItem"/>
+                <Property name="actionCommand" type="java.lang.String" value="OBJ_ITEM"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JRadioButton" name="allInOneYesjRadioButton">
+              <Properties>
+                <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+                  <ComponentRef name="funcbuttonGroup"/>
+                </Property>
+                <Property name="selected" type="boolean" value="true"/>
+                <Property name="text" type="java.lang.String" value="parse ALL"/>
+                <Property name="actionCommand" type="java.lang.String" value="YES"/>
+              </Properties>
+            </Component>
           </SubComponents>
         </Container>
         <Container class="javax.swing.JPanel" name="selectConfgFilejPanel">
@@ -261,7 +283,7 @@
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="10" y="220" width="520" height="80"/>
+              <AbsoluteConstraints x="0" y="260" width="520" height="80"/>
             </Constraint>
           </Constraints>
 
@@ -367,7 +389,7 @@
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="10" y="310" width="520" height="-1"/>
+              <AbsoluteConstraints x="0" y="350" width="520" height="-1"/>
             </Constraint>
           </Constraints>
 
@@ -427,49 +449,55 @@
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="0" y="380" width="530" height="20"/>
+              <AbsoluteConstraints x="0" y="420" width="530" height="20"/>
             </Constraint>
           </Constraints>
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBoxLayout"/>
-          <SubComponents>
-            <Component class="javax.swing.JLabel" name="bottomStatusjLabel">
-              <Properties>
-                <Property name="focusable" type="boolean" value="false"/>
-                <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[520, 20]"/>
-                </Property>
-                <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[520, 20]"/>
-                </Property>
-                <Property name="name" type="java.lang.String" value="" noResource="true"/>
-              </Properties>
-            </Component>
-          </SubComponents>
         </Container>
         <Container class="javax.swing.JPanel" name="allInOnejPanel">
           <Properties>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                <TitledBorder title="&#x4e00;&#x6b21;&#x6027;&#x5168;&#x8f6c;&#x6362;"/>
+                <TitledBorder title="&#x9700;&#x8981;&#x8f6c;&#x6362;&#x7684;&#x8bed;&#x8a00;"/>
               </Border>
             </Property>
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="10" y="160" width="520" height="60"/>
+              <AbsoluteConstraints x="10" y="160" width="520" height="80"/>
             </Constraint>
           </Constraints>
 
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
+                  <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="allInOneYesjRadioButton" min="-2" pref="37" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="allInOneNojRadioButton" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="410" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="langEnUsjCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="selectAlljRadioButton" alignment="0" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <Component id="langDeDejCheckBox" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="langFrFrjCheckBox" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="langEsEsjCheckBox" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Component id="langZhTwjCheckBox" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="langItItjCheckBox" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" attributes="0">
+                              <Component id="selectRevertjRadioButton" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Component id="selectNonejRadioButton" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <EmptySpace pref="168" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -477,36 +505,132 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="allInOneYesjRadioButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="allInOneNojRadioButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="langEnUsjCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="langFrFrjCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="langDeDejCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="langEsEsjCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="langItItjCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="langZhTwjCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="0" pref="13" max="32767" attributes="0"/>
+                      <EmptySpace pref="4" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="selectAlljRadioButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="selectRevertjRadioButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="selectNonejRadioButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="javax.swing.JRadioButton" name="allInOneYesjRadioButton">
+            <Component class="javax.swing.JCheckBox" name="langEnUsjCheckBox">
+              <Properties>
+                <Property name="selected" type="boolean" value="true"/>
+                <Property name="text" type="java.lang.String" value="en_us"/>
+              </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="langEnUsjCheckBoxMouseClicked"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="langFrFrjCheckBox">
+              <Properties>
+                <Property name="selected" type="boolean" value="true"/>
+                <Property name="text" type="java.lang.String" value="fr_fr"/>
+              </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="langFrFrjCheckBoxMouseClicked"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="langDeDejCheckBox">
+              <Properties>
+                <Property name="selected" type="boolean" value="true"/>
+                <Property name="text" type="java.lang.String" value="de_de"/>
+              </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="langDeDejCheckBoxMouseClicked"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="langEsEsjCheckBox">
+              <Properties>
+                <Property name="selected" type="boolean" value="true"/>
+                <Property name="text" type="java.lang.String" value="es_es"/>
+              </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="langEsEsjCheckBoxMouseClicked"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="langZhTwjCheckBox">
+              <Properties>
+                <Property name="selected" type="boolean" value="true"/>
+                <Property name="text" type="java.lang.String" value="zh_tw"/>
+              </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="langZhTwjCheckBoxMouseClicked"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="langItItjCheckBox">
+              <Properties>
+                <Property name="selected" type="boolean" value="true"/>
+                <Property name="text" type="java.lang.String" value="it_it"/>
+              </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="langItItjCheckBoxMouseClicked"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JRadioButton" name="selectAlljRadioButton">
               <Properties>
                 <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
-                  <ComponentRef name="allInOnejbuttonGroup"/>
+                  <ComponentRef name="langjbuttonGroup"/>
                 </Property>
                 <Property name="selected" type="boolean" value="true"/>
-                <Property name="text" type="java.lang.String" value="&#x662f;"/>
-                <Property name="actionCommand" type="java.lang.String" value="YES"/>
+                <Property name="text" type="java.lang.String" value="&#x5168;&#x9009;"/>
               </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="selectAlljRadioButtonMouseClicked"/>
+              </Events>
             </Component>
-            <Component class="javax.swing.JRadioButton" name="allInOneNojRadioButton">
+            <Component class="javax.swing.JRadioButton" name="selectRevertjRadioButton">
               <Properties>
                 <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
-                  <ComponentRef name="allInOnejbuttonGroup"/>
+                  <ComponentRef name="langjbuttonGroup"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="&#x5426;"/>
-                <Property name="actionCommand" type="java.lang.String" value="NO"/>
+                <Property name="text" type="java.lang.String" value="&#x53cd;&#x9009;"/>
               </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="selectRevertjRadioButtonMouseClicked"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JRadioButton" name="selectNonejRadioButton">
+              <Properties>
+                <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+                  <ComponentRef name="langjbuttonGroup"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="&#x5168;&#x4e0d;&#x9009;"/>
+              </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="selectNonejRadioButtonMouseClicked"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
+        <Component class="javax.swing.JLabel" name="bottomStatusjLabel">
+          <Properties>
+            <Property name="focusable" type="boolean" value="false"/>
+            <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[520, 20]"/>
+            </Property>
+            <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[520, 20]"/>
+            </Property>
+            <Property name="name" type="java.lang.String" value="" noResource="true"/>
+          </Properties>
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+              <AbsoluteConstraints x="10" y="430" width="517" height="18"/>
+            </Constraint>
+          </Constraints>
+        </Component>
       </SubComponents>
     </Container>
   </SubComponents>

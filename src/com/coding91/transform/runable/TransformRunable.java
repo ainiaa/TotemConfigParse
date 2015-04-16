@@ -2,7 +2,7 @@ package com.coding91.transform.runable;
 
 import com.coding91.logic.ParseConfigLogic;
 import static com.coding91.logic.TransformConfigLogic.getModel;
-import static com.coding91.parser.ConfigParser.getLangs;
+import static com.coding91.parser.ConfigParser.getLangArray;
 import com.coding91.transform.thread.TransformCommonContentThread;
 import com.coding91.ui.NoticeMessageJFrame;
 import com.coding91.utils.DateTimeUtils;
@@ -54,7 +54,7 @@ public class TransformRunable implements Runnable {
 
             final Map<String, Map<String, List>> modelInfo = getModel(originContent[0], combineFields);
 
-            String[] langList = getLangs();
+            String[] langList = getLangArray();
             for (final String currentLang : langList) {
                 final String[][] singleLangContent;
                 if (combineFields != null) {

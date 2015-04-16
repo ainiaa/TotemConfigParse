@@ -28,7 +28,7 @@ public class ConfigParserDispatch {
         if (null != function) {
             switch (function) {
                 case "SHOP_ITEM": {
-                    //shopItem done
+                    //shopItem 
                     Map activityInfoParam = new HashMap();
                     activityInfoParam.put("contentKey", new String[]{"require_item_id", "require_item_num", "require_type", "require_id"});
                     activityInfoParam.put("contentSeparator", new String[]{","});
@@ -61,7 +61,7 @@ public class ConfigParserDispatch {
                     break;
                 }
                 case "ACTIVITY_LIB": {
-                    //activityLibraryInfo done
+                    //activityLibraryInfo 
                     Map activityInfoParam = new HashMap();
                     activityInfoParam.put("contentKey", new String[]{"activity_type", "activity_id"});
                     activityInfoParam.put("contentSeparator", new String[]{",", ":"});
@@ -82,7 +82,7 @@ public class ConfigParserDispatch {
                     break;
                 }
                 case "AVATAR_ITEMS": {
-                    //avatarItems done
+                    //avatarItems 
                     Map suiteArrayParam = new HashMap();
                     suiteArrayParam.put("contentKey", new String[]{});
                     suiteArrayParam.put("contentSeparator", new String[]{","});
@@ -97,7 +97,7 @@ public class ConfigParserDispatch {
                     break;
                 }
                 case "FEED_INFO": {
-                    //feedInfo done
+                    //feedInfo 
                     fileName = "feedInfo";
                     idField = "feed_id";
                     Map<String, String> fieldDefaultPair = FileUtils.loadFieldDefaultValueProperty("resources/data/config/defaultvalue/feedInfo.properties");
@@ -107,7 +107,7 @@ public class ConfigParserDispatch {
                     break;
                 }
                 case "GOODS_ORDER": {
-                    //goodsOrder done
+                    //goodsOrder 
                     fileName = "goodsOrder";
                     idField = "id";
                     Map<String, String> fieldDefaultPair = FileUtils.loadFieldDefaultValueProperty("resources/data/config/defaultvalue/goodsOrder.properties");
@@ -117,7 +117,7 @@ public class ConfigParserDispatch {
                     break;
                 }
                 case "REQUEST_INFO": {
-                    //requestInfo done
+                    //requestInfo 
                     fileName = "requestInfo";
                     idField = "request_id";
                     Map<String, String> fieldDefaultPair = FileUtils.loadFieldDefaultValueProperty("resources/data/config/defaultvalue/requestInfo.properties");
@@ -127,7 +127,7 @@ public class ConfigParserDispatch {
                     break;
                 }
                 case "BINDING_RECIPE": {
-                    //bindingRecipe done
+                    //bindingRecipe 
                     Map recipesParam = new HashMap();
                     recipesParam.put("contentKey", new String[]{});
                     recipesParam.put("contentSeparator", new String[]{"|", ","});
@@ -148,7 +148,7 @@ public class ConfigParserDispatch {
                     break;
                 }
                 case "GAME": {
-                    //game done
+                    //game 
                     fileName = "game";
                     Map randomShelfProductListParam = new HashMap();
                     randomShelfProductListParam.put("contentKey", new String[]{});
@@ -168,7 +168,7 @@ public class ConfigParserDispatch {
                     break;
                 }
                 case "DESSERT_INFO": {
-                    //@dessertInfo done
+                    //@dessertInfo 
                     Map ingredientDataParam = new HashMap();
                     ingredientDataParam.put("contentKey", new String[]{"ingredient_id", "ingredient_num", "require_type", "require_id", "is_skippable"});
                     ingredientDataParam.put("contentSeparator", new String[]{",", ":"});
@@ -207,7 +207,7 @@ public class ConfigParserDispatch {
                     break;
                 }
                 case "GIFT_PACKAGE": {
-                    //gift package
+                    //gift package 
                     Map fixedDataParam = new HashMap();
                     fixedDataParam.put("contentKey", new String[]{});
                     fixedDataParam.put("contentSeparator", new String[]{",", ":"});
@@ -222,7 +222,7 @@ public class ConfigParserDispatch {
                     break;
                 }
                 case "MISSION_INFO": {
-                    //mission Info done
+                    //mission Info 
 
                     Map rewardDataParam = new HashMap();
                     rewardDataParam.put("contentKey", new String[]{});
@@ -251,6 +251,15 @@ public class ConfigParserDispatch {
                     
                     fileName = "missionTrigger";
                     TransformConfigLogic.transformMissionTriggerContent(configFilePath, outputPath, fileName, sheetName);
+                    break;
+                }
+                case "OBJ_ITEM":{
+                     //objItem 
+                    Map<String, String> fieldDefaultPair = FileUtils.loadFieldDefaultValueProperty("resources/data/config/defaultvalue/objItem.properties");
+                    extraParams.put("defaultValue", fieldDefaultPair);
+                    fileName = "objItem";
+                    idField = "item_id";
+                    TransformConfigLogic.transformCommonContent(configFilePath, outputPath, fileName, sheetName, idField, extraParams);
                     break;
                 }
             }

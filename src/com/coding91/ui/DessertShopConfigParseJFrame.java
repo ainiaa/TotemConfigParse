@@ -3,7 +3,9 @@ package com.coding91.ui;
 import com.coding91.parser.ConfigParserDispatch;
 import com.coding91.utils.FileUtils;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -36,7 +38,7 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         funcbuttonGroup = new javax.swing.ButtonGroup();
-        allInOnejbuttonGroup = new javax.swing.ButtonGroup();
+        langjbuttonGroup = new javax.swing.ButtonGroup();
         jLayeredPane = new javax.swing.JLayeredPane();
         funjPanel = new javax.swing.JPanel();
         shopObjItemjRadioButton = new javax.swing.JRadioButton();
@@ -50,6 +52,8 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
         missionInfojRadioButton = new javax.swing.JRadioButton();
         dessertInfojRadioButton = new javax.swing.JRadioButton();
         giftPackagejRadioButton = new javax.swing.JRadioButton();
+        objItemjRadioButton = new javax.swing.JRadioButton();
+        allInOneYesjRadioButton = new javax.swing.JRadioButton();
         selectConfgFilejPanel = new javax.swing.JPanel();
         configFilejLabel = new javax.swing.JLabel();
         configFilejTextField = new javax.swing.JTextField();
@@ -61,10 +65,17 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
         parsejButton = new javax.swing.JButton();
         closejButton = new javax.swing.JButton();
         dsParseConfjToolBar = new javax.swing.JToolBar();
-        bottomStatusjLabel = new javax.swing.JLabel();
         allInOnejPanel = new javax.swing.JPanel();
-        allInOneYesjRadioButton = new javax.swing.JRadioButton();
-        allInOneNojRadioButton = new javax.swing.JRadioButton();
+        langEnUsjCheckBox = new javax.swing.JCheckBox();
+        langFrFrjCheckBox = new javax.swing.JCheckBox();
+        langDeDejCheckBox = new javax.swing.JCheckBox();
+        langEsEsjCheckBox = new javax.swing.JCheckBox();
+        langZhTwjCheckBox = new javax.swing.JCheckBox();
+        langItItjCheckBox = new javax.swing.JCheckBox();
+        selectAlljRadioButton = new javax.swing.JRadioButton();
+        selectRevertjRadioButton = new javax.swing.JRadioButton();
+        selectNonejRadioButton = new javax.swing.JRadioButton();
+        bottomStatusjLabel = new javax.swing.JLabel();
         jMenuBar = new javax.swing.JMenuBar();
         filejMenu = new javax.swing.JMenu();
         settingjMenuItem = new javax.swing.JMenuItem();
@@ -119,6 +130,15 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
         giftPackagejRadioButton.setText("giftPackage");
         giftPackagejRadioButton.setActionCommand("GIFT_PACKAGE");
 
+        funcbuttonGroup.add(objItemjRadioButton);
+        objItemjRadioButton.setText("objItem");
+        objItemjRadioButton.setActionCommand("OBJ_ITEM");
+
+        funcbuttonGroup.add(allInOneYesjRadioButton);
+        allInOneYesjRadioButton.setSelected(true);
+        allInOneYesjRadioButton.setText("parse ALL");
+        allInOneYesjRadioButton.setActionCommand("YES");
+
         javax.swing.GroupLayout funjPanelLayout = new javax.swing.GroupLayout(funjPanel);
         funjPanel.setLayout(funjPanelLayout);
         funjPanelLayout.setHorizontalGroup(
@@ -127,7 +147,8 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
                 .addGroup(funjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(bindingRecipejRadioButton)
                     .addComponent(shopObjItemjRadioButton)
-                    .addComponent(giftPackagejRadioButton))
+                    .addComponent(giftPackagejRadioButton)
+                    .addComponent(allInOneYesjRadioButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(funjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(feedInfojRadioButton)
@@ -141,7 +162,8 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
                 .addGap(27, 27, 27)
                 .addGroup(funjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(gamejRadioButton)
-                    .addComponent(goodsOrderjRadioButton))
+                    .addComponent(goodsOrderjRadioButton)
+                    .addComponent(objItemjRadioButton))
                 .addContainerGap(63, Short.MAX_VALUE))
         );
         funjPanelLayout.setVerticalGroup(
@@ -149,10 +171,10 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
             .addGroup(funjPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(funjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(shopObjItemjRadioButton)
                     .addComponent(activityLibraryjRadioButton)
                     .addComponent(avatarItemsjRadioButton)
-                    .addComponent(goodsOrderjRadioButton))
+                    .addComponent(goodsOrderjRadioButton)
+                    .addComponent(allInOneYesjRadioButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(funjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(bindingRecipejRadioButton)
@@ -163,8 +185,11 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
                 .addGroup(funjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(missionInfojRadioButton)
                     .addComponent(dessertInfojRadioButton)
-                    .addComponent(giftPackagejRadioButton))
-                .addContainerGap(57, Short.MAX_VALUE))
+                    .addComponent(giftPackagejRadioButton)
+                    .addComponent(objItemjRadioButton))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(shopObjItemjRadioButton)
+                .addContainerGap(32, Short.MAX_VALUE))
         );
 
         jLayeredPane.add(funjPanel);
@@ -240,7 +265,7 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
         );
 
         jLayeredPane.add(selectConfgFilejPanel);
-        selectConfgFilejPanel.setBounds(10, 220, 520, 80);
+        selectConfgFilejPanel.setBounds(0, 260, 520, 80);
 
         operationjPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("操作"));
 
@@ -280,31 +305,88 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
         );
 
         jLayeredPane.add(operationjPanel);
-        operationjPanel.setBounds(10, 310, 520, 67);
+        operationjPanel.setBounds(0, 350, 520, 67);
 
         dsParseConfjToolBar.setRollover(true);
         dsParseConfjToolBar.setMaximumSize(new java.awt.Dimension(520, 22));
         dsParseConfjToolBar.setMinimumSize(new java.awt.Dimension(520, 22));
-
-        bottomStatusjLabel.setFocusable(false);
-        bottomStatusjLabel.setMaximumSize(new java.awt.Dimension(520, 20));
-        bottomStatusjLabel.setMinimumSize(new java.awt.Dimension(520, 20));
-        bottomStatusjLabel.setName(""); // NOI18N
-        dsParseConfjToolBar.add(bottomStatusjLabel);
-
         jLayeredPane.add(dsParseConfjToolBar);
-        dsParseConfjToolBar.setBounds(0, 380, 530, 20);
+        dsParseConfjToolBar.setBounds(0, 420, 530, 20);
 
-        allInOnejPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("一次性全转换"));
+        allInOnejPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("需要转换的语言"));
 
-        allInOnejbuttonGroup.add(allInOneYesjRadioButton);
-        allInOneYesjRadioButton.setSelected(true);
-        allInOneYesjRadioButton.setText("是");
-        allInOneYesjRadioButton.setActionCommand("YES");
+        langEnUsjCheckBox.setSelected(true);
+        langEnUsjCheckBox.setText("en_us");
+        langEnUsjCheckBox.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                langEnUsjCheckBoxMouseClicked(evt);
+            }
+        });
 
-        allInOnejbuttonGroup.add(allInOneNojRadioButton);
-        allInOneNojRadioButton.setText("否");
-        allInOneNojRadioButton.setActionCommand("NO");
+        langFrFrjCheckBox.setSelected(true);
+        langFrFrjCheckBox.setText("fr_fr");
+        langFrFrjCheckBox.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                langFrFrjCheckBoxMouseClicked(evt);
+            }
+        });
+
+        langDeDejCheckBox.setSelected(true);
+        langDeDejCheckBox.setText("de_de");
+        langDeDejCheckBox.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                langDeDejCheckBoxMouseClicked(evt);
+            }
+        });
+
+        langEsEsjCheckBox.setSelected(true);
+        langEsEsjCheckBox.setText("es_es");
+        langEsEsjCheckBox.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                langEsEsjCheckBoxMouseClicked(evt);
+            }
+        });
+
+        langZhTwjCheckBox.setSelected(true);
+        langZhTwjCheckBox.setText("zh_tw");
+        langZhTwjCheckBox.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                langZhTwjCheckBoxMouseClicked(evt);
+            }
+        });
+
+        langItItjCheckBox.setSelected(true);
+        langItItjCheckBox.setText("it_it");
+        langItItjCheckBox.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                langItItjCheckBoxMouseClicked(evt);
+            }
+        });
+
+        langjbuttonGroup.add(selectAlljRadioButton);
+        selectAlljRadioButton.setSelected(true);
+        selectAlljRadioButton.setText("全选");
+        selectAlljRadioButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                selectAlljRadioButtonMouseClicked(evt);
+            }
+        });
+
+        langjbuttonGroup.add(selectRevertjRadioButton);
+        selectRevertjRadioButton.setText("反选");
+        selectRevertjRadioButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                selectRevertjRadioButtonMouseClicked(evt);
+            }
+        });
+
+        langjbuttonGroup.add(selectNonejRadioButton);
+        selectNonejRadioButton.setText("全不选");
+        selectNonejRadioButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                selectNonejRadioButtonMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout allInOnejPanelLayout = new javax.swing.GroupLayout(allInOnejPanel);
         allInOnejPanel.setLayout(allInOnejPanelLayout);
@@ -312,22 +394,54 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
             allInOnejPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(allInOnejPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(allInOneYesjRadioButton, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(allInOneNojRadioButton)
-                .addContainerGap(410, Short.MAX_VALUE))
+                .addGroup(allInOnejPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(langEnUsjCheckBox)
+                    .addComponent(selectAlljRadioButton))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(allInOnejPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(allInOnejPanelLayout.createSequentialGroup()
+                        .addComponent(langDeDejCheckBox)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(langFrFrjCheckBox)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(langEsEsjCheckBox)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(langZhTwjCheckBox)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(langItItjCheckBox))
+                    .addGroup(allInOnejPanelLayout.createSequentialGroup()
+                        .addComponent(selectRevertjRadioButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(selectNonejRadioButton)))
+                .addContainerGap(168, Short.MAX_VALUE))
         );
         allInOnejPanelLayout.setVerticalGroup(
             allInOnejPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(allInOnejPanelLayout.createSequentialGroup()
                 .addGroup(allInOnejPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(allInOneYesjRadioButton)
-                    .addComponent(allInOneNojRadioButton))
-                .addGap(0, 13, Short.MAX_VALUE))
+                    .addComponent(langEnUsjCheckBox)
+                    .addComponent(langFrFrjCheckBox)
+                    .addComponent(langDeDejCheckBox)
+                    .addComponent(langEsEsjCheckBox)
+                    .addComponent(langItItjCheckBox)
+                    .addComponent(langZhTwjCheckBox))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 4, Short.MAX_VALUE)
+                .addGroup(allInOnejPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(selectAlljRadioButton)
+                    .addComponent(selectRevertjRadioButton)
+                    .addComponent(selectNonejRadioButton))
+                .addContainerGap())
         );
 
         jLayeredPane.add(allInOnejPanel);
-        allInOnejPanel.setBounds(10, 160, 520, 60);
+        allInOnejPanel.setBounds(10, 160, 520, 80);
+
+        bottomStatusjLabel.setFocusable(false);
+        bottomStatusjLabel.setMaximumSize(new java.awt.Dimension(520, 20));
+        bottomStatusjLabel.setMinimumSize(new java.awt.Dimension(520, 20));
+        bottomStatusjLabel.setName(""); // NOI18N
+        jLayeredPane.add(bottomStatusjLabel);
+        bottomStatusjLabel.setBounds(10, 430, 517, 18);
 
         filejMenu.setText("文件");
 
@@ -335,6 +449,11 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
         settingjMenuItem.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 settingjMenuItemMouseClicked(evt);
+            }
+        });
+        settingjMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                settingjMenuItemActionPerformed(evt);
             }
         });
         filejMenu.add(settingjMenuItem);
@@ -350,47 +469,114 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jLayeredPane, javax.swing.GroupLayout.PREFERRED_SIZE, 535, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jLayeredPane, javax.swing.GroupLayout.DEFAULT_SIZE, 535, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jLayeredPane, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLayeredPane, javax.swing.GroupLayout.PREFERRED_SIZE, 448, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private static List<String> langList;
+    public static final int LANG_COUNT_MIX = 0;
+    public static final int LANG_COUNT_MAX = 6;
+    private static int selectedCheckboxCount = LANG_COUNT_MAX;
+
+    public List<String> getLangList() {
+        if (null == langList) {
+            langList = new ArrayList<>();
+            if (langEnUsjCheckBox.isSelected()) {
+                langList.add("en_us");
+            }
+            if (langDeDejCheckBox.isSelected()) {
+                langList.add("de_de");
+            }
+            if (langFrFrjCheckBox.isSelected()) {
+                langList.add("fr_fr");
+            }
+            if (langEsEsjCheckBox.isSelected()) {
+                langList.add("es_es");
+            }
+            if (langZhTwjCheckBox.isSelected()) {
+                langList.add("zh_tw");
+            }
+            if (langItItjCheckBox.isSelected()) {
+                langList.add("it_it");
+            }
+        }
+        return langList;
+    }
+
+    private void changeFunctionButtonStatus() {
+        langjbuttonGroup.clearSelection();
+        if (selectedCheckboxCount == LANG_COUNT_MIX) {
+            selectNonejRadioButton.setSelected(true);
+        } else if (selectedCheckboxCount == LANG_COUNT_MAX) {
+            selectAlljRadioButton.setSelected(true);
+        }
+    }
+
+    private int calcCheckBoxCount(int offset) {
+        selectedCheckboxCount += offset;
+        if (selectedCheckboxCount <= LANG_COUNT_MIX) {
+            selectedCheckboxCount = LANG_COUNT_MIX;
+        } else if (selectedCheckboxCount >= LANG_COUNT_MAX) {
+            selectedCheckboxCount = LANG_COUNT_MAX;
+        }
+        return selectedCheckboxCount;
+    }
+
+    private int calcCheckBoxCount() {
+        selectedCheckboxCount = 0;
+        if (langEnUsjCheckBox.isSelected()) {
+            selectedCheckboxCount += 1;
+        }
+        if (langDeDejCheckBox.isSelected()) {
+            selectedCheckboxCount += 1;
+        }
+        if (langFrFrjCheckBox.isSelected()) {
+            selectedCheckboxCount += 1;
+        }
+        if (langEsEsjCheckBox.isSelected()) {
+            selectedCheckboxCount += 1;
+        }
+        if (langZhTwjCheckBox.isSelected()) {
+            selectedCheckboxCount += 1;
+        }
+        if (langItItjCheckBox.isSelected()) {
+            selectedCheckboxCount += 1;
+        }
+
+        return selectedCheckboxCount;
+    }
+
+
     private void parsejButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_parsejButtonMouseClicked
 //        long startTime = System.currentTimeMillis();
         ControllerJFrame.showNoticeMessageJFrame();
 
-        String allInOneFunc = "NO";
-        if (allInOnejbuttonGroup.getSelection() != null) {
-            allInOneFunc = allInOnejbuttonGroup.getSelection().getActionCommand();
+        String function = "";
+        if (funcbuttonGroup.getSelection() != null) {
+            function = funcbuttonGroup.getSelection().getActionCommand();
         }
 
         String msg = null;
-        if ("YES".equals(allInOneFunc)) {//全部转换
+        if ("YES".equals(function)) {//全部转换
             //配置文件
             String configFilePath = configFilejTextField.getText();
             //输出路径
             String outputPath = outputjTextField.getText();
             Map<String, String> funcMap = initFuncList();
             funcMap.entrySet().stream().forEach((entry) -> {
-                String function = entry.getKey();
+                String currentFunction = entry.getKey();
                 String excelFileName = entry.getValue();
-                ConfigParserDispatch.transformSingleExcel(function, configFilePath + "/" + excelFileName, outputPath);
+                ConfigParserDispatch.transformSingleExcel(currentFunction, configFilePath + "/" + excelFileName, outputPath);
             });
         } else {//转换某一个配置项
-            String function = "";
-            if (funcbuttonGroup.getSelection() != null) {
-                function = funcbuttonGroup.getSelection().getActionCommand();
-            }
-
             //配置文件
             String configFilePath = configFilejTextField.getText();
             //输出路径
@@ -431,6 +617,7 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
         funcList.put("GIFT_PACKAGE", "giftPackage.xls");
         funcList.put("DESSERT_INFO", "dessertInfo.xls");
         funcList.put("MISSION_INFO", "missionInfo.xls");
+        funcList.put("OBJ_ITEM", "objItem.xls");
         return funcList;
     }
 
@@ -498,6 +685,84 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_configFilejTextFieldMouseClicked
 
+    private void settingjMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_settingjMenuItemActionPerformed
+        NoticeMessageJFrame.showMessageDialogMessage("edit");
+    }//GEN-LAST:event_settingjMenuItemActionPerformed
+
+    private void selectNonejRadioButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_selectNonejRadioButtonMouseClicked
+        langEnUsjCheckBox.setSelected(false);
+        langDeDejCheckBox.setSelected(false);
+        langFrFrjCheckBox.setSelected(false);
+        langEsEsjCheckBox.setSelected(false);
+        langZhTwjCheckBox.setSelected(false);
+        langItItjCheckBox.setSelected(false);
+        calcCheckBoxCount(-LANG_COUNT_MAX);
+    }//GEN-LAST:event_selectNonejRadioButtonMouseClicked
+
+    /**
+     * 反选
+     *
+     * @param evt
+     */
+    private void selectRevertjRadioButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_selectRevertjRadioButtonMouseClicked
+        langEnUsjCheckBox.setSelected(!langEnUsjCheckBox.isSelected());
+        langDeDejCheckBox.setSelected(!langDeDejCheckBox.isSelected());
+        langFrFrjCheckBox.setSelected(!langFrFrjCheckBox.isSelected());
+        langEsEsjCheckBox.setSelected(!langEsEsjCheckBox.isSelected());
+        langZhTwjCheckBox.setSelected(!langZhTwjCheckBox.isSelected());
+        langItItjCheckBox.setSelected(!langItItjCheckBox.isSelected());
+        calcCheckBoxCount(LANG_COUNT_MAX - 2 * selectedCheckboxCount);
+    }//GEN-LAST:event_selectRevertjRadioButtonMouseClicked
+
+    /**
+     * 全选
+     *
+     * @param evt
+     */
+    private void selectAlljRadioButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_selectAlljRadioButtonMouseClicked
+        langEnUsjCheckBox.setSelected(true);
+        langDeDejCheckBox.setSelected(true);
+        langFrFrjCheckBox.setSelected(true);
+        langEsEsjCheckBox.setSelected(true);
+        langZhTwjCheckBox.setSelected(true);
+        langItItjCheckBox.setSelected(true);
+        calcCheckBoxCount(LANG_COUNT_MAX);
+    }//GEN-LAST:event_selectAlljRadioButtonMouseClicked
+
+    private void langEnUsjCheckBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_langEnUsjCheckBoxMouseClicked
+        langCheckBoxClicked(evt);
+    }//GEN-LAST:event_langEnUsjCheckBoxMouseClicked
+
+    private void langDeDejCheckBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_langDeDejCheckBoxMouseClicked
+        langCheckBoxClicked(evt);
+    }//GEN-LAST:event_langDeDejCheckBoxMouseClicked
+
+    private void langFrFrjCheckBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_langFrFrjCheckBoxMouseClicked
+        langCheckBoxClicked(evt);
+    }//GEN-LAST:event_langFrFrjCheckBoxMouseClicked
+
+    private void langEsEsjCheckBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_langEsEsjCheckBoxMouseClicked
+        langCheckBoxClicked(evt);
+    }//GEN-LAST:event_langEsEsjCheckBoxMouseClicked
+
+    private void langZhTwjCheckBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_langZhTwjCheckBoxMouseClicked
+        langCheckBoxClicked(evt);
+    }//GEN-LAST:event_langZhTwjCheckBoxMouseClicked
+
+    private void langItItjCheckBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_langItItjCheckBoxMouseClicked
+        langCheckBoxClicked(evt);
+    }//GEN-LAST:event_langItItjCheckBoxMouseClicked
+
+    private void langCheckBoxClicked(java.awt.event.MouseEvent evt) {
+        javax.swing.JCheckBox currentCheckBox = (javax.swing.JCheckBox) evt.getSource();
+        if (currentCheckBox.isSelected()) {
+            calcCheckBoxCount(1);
+        } else {
+            calcCheckBoxCount(-1);
+        }
+        changeFunctionButtonStatus();
+    }
+
     private static void showMessageDialogMessage(Exception ex) {
         String exMsg = ex.toString();
         JOptionPane.showMessageDialog(null, exMsg + new Throwable().getStackTrace()[1].toString(), "错误信息提示", JOptionPane.ERROR_MESSAGE);
@@ -508,10 +773,8 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JRadioButton activityLibraryjRadioButton;
-    private javax.swing.JRadioButton allInOneNojRadioButton;
     private javax.swing.JRadioButton allInOneYesjRadioButton;
     private javax.swing.JPanel allInOnejPanel;
-    private javax.swing.ButtonGroup allInOnejbuttonGroup;
     private javax.swing.JRadioButton avatarItemsjRadioButton;
     private javax.swing.JRadioButton bindingRecipejRadioButton;
     private javax.swing.JLabel bottomStatusjLabel;
@@ -531,14 +794,25 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
     private javax.swing.JRadioButton goodsOrderjRadioButton;
     private javax.swing.JLayeredPane jLayeredPane;
     private javax.swing.JMenuBar jMenuBar;
+    private javax.swing.JCheckBox langDeDejCheckBox;
+    private javax.swing.JCheckBox langEnUsjCheckBox;
+    private javax.swing.JCheckBox langEsEsjCheckBox;
+    private javax.swing.JCheckBox langFrFrjCheckBox;
+    private javax.swing.JCheckBox langItItjCheckBox;
+    private javax.swing.JCheckBox langZhTwjCheckBox;
+    private javax.swing.ButtonGroup langjbuttonGroup;
     private javax.swing.JRadioButton missionInfojRadioButton;
+    private javax.swing.JRadioButton objItemjRadioButton;
     private javax.swing.JPanel operationjPanel;
     private javax.swing.JButton outputjButton;
     private javax.swing.JLabel outputjLabel;
     private javax.swing.JTextField outputjTextField;
     private javax.swing.JButton parsejButton;
     private javax.swing.JRadioButton requestInfojRadioButton;
+    private javax.swing.JRadioButton selectAlljRadioButton;
     private javax.swing.JPanel selectConfgFilejPanel;
+    private javax.swing.JRadioButton selectNonejRadioButton;
+    private javax.swing.JRadioButton selectRevertjRadioButton;
     private javax.swing.JMenuItem settingjMenuItem;
     private javax.swing.JRadioButton shopObjItemjRadioButton;
     // End of variables declaration//GEN-END:variables

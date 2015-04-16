@@ -1,7 +1,7 @@
 package com.coding91.logic;
 
 import com.coding91.parser.BuildConfigContent;
-import static com.coding91.parser.ConfigParser.getLangs;
+import static com.coding91.parser.ConfigParser.getLangArray;
 import static com.coding91.parser.ConfigParser.showMessageDialogMessage;
 import com.coding91.transform.runable.TransformRunable;
 import com.coding91.ui.NoticeMessageJFrame;
@@ -42,7 +42,7 @@ public class TransformConfigLogic {
                     int sheetIndex = ExcelParserUtils.getSheetIndexBySheetName(configFilePath, sheetName);
                     final String[][] originContent = ExcelParserUtils.parseXls(configFilePath, sheetIndex, true);
 
-                    String[] langList = getLangs();
+                    String[] langList = getLangArray();
 
                     for (final String currentLang : langList) {
                         // start single lang 
@@ -154,7 +154,7 @@ public class TransformConfigLogic {
     public static Map getModel(String[] originSingleContent, Map<String, String[]> combineFields) {
         Map<String, List<Integer>> fieldIndex = new HashMap();
         Map<String, List<String>> fieldName = new HashMap();
-        String[] langList = getLangs();
+        String[] langList = getLangArray();
         List needSkipedFields = needSkipedFields(combineFields);
 
         for (String currentLang : langList) {

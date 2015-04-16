@@ -45,7 +45,7 @@ public class ConfigParser {
         return finalIndex;
     }
 
-    public static String[] getLangs() {
+    public static String[] getLangArray() {
         return new String[]{"zh_tw", "de_de", "fr_fr", "en_us", "es_es"};
     }
 
