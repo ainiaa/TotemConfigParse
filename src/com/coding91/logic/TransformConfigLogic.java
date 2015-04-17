@@ -1,9 +1,8 @@
 package com.coding91.logic;
 
 import com.coding91.parser.BuildConfigContent;
-import static com.coding91.parser.ConfigParser.getLangArray;
-import static com.coding91.parser.ConfigParser.showMessageDialogMessage;
 import com.coding91.transform.runable.TransformRunable;
+import com.coding91.ui.DessertShopConfigParseJFrame;
 import com.coding91.ui.NoticeMessageJFrame;
 import com.coding91.utils.DateTimeUtils;
 import com.coding91.utils.ExcelParserUtils;
@@ -42,7 +41,7 @@ public class TransformConfigLogic {
                     int sheetIndex = ExcelParserUtils.getSheetIndexBySheetName(configFilePath, sheetName);
                     final String[][] originContent = ExcelParserUtils.parseXls(configFilePath, sheetIndex, true);
 
-                    String[] langList = getLangArray();
+                    String[] langList = DessertShopConfigParseJFrame.getLangList().toArray(new String[]{}); 
 
                     for (final String currentLang : langList) {
                         // start single lang 
@@ -65,7 +64,7 @@ public class TransformConfigLogic {
                     NoticeMessageJFrame.noticeMessage("转换完成。耗时:" + DateTimeUtils.formatTimeDuration(diff));
 //                    ConfigParser.transformFinish("完成转换!");
                 } catch (IOException | BiffException ex) {
-                    showMessageDialogMessage(ex);
+                    NoticeMessageJFrame.showMessageDialogMessage(ex);
                 }
             }
         }).start();
@@ -106,9 +105,9 @@ public class TransformConfigLogic {
                         try {
                             FileUtils.writeToFile("<?php\r\n return " + singleItemInfo, descFile, "UTF-8");
                         } catch (FileNotFoundException ex) {
-                            showMessageDialogMessage(ex);
+                            NoticeMessageJFrame.showMessageDialogMessage(ex);
                         } catch (IOException ex) {
-                            showMessageDialogMessage(ex);
+                            NoticeMessageJFrame.showMessageDialogMessage(ex);
                         }
                         if (i == 1) {//第一行 没有必要添加\r\n
                             allContent.append(currentAllItemInfo);
@@ -154,7 +153,7 @@ public class TransformConfigLogic {
     public static Map getModel(String[] originSingleContent, Map<String, String[]> combineFields) {
         Map<String, List<Integer>> fieldIndex = new HashMap();
         Map<String, List<String>> fieldName = new HashMap();
-        String[] langList = getLangArray();
+        String[] langList = DessertShopConfigParseJFrame.getLangList().toArray(new String[]{});
         List needSkipedFields = needSkipedFields(combineFields);
 
         for (String currentLang : langList) {

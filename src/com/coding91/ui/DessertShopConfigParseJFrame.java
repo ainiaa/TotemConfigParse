@@ -25,6 +25,7 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
         Map<String, String> configMap = FileUtils.loadSetting("resources/data/setting.properties");
         configBaseDir = configMap.get("configBaseDir");
         outputDirectory = configMap.get("outputDirectory");
+        initFuncMap();
         initComponents();
     }
 
@@ -89,55 +90,120 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
         funcbuttonGroup.add(shopObjItemjRadioButton);
         shopObjItemjRadioButton.setText("shopItem");
         shopObjItemjRadioButton.setActionCommand("SHOP_ITEM");
+        shopObjItemjRadioButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                shopObjItemjRadioButtonMouseClicked(evt);
+            }
+        });
 
         funcbuttonGroup.add(activityLibraryjRadioButton);
         activityLibraryjRadioButton.setText("activityLibraryInfo");
         activityLibraryjRadioButton.setActionCommand("ACTIVITY_LIB");
+        activityLibraryjRadioButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                activityLibraryjRadioButtonMouseClicked(evt);
+            }
+        });
 
         funcbuttonGroup.add(avatarItemsjRadioButton);
         avatarItemsjRadioButton.setText("avatarItems");
         avatarItemsjRadioButton.setActionCommand("AVATAR_ITEMS");
+        avatarItemsjRadioButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                avatarItemsjRadioButtonMouseClicked(evt);
+            }
+        });
 
         funcbuttonGroup.add(bindingRecipejRadioButton);
         bindingRecipejRadioButton.setText("bindingRecipe");
         bindingRecipejRadioButton.setActionCommand("BINDING_RECIPE");
+        bindingRecipejRadioButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                bindingRecipejRadioButtonMouseClicked(evt);
+            }
+        });
 
         funcbuttonGroup.add(feedInfojRadioButton);
         feedInfojRadioButton.setText("feedInfo");
         feedInfojRadioButton.setActionCommand("FEED_INFO");
+        feedInfojRadioButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                feedInfojRadioButtonMouseClicked(evt);
+            }
+        });
 
         funcbuttonGroup.add(goodsOrderjRadioButton);
         goodsOrderjRadioButton.setText("goodsOrder");
         goodsOrderjRadioButton.setActionCommand("GOODS_ORDER");
+        goodsOrderjRadioButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                goodsOrderjRadioButtonMouseClicked(evt);
+            }
+        });
 
         funcbuttonGroup.add(requestInfojRadioButton);
         requestInfojRadioButton.setText("requestInfo");
         requestInfojRadioButton.setActionCommand("REQUEST_INFO");
+        requestInfojRadioButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                requestInfojRadioButtonMouseClicked(evt);
+            }
+        });
 
         funcbuttonGroup.add(gamejRadioButton);
         gamejRadioButton.setText("game");
         gamejRadioButton.setActionCommand("GAME");
+        gamejRadioButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                gamejRadioButtonMouseClicked(evt);
+            }
+        });
 
         funcbuttonGroup.add(missionInfojRadioButton);
         missionInfojRadioButton.setText("missionInfo");
         missionInfojRadioButton.setActionCommand("MISSION_INFO");
+        missionInfojRadioButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                missionInfojRadioButtonMouseClicked(evt);
+            }
+        });
 
         funcbuttonGroup.add(dessertInfojRadioButton);
         dessertInfojRadioButton.setText("dessertInfo");
         dessertInfojRadioButton.setActionCommand("DESSERT_INFO");
+        dessertInfojRadioButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                dessertInfojRadioButtonMouseClicked(evt);
+            }
+        });
 
         funcbuttonGroup.add(giftPackagejRadioButton);
         giftPackagejRadioButton.setText("giftPackage");
         giftPackagejRadioButton.setActionCommand("GIFT_PACKAGE");
+        giftPackagejRadioButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                giftPackagejRadioButtonMouseClicked(evt);
+            }
+        });
 
         funcbuttonGroup.add(objItemjRadioButton);
         objItemjRadioButton.setText("objItem");
         objItemjRadioButton.setActionCommand("OBJ_ITEM");
+        objItemjRadioButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                objItemjRadioButtonMouseClicked(evt);
+            }
+        });
 
         funcbuttonGroup.add(allInOneYesjRadioButton);
         allInOneYesjRadioButton.setSelected(true);
         allInOneYesjRadioButton.setText("parse ALL");
         allInOneYesjRadioButton.setActionCommand("YES");
+        allInOneYesjRadioButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                allInOneYesjRadioButtonMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout funjPanelLayout = new javax.swing.GroupLayout(funjPanel);
         funjPanel.setLayout(funjPanelLayout);
@@ -486,7 +552,7 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
     public static final int LANG_COUNT_MAX = 6;
     private static int selectedCheckboxCount = LANG_COUNT_MAX;
 
-    public List<String> getLangList() {
+    private void initLangList() {
         if (null == langList) {
             langList = new ArrayList<>();
             if (langEnUsjCheckBox.isSelected()) {
@@ -508,12 +574,15 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
                 langList.add("it_it");
             }
         }
-        return langList;
+    }
+
+    public static List<String> getLangList() {
+        return DessertShopConfigParseJFrame.langList;
     }
 
     private void changeFunctionButtonStatus() {
         langjbuttonGroup.clearSelection();
-        if (selectedCheckboxCount == LANG_COUNT_MIX) {
+        if (selectedCheckboxCount == 0) {
             selectNonejRadioButton.setSelected(true);
         } else if (selectedCheckboxCount == LANG_COUNT_MAX) {
             selectAlljRadioButton.setSelected(true);
@@ -522,8 +591,8 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
 
     private int calcCheckBoxCount(int offset) {
         selectedCheckboxCount += offset;
-        if (selectedCheckboxCount <= LANG_COUNT_MIX) {
-            selectedCheckboxCount = LANG_COUNT_MIX;
+        if (selectedCheckboxCount <= 0) {
+            selectedCheckboxCount = 0;
         } else if (selectedCheckboxCount >= LANG_COUNT_MAX) {
             selectedCheckboxCount = LANG_COUNT_MAX;
         }
@@ -559,6 +628,11 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
 //        long startTime = System.currentTimeMillis();
         ControllerJFrame.showNoticeMessageJFrame();
 
+        if (selectedCheckboxCount == 0) {
+            JOptionPane.showMessageDialog(null, "至少要选择一个语言", "信息提示", JOptionPane.ERROR_MESSAGE);
+            System.exit(0);
+        }
+
         String function = "";
         if (funcbuttonGroup.getSelection() != null) {
             function = funcbuttonGroup.getSelection().getActionCommand();
@@ -570,7 +644,7 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
             String configFilePath = configFilejTextField.getText();
             //输出路径
             String outputPath = outputjTextField.getText();
-            Map<String, String> funcMap = initFuncList();
+            initLangList();
             funcMap.entrySet().stream().forEach((entry) -> {
                 String currentFunction = entry.getKey();
                 String excelFileName = entry.getValue();
@@ -593,32 +667,32 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, msg, "信息提示", JOptionPane.ERROR_MESSAGE);
                 System.exit(0);
             }
+            initLangList();
             ConfigParserDispatch.transformSingleExcel(function, configFilePath, outputPath);
         }
 
-//        long endTime = System.currentTimeMillis();
-//        long diff = endTime - startTime;
-//        NoticeMessageJFrame.noticeMessage("所有文件转换完成。耗时:" + DateTimeUtils.formatTimeDuration(diff));
-//        NoticeMessageJFrame.showMessageDialogMessage("完成转换!");
-//        JOptionPane.showMessageDialog(null, "转换成功");
-//        this.dispose();
     }//GEN-LAST:event_parsejButtonMouseClicked
 
-    private Map<String, String> initFuncList() {
-        Map funcList = new HashMap();
-        funcList.put("SHOP_ITEM", "shopItem.xls");
-        funcList.put("ACTIVITY_LIB", "activityLibraryInfo.xls");
-        funcList.put("AVATAR_ITEMS", "avatarItems.xls");
-        funcList.put("GOODS_ORDER", "goodsOrder.xls");
-        funcList.put("BINDING_RECIPE", "bindingRecipe.xls");
-        funcList.put("FEED_INFO", "feedInfo.xls");
-        funcList.put("REQUEST_INFO", "requestInfo.xls");
-        funcList.put("GAME", "game.xls");
-        funcList.put("GIFT_PACKAGE", "giftPackage.xls");
-        funcList.put("DESSERT_INFO", "dessertInfo.xls");
-        funcList.put("MISSION_INFO", "missionInfo.xls");
-        funcList.put("OBJ_ITEM", "objItem.xls");
-        return funcList;
+    private static Map<String, String> funcMap;
+
+    private Map<String, String> initFuncMap() {
+        if (null == funcMap) {
+            funcMap = new HashMap();
+            funcMap.put("SHOP_ITEM", "shopItem.xls");
+            funcMap.put("ACTIVITY_LIB", "activityLibraryInfo.xls");
+            funcMap.put("AVATAR_ITEMS", "avatarItems.xls");
+            funcMap.put("GOODS_ORDER", "goodsOrder.xls");
+            funcMap.put("BINDING_RECIPE", "bindingRecipe.xls");
+            funcMap.put("FEED_INFO", "feedInfo.xls");
+            funcMap.put("REQUEST_INFO", "requestInfo.xls");
+            funcMap.put("GAME", "game.xls");
+            funcMap.put("GIFT_PACKAGE", "giftPackage.xls");
+            funcMap.put("DESSERT_INFO", "dessertInfo.xls");
+            funcMap.put("MISSION_INFO", "missionInfo.xls");
+            funcMap.put("OBJ_ITEM", "objItem.xls");
+        }
+
+        return funcMap;
     }
 
     public static String getLineInfo() {
@@ -643,11 +717,11 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
 
     public void transformFinish(String message) {
         JOptionPane.showMessageDialog(null, message);
-        this.dispose();
+        ControllerJFrame.dispose();
     }
 
     private void closejButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_closejButtonMouseClicked
-        this.dispose();
+        ControllerJFrame.dispose();
     }//GEN-LAST:event_closejButtonMouseClicked
 
     private void settingjMenuItemMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_settingjMenuItemMouseClicked
@@ -752,6 +826,66 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
     private void langItItjCheckBoxMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_langItItjCheckBoxMouseClicked
         langCheckBoxClicked(evt);
     }//GEN-LAST:event_langItItjCheckBoxMouseClicked
+
+    private void allInOneYesjRadioButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_allInOneYesjRadioButtonMouseClicked
+        setConfigFilejTextField(evt);
+    }//GEN-LAST:event_allInOneYesjRadioButtonMouseClicked
+
+    private void activityLibraryjRadioButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_activityLibraryjRadioButtonMouseClicked
+        setConfigFilejTextField(evt);
+    }//GEN-LAST:event_activityLibraryjRadioButtonMouseClicked
+
+    private void avatarItemsjRadioButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_avatarItemsjRadioButtonMouseClicked
+        setConfigFilejTextField(evt);
+    }//GEN-LAST:event_avatarItemsjRadioButtonMouseClicked
+
+    private void goodsOrderjRadioButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_goodsOrderjRadioButtonMouseClicked
+        setConfigFilejTextField(evt);
+    }//GEN-LAST:event_goodsOrderjRadioButtonMouseClicked
+
+    private void bindingRecipejRadioButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bindingRecipejRadioButtonMouseClicked
+        setConfigFilejTextField(evt);
+    }//GEN-LAST:event_bindingRecipejRadioButtonMouseClicked
+
+    private void feedInfojRadioButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_feedInfojRadioButtonMouseClicked
+        setConfigFilejTextField(evt);
+    }//GEN-LAST:event_feedInfojRadioButtonMouseClicked
+
+    private void requestInfojRadioButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_requestInfojRadioButtonMouseClicked
+        setConfigFilejTextField(evt);
+    }//GEN-LAST:event_requestInfojRadioButtonMouseClicked
+
+    private void gamejRadioButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_gamejRadioButtonMouseClicked
+        setConfigFilejTextField(evt);
+    }//GEN-LAST:event_gamejRadioButtonMouseClicked
+
+    private void giftPackagejRadioButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_giftPackagejRadioButtonMouseClicked
+        setConfigFilejTextField(evt);
+    }//GEN-LAST:event_giftPackagejRadioButtonMouseClicked
+
+    private void dessertInfojRadioButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dessertInfojRadioButtonMouseClicked
+        setConfigFilejTextField(evt);
+    }//GEN-LAST:event_dessertInfojRadioButtonMouseClicked
+
+    private void missionInfojRadioButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_missionInfojRadioButtonMouseClicked
+        setConfigFilejTextField(evt);
+    }//GEN-LAST:event_missionInfojRadioButtonMouseClicked
+
+    private void objItemjRadioButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_objItemjRadioButtonMouseClicked
+        setConfigFilejTextField(evt);
+    }//GEN-LAST:event_objItemjRadioButtonMouseClicked
+
+    private void shopObjItemjRadioButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_shopObjItemjRadioButtonMouseClicked
+        setConfigFilejTextField(evt);
+    }//GEN-LAST:event_shopObjItemjRadioButtonMouseClicked
+
+    private void setConfigFilejTextField(java.awt.event.MouseEvent evt) {
+        javax.swing.JRadioButton currentJradioButton = (javax.swing.JRadioButton) evt.getSource();
+        String cmd = currentJradioButton.getActionCommand();
+        if (funcMap.containsKey(cmd)) {
+            configFilejTextField.setText(configBaseDir + "\\" + funcMap.get(cmd));
+        }
+    }
 
     private void langCheckBoxClicked(java.awt.event.MouseEvent evt) {
         javax.swing.JCheckBox currentCheckBox = (javax.swing.JCheckBox) evt.getSource();

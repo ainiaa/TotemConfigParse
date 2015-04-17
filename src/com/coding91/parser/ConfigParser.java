@@ -48,10 +48,4 @@ public class ConfigParser {
     public static String[] getLangArray() {
         return new String[]{"zh_tw", "de_de", "fr_fr", "en_us", "es_es"};
     }
-
-    public static void showMessageDialogMessage(Exception ex) {
-        String exMsg = ex.toString();
-        JOptionPane.showMessageDialog(null, exMsg + new Throwable().getStackTrace()[1].toString(), "错误信息提示", JOptionPane.ERROR_MESSAGE);
-    }
-
 }

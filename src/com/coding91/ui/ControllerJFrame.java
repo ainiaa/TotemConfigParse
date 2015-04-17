@@ -12,8 +12,8 @@ public class ControllerJFrame {
     private static NoticeMessageJFrame noticeMessageJFrame;
 
     public static void main(String[] args) {
-         try {
-             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 //            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
 //                if ("Nimbus".equals(info.getName())) {
 //                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
@@ -24,11 +24,17 @@ public class ControllerJFrame {
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             NoticeMessageJFrame.noticeMessage(ex.getClass() + ":" + ex.getMessage());
         }
-         
+
         dessertShopConfigParseJFrame = new DessertShopConfigParseJFrame();
         noticeMessageJFrame = new NoticeMessageJFrame();
         dessertShopConfigParseJFrame.setVisible(true);
         dessertShopConfigParseJFrame.setLocationRelativeTo(null);
+    }
+
+    public static void dispose() {
+        dessertShopConfigParseJFrame.dispose();
+        noticeMessageJFrame.dispose();
+        System.exit(0);
     }
 
     public static void showNoticeMessageJFrame() {

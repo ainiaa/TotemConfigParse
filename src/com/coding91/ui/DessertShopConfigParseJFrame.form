@@ -161,6 +161,9 @@
                 <Property name="text" type="java.lang.String" value="shopItem"/>
                 <Property name="actionCommand" type="java.lang.String" value="SHOP_ITEM"/>
               </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="shopObjItemjRadioButtonMouseClicked"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JRadioButton" name="activityLibraryjRadioButton">
               <Properties>
@@ -170,6 +173,9 @@
                 <Property name="text" type="java.lang.String" value="activityLibraryInfo"/>
                 <Property name="actionCommand" type="java.lang.String" value="ACTIVITY_LIB"/>
               </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="activityLibraryjRadioButtonMouseClicked"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JRadioButton" name="avatarItemsjRadioButton">
               <Properties>
@@ -179,6 +185,9 @@
                 <Property name="text" type="java.lang.String" value="avatarItems"/>
                 <Property name="actionCommand" type="java.lang.String" value="AVATAR_ITEMS"/>
               </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="avatarItemsjRadioButtonMouseClicked"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JRadioButton" name="bindingRecipejRadioButton">
               <Properties>
@@ -188,6 +197,9 @@
                 <Property name="text" type="java.lang.String" value="bindingRecipe"/>
                 <Property name="actionCommand" type="java.lang.String" value="BINDING_RECIPE"/>
               </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="bindingRecipejRadioButtonMouseClicked"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JRadioButton" name="feedInfojRadioButton">
               <Properties>
@@ -197,6 +209,9 @@
                 <Property name="text" type="java.lang.String" value="feedInfo"/>
                 <Property name="actionCommand" type="java.lang.String" value="FEED_INFO"/>
               </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="feedInfojRadioButtonMouseClicked"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JRadioButton" name="goodsOrderjRadioButton">
               <Properties>
@@ -206,6 +221,9 @@
                 <Property name="text" type="java.lang.String" value="goodsOrder"/>
                 <Property name="actionCommand" type="java.lang.String" value="GOODS_ORDER"/>
               </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="goodsOrderjRadioButtonMouseClicked"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JRadioButton" name="requestInfojRadioButton">
               <Properties>
@@ -215,6 +233,9 @@
                 <Property name="text" type="java.lang.String" value="requestInfo"/>
                 <Property name="actionCommand" type="java.lang.String" value="REQUEST_INFO"/>
               </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="requestInfojRadioButtonMouseClicked"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JRadioButton" name="gamejRadioButton">
               <Properties>
@@ -224,6 +245,9 @@
                 <Property name="text" type="java.lang.String" value="game"/>
                 <Property name="actionCommand" type="java.lang.String" value="GAME"/>
               </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="gamejRadioButtonMouseClicked"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JRadioButton" name="missionInfojRadioButton">
               <Properties>
@@ -233,6 +257,9 @@
                 <Property name="text" type="java.lang.String" value="missionInfo"/>
                 <Property name="actionCommand" type="java.lang.String" value="MISSION_INFO"/>
               </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="missionInfojRadioButtonMouseClicked"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JRadioButton" name="dessertInfojRadioButton">
               <Properties>
@@ -242,6 +269,9 @@
                 <Property name="text" type="java.lang.String" value="dessertInfo"/>
                 <Property name="actionCommand" type="java.lang.String" value="DESSERT_INFO"/>
               </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="dessertInfojRadioButtonMouseClicked"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JRadioButton" name="giftPackagejRadioButton">
               <Properties>
@@ -251,6 +281,9 @@
                 <Property name="text" type="java.lang.String" value="giftPackage"/>
                 <Property name="actionCommand" type="java.lang.String" value="GIFT_PACKAGE"/>
               </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="giftPackagejRadioButtonMouseClicked"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JRadioButton" name="objItemjRadioButton">
               <Properties>
@@ -260,6 +293,9 @@
                 <Property name="text" type="java.lang.String" value="objItem"/>
                 <Property name="actionCommand" type="java.lang.String" value="OBJ_ITEM"/>
               </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="objItemjRadioButtonMouseClicked"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JRadioButton" name="allInOneYesjRadioButton">
               <Properties>
@@ -270,6 +306,9 @@
                 <Property name="text" type="java.lang.String" value="parse ALL"/>
                 <Property name="actionCommand" type="java.lang.String" value="YES"/>
               </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="allInOneYesjRadioButtonMouseClicked"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
