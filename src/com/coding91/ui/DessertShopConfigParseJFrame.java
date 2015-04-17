@@ -626,11 +626,9 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
 
     private void parsejButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_parsejButtonMouseClicked
 //        long startTime = System.currentTimeMillis();
-        ControllerJFrame.showNoticeMessageJFrame();
-
         if (selectedCheckboxCount == 0) {
             JOptionPane.showMessageDialog(null, "至少要选择一个语言", "信息提示", JOptionPane.ERROR_MESSAGE);
-            System.exit(0);
+            return;
         }
 
         String function = "";
@@ -638,6 +636,10 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
             function = funcbuttonGroup.getSelection().getActionCommand();
         }
 
+        ControllerJFrame.showNoticeMessageJFrame();
+        
+        NoticeMessageJFrame.noticeMessage("开始转换,请耐心等待。。。。");
+        
         String msg = null;
         if ("YES".equals(function)) {//全部转换
             //配置文件
@@ -670,7 +672,6 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
             initLangList();
             ConfigParserDispatch.transformSingleExcel(function, configFilePath, outputPath);
         }
-
     }//GEN-LAST:event_parsejButtonMouseClicked
 
     private static Map<String, String> funcMap;
