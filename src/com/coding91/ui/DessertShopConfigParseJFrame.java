@@ -884,6 +884,8 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
         String cmd = currentJradioButton.getActionCommand();
         if (funcMap.containsKey(cmd)) {
             configFilejTextField.setText(configBaseDir + "\\" + funcMap.get(cmd));
+        } else {
+            configFilejTextField.setText(configBaseDir);
         }
     }
 
