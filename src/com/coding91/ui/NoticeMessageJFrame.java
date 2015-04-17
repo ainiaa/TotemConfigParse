@@ -1,5 +1,6 @@
 package com.coding91.ui;
 
+import java.awt.Toolkit;
 import java.io.IOException;
 import javax.swing.JOptionPane;
 
@@ -10,6 +11,8 @@ import javax.swing.JOptionPane;
 public class NoticeMessageJFrame extends javax.swing.JFrame {
 
     public NoticeMessageJFrame() {
+        this.setIconImage(Toolkit.getDefaultToolkit().getImage(
+                getClass().getClassLoader().getResource("resources/images/sync.png")));//这个不能以 '/'开头
         initComponents();
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);//点击窗口的关闭 退出程序
         try {

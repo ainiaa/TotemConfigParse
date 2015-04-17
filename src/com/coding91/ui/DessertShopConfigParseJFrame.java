@@ -2,6 +2,7 @@ package com.coding91.ui;
 
 import com.coding91.parser.ConfigParserDispatch;
 import com.coding91.utils.FileUtils;
+import java.awt.Toolkit;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,8 +26,12 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
         Map<String, String> configMap = FileUtils.loadSetting("resources/data/setting.properties");
         configBaseDir = configMap.get("configBaseDir");
         outputDirectory = configMap.get("outputDirectory");
+        this.setIconImage(Toolkit.getDefaultToolkit().getImage(
+                getClass().getClassLoader().getResource("resources/images/sync.png")));//这个不能以 '/'开头
         initFuncMap();
         initComponents();
+        dsParseConfjToolBar.setToolTipText("@Jeff.Liu 2015-04-17");
+        bottomStatusjLabel.setText("@Jeff.Liu 2015-04-17");
     }
 
     /**
@@ -66,6 +71,7 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
         parsejButton = new javax.swing.JButton();
         closejButton = new javax.swing.JButton();
         dsParseConfjToolBar = new javax.swing.JToolBar();
+        bottomStatusjLabel = new javax.swing.JLabel();
         allInOnejPanel = new javax.swing.JPanel();
         langEnUsjCheckBox = new javax.swing.JCheckBox();
         langFrFrjCheckBox = new javax.swing.JCheckBox();
@@ -76,7 +82,6 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
         selectAlljRadioButton = new javax.swing.JRadioButton();
         selectRevertjRadioButton = new javax.swing.JRadioButton();
         selectNonejRadioButton = new javax.swing.JRadioButton();
-        bottomStatusjLabel = new javax.swing.JLabel();
         jMenuBar = new javax.swing.JMenuBar();
         filejMenu = new javax.swing.JMenu();
         settingjMenuItem = new javax.swing.JMenuItem();
@@ -376,6 +381,14 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
         dsParseConfjToolBar.setRollover(true);
         dsParseConfjToolBar.setMaximumSize(new java.awt.Dimension(520, 22));
         dsParseConfjToolBar.setMinimumSize(new java.awt.Dimension(520, 22));
+
+        bottomStatusjLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        bottomStatusjLabel.setFocusable(false);
+        bottomStatusjLabel.setMaximumSize(new java.awt.Dimension(520, 20));
+        bottomStatusjLabel.setMinimumSize(new java.awt.Dimension(520, 20));
+        bottomStatusjLabel.setName(""); // NOI18N
+        dsParseConfjToolBar.add(bottomStatusjLabel);
+
         jLayeredPane.add(dsParseConfjToolBar);
         dsParseConfjToolBar.setBounds(0, 420, 530, 20);
 
@@ -502,13 +515,6 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
         jLayeredPane.add(allInOnejPanel);
         allInOnejPanel.setBounds(10, 160, 520, 80);
 
-        bottomStatusjLabel.setFocusable(false);
-        bottomStatusjLabel.setMaximumSize(new java.awt.Dimension(520, 20));
-        bottomStatusjLabel.setMinimumSize(new java.awt.Dimension(520, 20));
-        bottomStatusjLabel.setName(""); // NOI18N
-        jLayeredPane.add(bottomStatusjLabel);
-        bottomStatusjLabel.setBounds(10, 430, 517, 18);
-
         filejMenu.setText("文件");
 
         settingjMenuItem.setText("设置");
@@ -535,7 +541,7 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLayeredPane, javax.swing.GroupLayout.DEFAULT_SIZE, 535, Short.MAX_VALUE)
+            .addComponent(jLayeredPane, javax.swing.GroupLayout.PREFERRED_SIZE, 535, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
