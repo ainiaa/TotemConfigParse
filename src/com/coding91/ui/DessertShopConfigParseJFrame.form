@@ -304,7 +304,7 @@
                 </Property>
                 <Property name="selected" type="boolean" value="true"/>
                 <Property name="text" type="java.lang.String" value="parse ALL"/>
-                <Property name="actionCommand" type="java.lang.String" value="YES"/>
+                <Property name="actionCommand" type="java.lang.String" value="PARSE_ALL"/>
               </Properties>
               <Events>
                 <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="allInOneYesjRadioButtonMouseClicked"/>

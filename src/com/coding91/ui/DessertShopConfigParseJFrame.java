@@ -2,6 +2,7 @@ package com.coding91.ui;
 
 import com.coding91.parser.ConfigParserDispatch;
 import com.coding91.utils.FileUtils;
+import com.coding91.utils.MyFileFilter;
 import java.awt.Toolkit;
 import java.io.File;
 import java.util.ArrayList;
@@ -203,7 +204,7 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
         funcbuttonGroup.add(allInOneYesjRadioButton);
         allInOneYesjRadioButton.setSelected(true);
         allInOneYesjRadioButton.setText("parse ALL");
-        allInOneYesjRadioButton.setActionCommand("YES");
+        allInOneYesjRadioButton.setActionCommand("PARSE_ALL");
         allInOneYesjRadioButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 allInOneYesjRadioButtonMouseClicked(evt);
@@ -643,11 +644,11 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
         }
 
         ControllerJFrame.showNoticeMessageJFrame();
-        
+
         NoticeMessageJFrame.noticeMessage("开始转换,请耐心等待。。。。");
-        
+
         String msg = null;
-        if ("YES".equals(function)) {//全部转换
+        if ("PARSE_ALL".equals(function)) {//全部转换
             //配置文件
             String configFilePath = configFilejTextField.getText();
             //输出路径
@@ -756,12 +757,25 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
 
     private void configFilejTextFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_configFilejTextFieldMouseClicked
         File f = new File(configBaseDir);
-        JFileChooser jfc = new JFileChooser(f);
-        //        jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        JFileChooser fileChooser = new JFileChooser(f);
+        String function = "";
+        if (funcbuttonGroup.getSelection() != null) {
+            function = funcbuttonGroup.getSelection().getActionCommand();
+        }
+        if ("PARSE_ALL".equals(function)) {//全部转换,只需要选择文件夹就行了 否则要选择具体的文件
+            fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        } else {
+            MyFileFilter xlsFilter = new MyFileFilter(".xls", "xls文件(*.xls)");
+            MyFileFilter xlsxFilter = new MyFileFilter(".xlsx", "xlsx文件(*.xlsx)");
+            fileChooser.addChoosableFileFilter(xlsFilter);
+            fileChooser.addChoosableFileFilter(xlsxFilter);
+            fileChooser.setAcceptAllFileFilterUsed(false);
+        }
+
         int result;
-        result = jfc.showOpenDialog(null);
+        result = fileChooser.showOpenDialog(null);
         if (result == JFileChooser.APPROVE_OPTION) {
-            File file = jfc.getSelectedFile();
+            File file = fileChooser.getSelectedFile();
             configFilejTextField.setText(file.getPath());
         }
     }//GEN-LAST:event_configFilejTextFieldMouseClicked
