@@ -3,12 +3,14 @@ package com.coding91.logic;
 import static com.coding91.parser.BuildConfigContent.commonSingleFieldString;
 import static com.coding91.parser.BuildConfigContent.getDefaultValue;
 import static com.coding91.parser.BuildConfigContent.isContentEmpty;
+import static com.coding91.parser.BuildConfigContent.leadingString;
 import static com.coding91.parser.ConfigParser.getFieldIndexByFieldName;
 import com.coding91.utils.ArrayUtils;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  *
@@ -262,7 +264,7 @@ public class ParseConfigLogic {
         }
 
         StringBuilder finalContent = new StringBuilder();
-        finalContent.append("\r\narray(\r\n");
+        finalContent.append("\r\n").append(StringUtils.repeat(leadingString, index + 1)).append("array(\r\n");
         if (!fieldValue.isEmpty()) {//内容不为空
             String[] contentChunk = fieldValue.split("\\" + contentSeparator[index]);
             if (contentSeparator.length == index + 1) {//已经是最后一层了
@@ -281,14 +283,13 @@ public class ParseConfigLogic {
                         if (isContentEmpty(contentKey[i], content, defaultValueMap, globalDefaultValueMap)) {//为空
                             isContentNeedQuote = false;
                             String currentFieldContent = getDefaultValue(contentKey[i], defaultValueMap, globalDefaultValueMap);
-                            String currentContent = commonSingleFieldString(contentKey[i], currentFieldContent, "    ", isContentNeedQuote);
+                            String currentContent = commonSingleFieldString(contentKey[i], currentFieldContent, StringUtils.repeat(leadingString, index + 1), isContentNeedQuote);
                             finalContent.append(currentContent);
                         } else {
-                            String currentContent = commonSingleFieldString(contentKey[i], content, "", isContentNeedQuote);
+                            String currentContent = commonSingleFieldString(contentKey[i], content, StringUtils.repeat(leadingString, index + 1), isContentNeedQuote);
                             finalContent.append(currentContent);
                         }
 
-//                        finalContent.append(String.format("'%s' => '%s',\r\n", contentKey[i], content));
                     }
                 } else {//直接使用逗号分割放入array()中即可
                     for (int i = 0; i < contentChunk.length; i++) {
@@ -377,8 +378,7 @@ public class ParseConfigLogic {
      */
     private String parseGameRankScoreRewards(Map parseFunctionParam, String fieldName, String fieldValue) {
 
-        String leadingString = "    ";
-        String rewardStringFormat = "\r\n  %d => \r\n       array(\r\n        'itemId' => '%s',\r\n         'itemNum' => '%s',\r\n      ),";
+        String rewardStringFormat = "\r\n" + leadingString + "%d => \r\n" + StringUtils.repeat(leadingString, 4) + "array(\r\n" + StringUtils.repeat(leadingString, 4) + "'itemId' => '%s',\r\n" + StringUtils.repeat(leadingString, 4) + "'itemNum' => '%s',\r\n" + StringUtils.repeat(leadingString, 3) + "),";
         //500|1:5,56004:50,56001:5000;
         String[] singleRankScore = fieldValue.split(";");
         String finalContent = "\r\n  array(\r\n";
@@ -386,9 +386,9 @@ public class ParseConfigLogic {
             String currentSingleRankScore = singleRankScore[i];
             if (!currentSingleRankScore.isEmpty()) {
                 String[] singleRankScoreItem = currentSingleRankScore.split("\\|");
-                finalContent += leadingString + leadingString + i + " => \r\n      array(\r\n";
-                finalContent += leadingString + leadingString + leadingString + "'score' => " + singleRankScoreItem[0] + ",\r\n";
-                finalContent += leadingString + leadingString + leadingString + "'reward' => \r\n      array(\r\n";
+                finalContent += StringUtils.repeat(leadingString, 4) + i + " => \r\n      array(\r\n";
+                finalContent += StringUtils.repeat(leadingString, 6) + "'score' => " + singleRankScoreItem[0] + ",\r\n";
+                finalContent += StringUtils.repeat(leadingString, 6) + "'reward' => \r\n      array(\r\n";
                 String currentSingleRankScoreItem = singleRankScoreItem[1];
                 if (!currentSingleRankScoreItem.isEmpty()) {
                     String[] singleRankScoreItemReward = currentSingleRankScoreItem.split(",");
@@ -396,16 +396,16 @@ public class ParseConfigLogic {
                         String currentSingleRankScoreItemReward = singleRankScoreItemReward[j];
                         if (!currentSingleRankScoreItemReward.isEmpty()) {
                             String[] singleRankScoreItemRewardItem = currentSingleRankScoreItemReward.split(":");
-                            finalContent += leadingString + leadingString + leadingString + leadingString + String.format(rewardStringFormat, j, singleRankScoreItemRewardItem[0], singleRankScoreItemRewardItem[1]) + "\r\n";
+                            finalContent += StringUtils.repeat(leadingString, 8) + String.format(rewardStringFormat, j, singleRankScoreItemRewardItem[0], singleRankScoreItemRewardItem[1]) + "\r\n";
                         }
                     }
                 }
             }
-            finalContent += leadingString + leadingString + leadingString + "),\r\n";
-            finalContent += leadingString + "),\r\n";
+            finalContent += StringUtils.repeat(leadingString, 6) + "),\r\n";
+            finalContent += StringUtils.repeat(leadingString, 2) + "),\r\n";
         }
 
-        finalContent += leadingString + ")";
+        finalContent += StringUtils.repeat(leadingString, 2) + ")";
         return finalContent;
     }
 
