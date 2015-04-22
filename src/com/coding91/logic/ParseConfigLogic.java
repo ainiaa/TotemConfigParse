@@ -280,16 +280,15 @@ public class ParseConfigLogic {
                         } else {
                             isContentNeedQuote = true;
                         }
+                        String currentContent;
                         if (isContentEmpty(contentKey[i], content, defaultValueMap, globalDefaultValueMap)) {//为空
                             isContentNeedQuote = false;
                             String currentFieldContent = getDefaultValue(contentKey[i], defaultValueMap, globalDefaultValueMap);
-                            String currentContent = commonSingleFieldString(contentKey[i], currentFieldContent, StringUtils.repeat(leadingString, index + 1), isContentNeedQuote);
-                            finalContent.append(currentContent);
+                            currentContent = commonSingleFieldString(contentKey[i], currentFieldContent, StringUtils.repeat(leadingString, index + 1), isContentNeedQuote);
                         } else {
-                            String currentContent = commonSingleFieldString(contentKey[i], content, StringUtils.repeat(leadingString, index + 1), isContentNeedQuote);
-                            finalContent.append(currentContent);
+                            currentContent = commonSingleFieldString(contentKey[i], content, StringUtils.repeat(leadingString, index + 1), isContentNeedQuote);
                         }
-
+                        finalContent.append(currentContent);
                     }
                 } else {//直接使用逗号分割放入array()中即可
                     for (int i = 0; i < contentChunk.length; i++) {
@@ -297,7 +296,7 @@ public class ParseConfigLogic {
                         if (i == 0) {//第一个要多添加一个\r\n
                             finalContent.append("\r\n");
                         }
-                        finalContent.append(String.format("%d => '%s',\r\n", i, content));
+                        finalContent.append(StringUtils.repeat(leadingString, index + 1)).append(String.format("%d => '%s',\r\n", i, content));
                     }
                 }
             } else {

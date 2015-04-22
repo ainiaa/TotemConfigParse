@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  *
@@ -79,11 +80,11 @@ public class BuildConfigContent {
             }
             String format;
             if (null != idNeedWrapped && idNeedWrapped.equals("1")) {
-                format = leadingString + "'%s' => \r\n" + leadingString + "array(\r\n";
+                format = "%s'%s' => \r\n%sarray(\r\n";
             } else {
-                format = leadingString + "%s => \r\n" + leadingString + "array(\r\n";
+                format = "%s%s => \r\n%sarray(\r\n";
             }
-            allRowsStringBuilder.append(String.format(format, id));
+            allRowsStringBuilder.append(String.format(format, leadingString, id, leadingString));
         }
 
         Map defaultValueMap = extraParams.get("defaultValue");
@@ -102,11 +103,10 @@ public class BuildConfigContent {
             boolean isContentNeedQuote = isContentNeedQuote(currentField, currentFieldContent, defaultValueMap, globalDefaultValueMap);
             if (isContentEmpty(currentField, currentFieldContent, defaultValueMap, globalDefaultValueMap)) {//为空
                 isContentNeedQuote = false;
-                //} else if (currentFieldContent.isEmpty() || currentFieldContent.equals("0")) {//内容为空 或者为 0 
                 currentFieldContent = getDefaultValue(currentField, defaultValueMap, globalDefaultValueMap);
-                currentFieldSingleContent = commonSingleFieldString(currentField, currentFieldContent, "    ", isContentNeedQuote);
+                currentFieldSingleContent = commonSingleFieldString(currentField, currentFieldContent, StringUtils.repeat(leadingString, 2), isContentNeedQuote);
                 if (isNeedAllRowsContent) {
-                    currentFieldAllRowsContent = commonSingleFieldString(currentField, currentFieldContent, "  ", isContentNeedQuote);
+                    currentFieldAllRowsContent = commonSingleFieldString(currentField, currentFieldContent, leadingString, isContentNeedQuote);
                 }
             } else if (extraParams.containsKey(currentField)) {
                 try {
@@ -129,8 +129,8 @@ public class BuildConfigContent {
                     Method parseField = ParseConfigLogic.class.getDeclaredMethod(parseFieldFunctionName, new Class[]{Map.class, String.class, String.class});//getMethod 方法 只能获取public 方法
                     parseField.setAccessible(true);
 
-                    String format = "'%s' => %s,\r\n";
-                    currentFieldSingleContent = String.format(format, currentField, parseField.invoke(getInstance(), new Object[]{parseFieldFunctionInfo, currentField, currentFieldContent}));
+                    String format = "%s'%s' => %s,\r\n";
+                    currentFieldSingleContent = String.format(format, leadingString, currentField, parseField.invoke(getInstance(), new Object[]{parseFieldFunctionInfo, currentField, currentFieldContent}));
                     if (isNeedAllRowsContent) {
                         currentFieldAllRowsContent = currentFieldSingleContent;
                     }
@@ -153,7 +153,7 @@ public class BuildConfigContent {
 
         singleRowStringBuilder.append(");");
         if (isNeedAllRowsContent) {
-            allRowsStringBuilder.append("  ),");
+            allRowsStringBuilder.append(leadingString).append("),");
         }
 
         Map finalInfo = new HashMap();
