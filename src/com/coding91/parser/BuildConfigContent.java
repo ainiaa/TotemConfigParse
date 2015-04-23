@@ -17,6 +17,9 @@ import org.apache.commons.lang3.StringUtils;
 public class BuildConfigContent {
 
     public static String leadingString = "  ";
+    public static String doubleLeadingString = "    ";
+    public static String tripleLeadingString = "      ";
+    public static String fourfoldLeadingString = "        ";
 
     public static ParseConfigLogic getInstance() {
         Class classType = ParseConfigLogic.class;
@@ -80,9 +83,9 @@ public class BuildConfigContent {
             }
             String format;
             if (null != idNeedWrapped && idNeedWrapped.equals("1")) {
-                format = "%s'%s' => \r\n%sarray(\r\n";
+                format = "%s'%s' => \r\n%sarray (\r\n";
             } else {
-                format = "%s%s => \r\n%sarray(\r\n";
+                format = "%s%s => \r\n%sarray (\r\n";
             }
             allRowsStringBuilder.append(String.format(format, leadingString, id, leadingString));
         }
@@ -104,9 +107,9 @@ public class BuildConfigContent {
             if (isContentEmpty(currentField, currentFieldContent, defaultValueMap, globalDefaultValueMap)) {//为空
                 isContentNeedQuote = false;
                 currentFieldContent = getDefaultValue(currentField, defaultValueMap, globalDefaultValueMap);
-                currentFieldSingleContent = commonSingleFieldString(currentField, currentFieldContent, StringUtils.repeat(leadingString, 2), isContentNeedQuote);
+                currentFieldSingleContent = commonSingleFieldString(currentField, currentFieldContent, leadingString, isContentNeedQuote);
                 if (isNeedAllRowsContent) {
-                    currentFieldAllRowsContent = commonSingleFieldString(currentField, currentFieldContent, leadingString, isContentNeedQuote);
+                    currentFieldAllRowsContent = commonSingleFieldString(currentField, currentFieldContent, doubleLeadingString, isContentNeedQuote);
                 }
             } else if (extraParams.containsKey(currentField)) {
                 try {
@@ -132,16 +135,16 @@ public class BuildConfigContent {
                     String format = "%s'%s' => %s,\r\n";
                     currentFieldSingleContent = String.format(format, leadingString, currentField, parseField.invoke(getInstance(), new Object[]{parseFieldFunctionInfo, currentField, currentFieldContent}));
                     if (isNeedAllRowsContent) {
-                        currentFieldAllRowsContent = currentFieldSingleContent;
+                        currentFieldAllRowsContent = String.format(format, doubleLeadingString, currentField, parseField.invoke(getInstance(), new Object[]{parseFieldFunctionInfo, currentField, currentFieldContent}));
                     }
                 } catch (IllegalAccessException | SecurityException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException ex) {
                     currentFieldSingleContent = "";
                     NoticeMessageJFrame.noticeMessage(ex.getClass() + ":" + ex.getMessage());
                 }
             } else {
-                currentFieldSingleContent = commonSingleFieldString(currentField, currentFieldContent, leadingString + leadingString, isContentNeedQuote);//singleRowStringBuilder.append(commonSingleFieldString(currentField, currentFieldContent, "    ", true));
+                currentFieldSingleContent = commonSingleFieldString(currentField, currentFieldContent, leadingString, isContentNeedQuote);//singleRowStringBuilder.append(commonSingleFieldString(currentField, currentFieldContent, "    ", true));
                 if (isNeedAllRowsContent) {
-                    currentFieldAllRowsContent = commonSingleFieldString(currentField, currentFieldContent, leadingString, isContentNeedQuote);
+                    currentFieldAllRowsContent = commonSingleFieldString(currentField, currentFieldContent, doubleLeadingString, isContentNeedQuote);
                 }
             }
 

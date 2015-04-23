@@ -41,9 +41,9 @@ public class TransformConfigLogic {
                     int sheetIndex = ExcelParserUtils.getSheetIndexBySheetName(configFilePath, sheetName);
                     final String[][] originContent = ExcelParserUtils.parseXls(configFilePath, sheetIndex, true);
 
-                    String[] langList = DessertShopConfigParseJFrame.getLangList().toArray(new String[]{}); 
+                    String[] totalLangList = DessertShopConfigParseJFrame.needParseLangList().toArray(new String[]{});
 
-                    for (final String currentLang : langList) {
+                    for (final String currentLang : totalLangList) {
                         // start single lang 
                         Thread currentThread = transformMissionTriggerThread(currentLang, outputPath, fileName, originContent);
                         currentThread.start();
@@ -153,10 +153,10 @@ public class TransformConfigLogic {
     public static Map getModel(String[] originSingleContent, Map<String, String[]> combineFields) {
         Map<String, List<Integer>> fieldIndex = new HashMap();
         Map<String, List<String>> fieldName = new HashMap();
-        String[] langList = DessertShopConfigParseJFrame.getLangList().toArray(new String[]{});
+        String[] totalLangList = DessertShopConfigParseJFrame.getTotalLangList();
         List needSkipedFields = needSkipedFields(combineFields);
 
-        for (String currentLang : langList) {
+        for (String currentLang : totalLangList) {
             fieldIndex.put(currentLang, new ArrayList());
             fieldName.put(currentLang, new ArrayList());
         }
@@ -167,7 +167,7 @@ public class TransformConfigLogic {
             if (!originField.trim().isEmpty()) {
                 if (originField.length() >= 6) {//查看是否为属于某个特定的语言
                     prefix = originField.substring(0, 5);
-                    currentPrefixIsLang = Arrays.asList(langList).contains(prefix);
+                    currentPrefixIsLang = Arrays.asList(totalLangList).contains(prefix);
                 }
                 if (currentPrefixIsLang) {//当前field 只属于某一个lang
                     List currentModelIndex = fieldIndex.get(prefix);
@@ -179,7 +179,7 @@ public class TransformConfigLogic {
                     }
                 } else {//当前field 属于所有lang
                     if (!needSkipedFields.contains(originField)) { //需要掉过的field不需要出现在最终的model中
-                        for (String currentLang : langList) {
+                        for (String currentLang : totalLangList) {
                             List currentModelIndex = fieldIndex.get(currentLang);
                             List currentModelField = fieldName.get(currentLang);
                             currentModelIndex.add(j);

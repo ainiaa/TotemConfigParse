@@ -67,7 +67,7 @@ public class Test {
 
     public static String parseCommonMultipleEx(String originContent, String[] flagment, String[] contentKey, int index) {
         StringBuilder finalContent = new StringBuilder();
-        finalContent.append("array(");
+        finalContent.append("array (");
         if (!originContent.isEmpty()) {//内容不为空
             String[] contentChunk = originContent.split("\\" + flagment[index]);
             if (flagment.length == index + 1) {//已经是最后一层了

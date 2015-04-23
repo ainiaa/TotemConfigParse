@@ -4,6 +4,9 @@ import static com.coding91.parser.BuildConfigContent.commonSingleFieldString;
 import static com.coding91.parser.BuildConfigContent.getDefaultValue;
 import static com.coding91.parser.BuildConfigContent.isContentEmpty;
 import static com.coding91.parser.BuildConfigContent.leadingString;
+import static com.coding91.parser.BuildConfigContent.doubleLeadingString;
+import static com.coding91.parser.BuildConfigContent.tripleLeadingString;
+import static com.coding91.parser.BuildConfigContent.fourfoldLeadingString;
 import static com.coding91.parser.ConfigParser.getFieldIndexByFieldName;
 import com.coding91.utils.ArrayUtils;
 import java.util.ArrayList;
@@ -58,7 +61,7 @@ public class ParseConfigLogic {
         StringBuilder tmpContent = new StringBuilder();
         tmpContent.append(leadingString).append("'").append(field).append("' => ");
         if (!content.isEmpty()) {
-            tmpContent.append("array(");
+            tmpContent.append("array (");
             int index = 0;
             for (String currentContent : contentArray) {
                 tmpContent.append(index++).append(" => '").append(currentContent).append("',");
@@ -87,17 +90,17 @@ public class ParseConfigLogic {
         StringBuilder tmpContent = new StringBuilder();
         tmpContent.append(leadingString).append("'").append(field).append("' => ");
         if (!content.isEmpty()) {
-            tmpContent.append("array(\r\n");
+            tmpContent.append("array (\r\n");
             int firstFoolrIndex = 0;
             for (String currentContent : contentArray) {
                 int secondFoolrIndex = 0;
                 if (!currentContent.isEmpty()) {
                     String[] currentContentArray = currentContent.split(",");//第二层
-                    tmpContent.append(leadingString).append(leadingString).append(firstFoolrIndex).append(" => array(\r\n");
+                    tmpContent.append(leadingString).append(leadingString).append(firstFoolrIndex).append(" => array (\r\n");
                     for (String currentItem : currentContentArray) {
                         if (!currentItem.isEmpty()) {
                             String[] singleFactors = currentItem.split(":");//第三层
-                            tmpContent.append(leadingString).append(leadingString).append(leadingString).append(secondFoolrIndex).append(" => array(\r\n");//),\r\n
+                            tmpContent.append(leadingString).append(leadingString).append(leadingString).append(secondFoolrIndex).append(" => array (\r\n");//),\r\n
                             tmpContent.append(leadingString).append(leadingString).append(leadingString).append(leadingString).append(leadingString).append("'activate_id' => '").append(singleFactors[0]).append("',\r\n");
                             tmpContent.append(leadingString).append(leadingString).append(leadingString).append(leadingString).append(leadingString).append("'activate_item_id' => '").append(singleFactors[1]).append("',\r\n");
                             tmpContent.append(leadingString).append(leadingString).append(leadingString).append(leadingString).append(leadingString).append("'activate_num' => '").append(singleFactors[2]).append("',\r\n");
@@ -150,7 +153,7 @@ public class ParseConfigLogic {
                     + "%s'reward_item_num' => '%s',\r\n"
                     + "%s),\r\n";
             if (!content.isEmpty()) {
-                tmpContent.append("\r\n      array(\r\n");
+                tmpContent.append("\r\n      array (\r\n");
                 int firstFoolrIndex = 0;
                 for (String currentFirstFloorContent : contentArray) {
                     if (!currentFirstFloorContent.isEmpty()) {
@@ -177,27 +180,26 @@ public class ParseConfigLogic {
         String leadingString2 = leadingString + leadingString;
         String leadingString3 = leadingString + leadingString + leadingString;
         String secondFloorContentFormat = "%s%d => \r\n      array (\r\n"
-                + leadingString3 + "'require_index' => '%s',\r\n"
-                + leadingString3 + "'mission_require_icon' => '%s',\r\n"
-                + leadingString3 + "'mission_require_type' => '%s',\r\n"
-                + leadingString3 + "'require_item_id' => '%s',\r\n"
-                + leadingString3 + "'require_item_num' => '%s',\r\n"
-                + leadingString3 + "'require_type' => '%s',\r\n"
-                + leadingString3 + "'require_id' => '%s',\r\n"
-                + leadingString3 + "'is_skippable' => '%s',\r\n"
-                + leadingString3 + "'require_skip_cash' => '%s',\r\n"
-                + leadingString3 + "'mission_sub_require' => '%s',\r\n"
-                + leadingString3 + "'mission_sub_require_desc' => '%s',\r\n"
-                + leadingString3 + "'mission_sub_require_tips' => '%s',\r\n"
-                + leadingString3 + "),\r\n";
+                + leadingString2 + "'require_index' => '%s',\r\n"
+                + leadingString2 + "'mission_require_icon' => '%s',\r\n"
+                + leadingString2 + "'mission_require_type' => '%s',\r\n"
+                + leadingString2 + "'require_item_id' => '%s',\r\n"
+                + leadingString2 + "'require_item_num' => '%s',\r\n"
+                + leadingString2 + "'require_type' => '%s',\r\n"
+                + leadingString2 + "'require_id' => '%s',\r\n"
+                + leadingString2 + "'is_skippable' => '%s',\r\n"
+                + leadingString2 + "'require_skip_cash' => '%s',\r\n"
+                + leadingString2 + "'mission_sub_require' => '%s',\r\n"
+                + leadingString2 + "'mission_sub_require_desc' => '%s',\r\n"
+                + leadingString2 + "'mission_sub_require_tips' => '%s',\r\n"
+                +  "      ),\r\n";
         if (!content.isEmpty()) {
-            tmpContent.append("\r\n    array(\r\n");
+            tmpContent.append("\r\n    array (\r\n");
             int firstFoolrIndex = 0;
             for (String currentFirstFloorContent : contentArray) {
                 if (!currentFirstFloorContent.isEmpty()) {
                     String[] currentSecondFloorContentArray = currentFirstFloorContent.split(MISSION_REQUIRE_SECOND_FLOOR);//第二层
-                    tmpContent.append(leadingString).append(leadingString)
-                            .append(String.format(secondFloorContentFormat, leadingString2, firstFoolrIndex,
+                    tmpContent.append(String.format(secondFloorContentFormat, "      ", firstFoolrIndex,
                                             currentSecondFloorContentArray[0],
                                             currentSecondFloorContentArray[1],
                                             currentSecondFloorContentArray[2],
@@ -264,7 +266,10 @@ public class ParseConfigLogic {
         }
 
         StringBuilder finalContent = new StringBuilder();
-        finalContent.append("\r\n").append(StringUtils.repeat(leadingString, index + 1)).append("array(\r\n");
+
+        String tmpContentFormat = "\r\n%sarray(\r\n%s%s)";
+
+        finalContent.append("\r\n").append(StringUtils.repeat(leadingString, index + 2)).append("array (\r\n");
         if (!fieldValue.isEmpty()) {//内容不为空
             String[] contentChunk = fieldValue.split("\\" + contentSeparator[index]);
             if (contentSeparator.length == index + 1) {//已经是最后一层了
@@ -284,9 +289,9 @@ public class ParseConfigLogic {
                         if (isContentEmpty(contentKey[i], content, defaultValueMap, globalDefaultValueMap)) {//为空
                             isContentNeedQuote = false;
                             String currentFieldContent = getDefaultValue(contentKey[i], defaultValueMap, globalDefaultValueMap);
-                            currentContent = commonSingleFieldString(contentKey[i], currentFieldContent, StringUtils.repeat(leadingString, index + 1), isContentNeedQuote);
+                            currentContent = commonSingleFieldString(contentKey[i], currentFieldContent, StringUtils.repeat(leadingString, index + 3), isContentNeedQuote);
                         } else {
-                            currentContent = commonSingleFieldString(contentKey[i], content, StringUtils.repeat(leadingString, index + 1), isContentNeedQuote);
+                            currentContent = commonSingleFieldString(contentKey[i], content, StringUtils.repeat(leadingString, index + 3), isContentNeedQuote);
                         }
                         finalContent.append(currentContent);
                     }
@@ -294,22 +299,23 @@ public class ParseConfigLogic {
                     for (int i = 0; i < contentChunk.length; i++) {
                         String content = contentChunk[i];
                         if (i == 0) {//第一个要多添加一个\r\n
-                            finalContent.append("\r\n");
+                            //finalContent.append("\r\n");
                         }
-                        finalContent.append(StringUtils.repeat(leadingString, index + 1)).append(String.format("%d => '%s',\r\n", i, content));
+                        finalContent.append(StringUtils.repeat(leadingString, index + 3)).append(String.format("%d => '%s',\r\n", i, content));
                     }
                 }
             } else {
-                ++index;
                 int currentIndex = 0;
                 for (String currentChunk : contentChunk) {
-                    finalContent.append(currentIndex++).append(" => ").append(parseCommonMultipleEx(fieldName, currentChunk, contentSeparator, contentKey, index, parseFunctionParam)).append(",\r\n");
+                    finalContent.append(StringUtils.repeat(leadingString, index + 3)).append(currentIndex++).append(" => ").append(parseCommonMultipleEx(fieldName, currentChunk, contentSeparator, contentKey, index + 1, parseFunctionParam)).append(",\r\n");
                 }
             }
         }
-        finalContent.append(")");
-        if (contentSeparator.length == index + 1) {
-            finalContent.append("");
+
+        if (contentSeparator.length == index + 1) {//内层
+            finalContent.append(StringUtils.repeat(leadingString, index + 2)).append(")");
+        } else {//外层
+            finalContent.append(StringUtils.repeat(leadingString, index + 2)).append(")");
         }
         return finalContent.toString();
     }
@@ -377,17 +383,17 @@ public class ParseConfigLogic {
      */
     private String parseGameRankScoreRewards(Map parseFunctionParam, String fieldName, String fieldValue) {
 
-        String rewardStringFormat = "\r\n" + leadingString + "%d => \r\n" + StringUtils.repeat(leadingString, 4) + "array(\r\n" + StringUtils.repeat(leadingString, 4) + "'itemId' => '%s',\r\n" + StringUtils.repeat(leadingString, 4) + "'itemNum' => '%s',\r\n" + StringUtils.repeat(leadingString, 3) + "),";
+        String rewardStringFormat = "        %d => \r\n" + fourfoldLeadingString + "array (\r\n          'itemId' => '%s',\r\n          'itemNum' => '%s',\r\n        ),";
         //500|1:5,56004:50,56001:5000;
         String[] singleRankScore = fieldValue.split(";");
-        String finalContent = "\r\n  array(\r\n";
+        String finalContent = "\r\n  array (\r\n";
         for (int i = 0; i < singleRankScore.length; i++) {
             String currentSingleRankScore = singleRankScore[i];
             if (!currentSingleRankScore.isEmpty()) {
                 String[] singleRankScoreItem = currentSingleRankScore.split("\\|");
-                finalContent += StringUtils.repeat(leadingString, 4) + i + " => \r\n      array(\r\n";
-                finalContent += StringUtils.repeat(leadingString, 6) + "'score' => " + singleRankScoreItem[0] + ",\r\n";
-                finalContent += StringUtils.repeat(leadingString, 6) + "'reward' => \r\n      array(\r\n";
+                finalContent += doubleLeadingString + i + " => \r\n    array (\r\n";
+                finalContent += StringUtils.repeat(leadingString, 3) + "'score' => " + singleRankScoreItem[0] + ",\r\n";
+                finalContent += StringUtils.repeat(leadingString, 3) + "'reward' => \r\n      array (\r\n";
                 String currentSingleRankScoreItem = singleRankScoreItem[1];
                 if (!currentSingleRankScoreItem.isEmpty()) {
                     String[] singleRankScoreItemReward = currentSingleRankScoreItem.split(",");
@@ -395,16 +401,16 @@ public class ParseConfigLogic {
                         String currentSingleRankScoreItemReward = singleRankScoreItemReward[j];
                         if (!currentSingleRankScoreItemReward.isEmpty()) {
                             String[] singleRankScoreItemRewardItem = currentSingleRankScoreItemReward.split(":");
-                            finalContent += StringUtils.repeat(leadingString, 8) + String.format(rewardStringFormat, j, singleRankScoreItemRewardItem[0], singleRankScoreItemRewardItem[1]) + "\r\n";
+                            finalContent +=  String.format(rewardStringFormat, j, singleRankScoreItemRewardItem[0], singleRankScoreItemRewardItem[1]) + "\r\n";
                         }
                     }
                 }
             }
-            finalContent += StringUtils.repeat(leadingString, 6) + "),\r\n";
-            finalContent += StringUtils.repeat(leadingString, 2) + "),\r\n";
+            finalContent += StringUtils.repeat(leadingString, 3) + "),\r\n";
+            finalContent += doubleLeadingString + "),\r\n";
         }
 
-        finalContent += StringUtils.repeat(leadingString, 2) + ")";
+        finalContent += doubleLeadingString + ")";
         return finalContent;
     }
 
@@ -422,7 +428,7 @@ public class ParseConfigLogic {
                 + "        'normal_dessert_id' => '%s',\n"
                 + "        'normal_dessert_num' => \n"
                 + "        array (\n"
-                + "          %s"
+                + "%s"
                 + "        ),\n"
                 + "      ),\n"
                 + "    )";
@@ -446,12 +452,12 @@ public class ParseConfigLogic {
     private String parseDessertInfoCondimentsDessertData(Map parseFunctionParam, String fieldName, String fieldValue) {
         StringBuilder finalContent = new StringBuilder();
         finalContent.append("\r\n    array (\r\n");
-        String contentFormat = "%d => \n"
+        String contentFormat = "      %d => \n"
                 + "      array (\n"
                 + "        'condiments_dessert_id' => '%s',\n"
                 + "        'condiments_dessert_num' => \n"
                 + "        array (\n"
-                + "         %s"
+                + "%s"
                 + "        ),\n"
                 + "        'level_up_cook_times' => '%s',\n"
                 + "        'unlock_pink_star_require' => %s,\n"
@@ -481,10 +487,10 @@ public class ParseConfigLogic {
      */
     private String parseDessertInfoLevelUpCookTimes(Map parseFunctionParam, String fieldName, String fieldValue) {
         String contentFormat = "\r\n    array (\n"
-                + "      %s"
+                + "%s"
                 + "    )";
         String[] singleContentFlagment = fieldValue.split(",");
-        String ouptputNumFormat = "          %s => '%s',\r\n";
+        String ouptputNumFormat = "      %s => '%s',\r\n";
         StringBuilder ouptputNumContent = new StringBuilder();
         for (String singleContentFlagment1 : singleContentFlagment) {
             String[] singleOuptputNum = singleContentFlagment1.split(":");
@@ -501,15 +507,15 @@ public class ParseConfigLogic {
      * @return
      */
     private String parseGiftPackageFixData(Map parseFunctionParam, String fieldName, String fieldValue) {
-        String contentFormat = "\r\n    array (\n"
-                + "      %s"
+        String contentFormat = "\r\n    array (\r\n"
+                + "%s"
                 + "    )";
         String[] singleContentFlagment = fieldValue.split(",");
-        String ouptputNumFormat = "      %d => \n"
-                + "      array (\n"
-                + "        'index' => '%s',\n"
-                + "        'item_id' => '%s',\n"
-                + "        'num' => '%s',\n"
+        String ouptputNumFormat = "      %d => \r\n"
+                + "      array (\r\n"
+                + "        'index' => '%s',\r\n"
+                + "        'item_id' => '%s',\r\n"
+                + "        'num' => '%s',\r\n"
                 + "      ),\r\n";
         StringBuilder ouptputNumContent = new StringBuilder();
         for (int i = 0; i < singleContentFlagment.length; i++) {
@@ -536,12 +542,12 @@ public class ParseConfigLogic {
         StringBuilder tmpContent = new StringBuilder();
         tmpContent.append(leadingString).append("'").append(field).append("' => ");
         if (!content.isEmpty()) {
-            tmpContent.append("array(\r\n");
+            tmpContent.append("array (\r\n");
             String[] keyArray = keys.split(",");
             int index = 0;
             for (String currentContent : contentArray) {
                 String[] contentFactor = currentContent.split(":");
-                tmpContent.append(leadingString).append(leadingString).append(leadingString).append(leadingString).append(index++).append(" => array(\r\n");
+                tmpContent.append(leadingString).append(leadingString).append(leadingString).append(leadingString).append(index++).append(" => array (\r\n");
                 if (contentFactor.length == keyArray.length) {
                     for (int i = 0; i < keyArray.length; i++) {
                         tmpContent.append(String.format("'%s' => '%s',\r\n", keyArray[i], contentFactor[i]));

@@ -554,37 +554,41 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private static List<String> langList;
+    private static List<String> needParseLangList;
     public static final int LANG_COUNT_MIX = 0;
     public static final int LANG_COUNT_MAX = 6;
     private static int selectedCheckboxCount = LANG_COUNT_MAX;
 
-    private void initLangList() {
-        if (null == langList) {
-            langList = new ArrayList<>();
+    private void initNeedParseLangList() {
+        if (null == needParseLangList) {
+            needParseLangList = new ArrayList<>();
             if (langEnUsjCheckBox.isSelected()) {
-                langList.add("en_us");
+                needParseLangList.add("en_us");
             }
             if (langDeDejCheckBox.isSelected()) {
-                langList.add("de_de");
+                needParseLangList.add("de_de");
             }
             if (langFrFrjCheckBox.isSelected()) {
-                langList.add("fr_fr");
+                needParseLangList.add("fr_fr");
             }
             if (langEsEsjCheckBox.isSelected()) {
-                langList.add("es_es");
+                needParseLangList.add("es_es");
             }
             if (langZhTwjCheckBox.isSelected()) {
-                langList.add("zh_tw");
+                needParseLangList.add("zh_tw");
             }
             if (langItItjCheckBox.isSelected()) {
-                langList.add("it_it");
+                needParseLangList.add("it_it");
             }
         }
     }
 
-    public static List<String> getLangList() {
-        return DessertShopConfigParseJFrame.langList;
+    public static List<String> needParseLangList() {
+        return needParseLangList;
+    }
+    
+    public static String[] getTotalLangList() {
+        return new String[]{"en_us","zh_tw","fr_fr", "de_de", "it_it", "es_es"};
     }
 
     private void changeFunctionButtonStatus() {
@@ -653,7 +657,7 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
             String configFilePath = configFilejTextField.getText();
             //输出路径
             String outputPath = outputjTextField.getText();
-            initLangList();
+            initNeedParseLangList();
             funcMap.entrySet().stream().forEach((entry) -> {
                 String currentFunction = entry.getKey();
                 String excelFileName = entry.getValue();
@@ -676,7 +680,7 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, msg, "信息提示", JOptionPane.ERROR_MESSAGE);
                 System.exit(0);
             }
-            initLangList();
+            initNeedParseLangList();
             ConfigParserDispatch.transformSingleExcel(function, configFilePath, outputPath);
         }
     }//GEN-LAST:event_parsejButtonMouseClicked

@@ -54,8 +54,8 @@ public class TransformRunable implements Runnable {
 
             final Map<String, Map<String, List>> modelInfo = getModel(originContent[0], combineFields);
 
-            String[] langList = DessertShopConfigParseJFrame.getLangList().toArray(new String[]{}); 
-            for (final String currentLang : langList) {
+            String[] totalLangList = DessertShopConfigParseJFrame.needParseLangList().toArray(new String[]{});
+            for (final String currentLang : totalLangList) {
                 final String[][] singleLangContent;
                 if (combineFields != null) {
                     Map<String, Map<String, List>> fullModelInfo = getModel(originContent[0]);
