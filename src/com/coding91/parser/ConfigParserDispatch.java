@@ -32,25 +32,25 @@ public class ConfigParserDispatch {
                     Map activityInfoParam = new HashMap();
                     activityInfoParam.put("contentKey", new String[]{"require_item_id", "require_item_num", "require_type", "require_id"});
                     activityInfoParam.put("contentSeparator", new String[]{","});
-                    activityInfoParam.put("parseFunction", "parseCommonMultipleEx");
+                    activityInfoParam.put("parseFunction", "parseCommonMultiple");
                     extraParams.put("item_property", activityInfoParam);
                     
                     Map marketPurchaseLimitParam = new HashMap();
                     marketPurchaseLimitParam.put("contentKey", new String[]{"level", "purchase_limit_num"});
                     marketPurchaseLimitParam.put("contentSeparator", new String[]{",", ":"});
-                    marketPurchaseLimitParam.put("parseFunction", "parseCommonMultipleEx");
+                    marketPurchaseLimitParam.put("parseFunction", "parseCommonMultiple");
                     extraParams.put("market_purchase_limit", marketPurchaseLimitParam);
                     
                     Map activateDataParam = new HashMap();
                     activateDataParam.put("contentKey", new String[]{"activate_id", "activate_item_id", "activate_num", "activate_type"});
                     activateDataParam.put("contentSeparator", new String[]{",", ":"});
-                    activateDataParam.put("parseFunction", "parseCommonMultipleEx");
+                    activateDataParam.put("parseFunction", "parseCommonMultiple");
                     extraParams.put("activate_data", activateDataParam);
                     
                     Map recipeListParam = new HashMap();
                     recipeListParam.put("contentKey", new String[]{});
                     recipeListParam.put("contentSeparator", new String[]{","});
-                    recipeListParam.put("parseFunction", "parseCommonMultipleEx");
+                    recipeListParam.put("parseFunction", "parseCommonMultiple");
                     extraParams.put("recipe_list", recipeListParam);
                     
                     Map<String, String> fieldDefaultPair = FileUtils.loadFieldDefaultValueProperty("resources/data/config/defaultvalue/shopItem.properties");
@@ -65,13 +65,13 @@ public class ConfigParserDispatch {
                     Map activityInfoParam = new HashMap();
                     activityInfoParam.put("contentKey", new String[]{"activity_type", "activity_id"});
                     activityInfoParam.put("contentSeparator", new String[]{",", ":"});
-                    activityInfoParam.put("parseFunction", "parseCommonMultipleEx");
+                    activityInfoParam.put("parseFunction", "parseCommonMultiple");
                     extraParams.put("activity_info", activityInfoParam);
                     
                     Map unlockRecipeParam = new HashMap();
                     unlockRecipeParam.put("contentKey", new String[]{});
                     unlockRecipeParam.put("contentSeparator", new String[]{","});
-                    unlockRecipeParam.put("parseFunction", "parseCommonMultipleEx");
+                    unlockRecipeParam.put("parseFunction", "parseCommonMultiple");
                     extraParams.put("unlockRecipe", unlockRecipeParam);
                     
                     Map<String, String> fieldDefaultPair = FileUtils.loadFieldDefaultValueProperty("resources/data/config/defaultvalue/activityLibraryInfo.properties");
@@ -86,7 +86,7 @@ public class ConfigParserDispatch {
                     Map suiteArrayParam = new HashMap();
                     suiteArrayParam.put("contentKey", new String[]{});
                     suiteArrayParam.put("contentSeparator", new String[]{","});
-                    suiteArrayParam.put("parseFunction", "parseCommonMultipleEx");
+                    suiteArrayParam.put("parseFunction", "parseCommonMultiple");
                     extraParams.put("suite_array", suiteArrayParam);
                     
                     Map<String, String> fieldDefaultPair = FileUtils.loadFieldDefaultValueProperty("resources/data/config/defaultvalue/avatarItems.properties");
@@ -131,13 +131,13 @@ public class ConfigParserDispatch {
                     Map recipesParam = new HashMap();
                     recipesParam.put("contentKey", new String[]{});
                     recipesParam.put("contentSeparator", new String[]{"|", ","});
-                    recipesParam.put("parseFunction", "parseCommonMultipleEx");
+                    recipesParam.put("parseFunction", "parseCommonMultiple");
                     extraParams.put("recipes", recipesParam);
                     
                     Map activateDataParam = new HashMap();
                     activateDataParam.put("contentKey", new String[]{"activate_id", "activate_item_id", "activate_num", "activate_type"});
                     activateDataParam.put("contentSeparator", new String[]{"|", ",", ":"});
-                    activateDataParam.put("parseFunction", "parseCommonMultipleEx");
+                    activateDataParam.put("parseFunction", "parseCommonMultiple");
                     extraParams.put("activate_data", activateDataParam);
                     
                     Map<String, String> fieldDefaultPair = FileUtils.loadFieldDefaultValueProperty("resources/data/config/defaultvalue/bindingRecipe.properties");
@@ -153,7 +153,7 @@ public class ConfigParserDispatch {
                     Map randomShelfProductListParam = new HashMap();
                     randomShelfProductListParam.put("contentKey", new String[]{});
                     randomShelfProductListParam.put("contentSeparator", new String[]{","});
-                    randomShelfProductListParam.put("parseFunction", "parseCommonMultipleEx");
+                    randomShelfProductListParam.put("parseFunction", "parseCommonMultiple");
                     extraParams.put("randomShelfProductList", randomShelfProductListParam);
                     
                     Map rankScoreRewardsParam = new HashMap();
@@ -172,13 +172,13 @@ public class ConfigParserDispatch {
                     Map ingredientDataParam = new HashMap();
                     ingredientDataParam.put("contentKey", new String[]{"ingredient_id", "ingredient_num", "require_type", "require_id", "is_skippable"});
                     ingredientDataParam.put("contentSeparator", new String[]{",", ":"});
-                    ingredientDataParam.put("parseFunction", "parseCommonMultipleEx");
+                    ingredientDataParam.put("parseFunction", "parseCommonMultiple");
                     extraParams.put("ingredient_data", ingredientDataParam);
                     
                     Map condimentsDataParam = new HashMap();
                     condimentsDataParam.put("contentKey", new String[]{"condiments_id", "condiments_num", "require_type", "require_id", "is_skippable"});
                     condimentsDataParam.put("contentSeparator", new String[]{",", ":"});
-                    condimentsDataParam.put("parseFunction", "parseCommonMultipleEx");
+                    condimentsDataParam.put("parseFunction", "parseCommonMultiple");
                     extraParams.put("condiments_data", condimentsDataParam);
                     
                     Map normalDessertDataParam = new HashMap();
