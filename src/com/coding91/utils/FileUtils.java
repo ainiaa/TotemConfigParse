@@ -112,7 +112,7 @@ public class FileUtils {
         Map finalResult = new HashMap();
         String filePathMD5 = MD5Utils.MD5(filePath);
         if (!loadSetting.containsKey(filePathMD5)) {
-            String configBaseDir = "", outputDirectory = "";
+            String configBaseDir = "", outputDirectory = "", versionInfo = "";
             URL url = FileUtils.class.getClassLoader().getResource(filePath);
             if (null != url) {
                 Properties prop = new Properties();
@@ -129,8 +129,13 @@ public class FileUtils {
                     outputDirectory = prop.getProperty("outputDirectory");
                 }
 
+                if (!prop.getProperty("versionInfo", "").isEmpty()) {
+                    versionInfo = prop.getProperty("versionInfo");
+                }
+
                 finalResult.put("configBaseDir", configBaseDir);
                 finalResult.put("outputDirectory", outputDirectory);
+                finalResult.put("versionInfo", versionInfo);
             }
         } else {
             finalResult = loadSetting.get(filePathMD5);

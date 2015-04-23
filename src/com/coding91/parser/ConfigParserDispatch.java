@@ -33,6 +33,7 @@ public class ConfigParserDispatch {
                     activityInfoParam.put("contentKey", new String[]{"require_item_id", "require_item_num", "require_type", "require_id"});
                     activityInfoParam.put("contentSeparator", new String[]{","});
                     activityInfoParam.put("parseFunction", "parseCommonMultiple");
+//                    activityInfoParam.put("parseFunctionParam", new Class[]{Map.class, String.class, String.class, Boolean.class});
                     extraParams.put("item_property", activityInfoParam);
                     
                     Map marketPurchaseLimitParam = new HashMap();

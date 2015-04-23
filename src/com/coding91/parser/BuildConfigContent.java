@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  *
@@ -106,10 +105,9 @@ public class BuildConfigContent {
             boolean isContentNeedQuote = isContentNeedQuote(currentField, currentFieldContent, defaultValueMap, globalDefaultValueMap);
             if (isContentEmpty(currentField, currentFieldContent, defaultValueMap, globalDefaultValueMap)) {//为空
                 isContentNeedQuote = false;
-                currentFieldContent = getDefaultValue(currentField, defaultValueMap, globalDefaultValueMap);
-                currentFieldSingleContent = commonSingleFieldString(currentField, currentFieldContent, leadingString, isContentNeedQuote);
+                currentFieldSingleContent = commonSingleFieldString(currentField, getDefaultValue(currentField, defaultValueMap, globalDefaultValueMap, true), leadingString, isContentNeedQuote);
                 if (isNeedAllRowsContent) {
-                    currentFieldAllRowsContent = commonSingleFieldString(currentField, currentFieldContent, doubleLeadingString, isContentNeedQuote);
+                    currentFieldAllRowsContent = commonSingleFieldString(currentField, getDefaultValue(currentField, defaultValueMap, globalDefaultValueMap, false), doubleLeadingString, isContentNeedQuote);
                 }
             } else if (extraParams.containsKey(currentField)) {
                 try {
@@ -118,6 +116,13 @@ public class BuildConfigContent {
                     String parseFieldFunctionName = (String) parseFieldFunctionInfo.get("parseFunction");
 //                    parseFieldFunctionInfo.put("fieldName", currentField);//直接传递过去 放置错乱
 //                    parseFieldFunctionInfo.put("fieldValue", currentFieldContent);
+
+                    Class[] parseFieldFunctionParam;
+                    if (parseFieldFunctionInfo.containsKey("parseFunctionParam")) {
+                        parseFieldFunctionParam = (Class[]) parseFieldFunctionInfo.get("parseFunctionParam");
+                    } else {
+                        parseFieldFunctionParam = new Class[]{Map.class, String.class, String.class, Boolean.class};
+                    }
 
                     String[] contentKey = (String[]) parseFieldFunctionInfo.get("contentKey");
                     Map isContentNeedQuoteMap = new HashMap();
@@ -129,13 +134,13 @@ public class BuildConfigContent {
                     parseFieldFunctionInfo.put("defaultValueMap", defaultValueMap);
                     parseFieldFunctionInfo.put("globalDefaultValueMap", globalDefaultValueMap);
 
-                    Method parseField = ParseConfigLogic.class.getDeclaredMethod(parseFieldFunctionName, new Class[]{Map.class, String.class, String.class, Boolean.class});//getMethod 方法 只能获取public 方法
+                    Method parseField = ParseConfigLogic.class.getDeclaredMethod(parseFieldFunctionName, parseFieldFunctionParam);//getMethod 方法 只能获取public 方法
                     parseField.setAccessible(true);
 
                     String format = "%s'%s' => %s,\r\n";
-                    currentFieldSingleContent = String.format(format, leadingString, currentField, parseField.invoke(getInstance(), new Object[]{parseFieldFunctionInfo, currentField, currentFieldContent, false}));
+                    currentFieldSingleContent = String.format(format, leadingString, currentField, parseField.invoke(getInstance(), new Object[]{parseFieldFunctionInfo, currentField, currentFieldContent, false}));//todo 参数怎么传递
                     if (isNeedAllRowsContent) {
-                        currentFieldAllRowsContent = String.format(format, doubleLeadingString, currentField, parseField.invoke(getInstance(), new Object[]{parseFieldFunctionInfo, currentField, currentFieldContent, true}));
+                        currentFieldAllRowsContent = String.format(format, doubleLeadingString, currentField, parseField.invoke(getInstance(), new Object[]{parseFieldFunctionInfo, currentField, currentFieldContent, true}));//todo 参数怎么传递
                     }
                 } catch (IllegalAccessException | SecurityException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException ex) {
                     currentFieldSingleContent = "";
@@ -219,14 +224,27 @@ public class BuildConfigContent {
      * @param currentField
      * @param defaultValueMap
      * @param globalDefaultValueMap
+     * @param isSinlgeFile
      * @return
      */
-    public static String getDefaultValue(String currentField, Map<String, String> defaultValueMap, Map<String, String> globalDefaultValueMap) {
+    public static String getDefaultValue(String currentField, Map<String, String> defaultValueMap, Map<String, String> globalDefaultValueMap, Boolean isSinlgeFile) {
         String defalutValue = "''";
-        String currentFieldDefaultKey = currentField + ".default";
-        String currentFieldTypeKey = currentField + ".type";
-        String commonDefaultKey = "common.default";
-        String typeDefaultKey = "type.default";
+        String currentFieldDefaultKey;
+        String currentFieldTypeKey;
+        String commonDefaultKey;
+        String typeDefaultKey;
+        if (isSinlgeFile) {
+            currentFieldDefaultKey = currentField + ".single.default";
+            currentFieldTypeKey = currentField + ".single.type";
+            commonDefaultKey = "common.sinlge.default";
+            typeDefaultKey = "type.sinlge.default";
+        } else {
+            currentFieldDefaultKey = currentField + ".default";
+            currentFieldTypeKey = currentField + ".type";
+            commonDefaultKey = "common.default";
+            typeDefaultKey = "type.default";
+        }
+
         if (defaultValueMap.containsKey(currentFieldDefaultKey)) {//设置了默认值
             defalutValue = defaultValueMap.get(currentFieldDefaultKey);
         } else if (defaultValueMap.containsKey(currentFieldTypeKey)) {//设置为当前类型 可以根据当前类型去的默认值  当前配置项的 该类型默认值  eg type.int='',没有 找找 global.properties 的  type.int=''

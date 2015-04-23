@@ -19,6 +19,7 @@ import javax.swing.JOptionPane;
 public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
 
     private static final long serialVersionUID = 1L;
+    public static final String versionInfo = "version: v0.2 @Jeff.Liu 2015-04-23";
 
     /**
      * Creates new form TotemConfigParseJFrame
@@ -31,8 +32,8 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
                 getClass().getClassLoader().getResource("resources/images/sync.png")));//这个不能以 '/'开头
         initFuncMap();
         initComponents();
-        dsParseConfjToolBar.setToolTipText("@Jeff.Liu 2015-04-17");
-        bottomStatusjLabel.setText("@Jeff.Liu 2015-04-17");
+        dsParseConfjToolBar.setToolTipText(configMap.get("versionInfo"));
+        bottomStatusjLabel.setText(configMap.get("versionInfo"));
     }
 
     /**
@@ -586,9 +587,9 @@ public class DessertShopConfigParseJFrame extends javax.swing.JFrame {
     public static List<String> needParseLangList() {
         return needParseLangList;
     }
-    
+
     public static String[] getTotalLangList() {
-        return new String[]{"en_us","zh_tw","fr_fr", "de_de", "it_it", "es_es"};
+        return new String[]{"en_us", "zh_tw", "fr_fr", "de_de", "it_it", "es_es"};
     }
 
     private void changeFunctionButtonStatus() {
