@@ -61,11 +61,11 @@ public class Test {
         //String[] contentKey = new String[]{"activate_id", "activate_item_id", "activate_num", "activate_type"};
         String[] contentKey = new String[]{};
         int index = 0;
-        String content = parseCommonMultiple(originContent, flagment, contentKey, index);
+        String content = parseCommonMultipleEx(originContent, flagment, contentKey, index);
         System.out.println(content);
     }
 
-    public static String parseCommonMultiple(String originContent, String[] flagment, String[] contentKey, int index) {
+    public static String parseCommonMultipleEx(String originContent, String[] flagment, String[] contentKey, int index) {
         StringBuilder finalContent = new StringBuilder();
         finalContent.append("array (");
         if (!originContent.isEmpty()) {//内容不为空
@@ -87,7 +87,7 @@ public class Test {
             } else {
                 ++index;
                 for (String currentChunk : contentChunk) {
-                    finalContent.append(parseCommonMultiple(currentChunk, flagment, contentKey, index)).append(",");
+                    finalContent.append(parseCommonMultipleEx(currentChunk, flagment, contentKey, index)).append(",");
                 }
             }
         }

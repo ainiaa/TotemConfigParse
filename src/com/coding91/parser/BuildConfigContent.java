@@ -129,13 +129,13 @@ public class BuildConfigContent {
                     parseFieldFunctionInfo.put("defaultValueMap", defaultValueMap);
                     parseFieldFunctionInfo.put("globalDefaultValueMap", globalDefaultValueMap);
 
-                    Method parseField = ParseConfigLogic.class.getDeclaredMethod(parseFieldFunctionName, new Class[]{Map.class, String.class, String.class, Boolean.class});//getMethod 方法 只能获取public 方法
+                    Method parseField = ParseConfigLogic.class.getDeclaredMethod(parseFieldFunctionName, new Class[]{Map.class, String.class, String.class});//getMethod 方法 只能获取public 方法
                     parseField.setAccessible(true);
 
                     String format = "%s'%s' => %s,\r\n";
-                    currentFieldSingleContent = String.format(format, leadingString, currentField, parseField.invoke(getInstance(), new Object[]{parseFieldFunctionInfo, currentField, currentFieldContent, false}));
+                    currentFieldSingleContent = String.format(format, leadingString, currentField, parseField.invoke(getInstance(), new Object[]{parseFieldFunctionInfo, currentField, currentFieldContent}));
                     if (isNeedAllRowsContent) {
-                        currentFieldAllRowsContent = String.format(format, doubleLeadingString, currentField, parseField.invoke(getInstance(), new Object[]{parseFieldFunctionInfo, currentField, currentFieldContent, true}));
+                        currentFieldAllRowsContent = String.format(format, doubleLeadingString, currentField, parseField.invoke(getInstance(), new Object[]{parseFieldFunctionInfo, currentField, currentFieldContent}));
                     }
                 } catch (IllegalAccessException | SecurityException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException ex) {
                     currentFieldSingleContent = "";
