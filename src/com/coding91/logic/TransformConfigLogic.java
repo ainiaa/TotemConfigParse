@@ -94,6 +94,7 @@ public class TransformConfigLogic {
                 StringBuilder allContent = new StringBuilder();
                 allContent.append(" return array (\r\n");
                 int index = 0;
+                NoticeMessageJFrame.setTotalFileCountMap(currentLang + ":" + fileName, commonContent.length - 1);
                 for (int i = 1; i < commonContent.length; i++) {
 //                    NoticeMessageJFrame.setCurrentProcessing(1);
                     Map<String, String> singleRowInfo = BuildConfigContent.buildMissionTriggerSingleRowStr(commonContent[i], index);

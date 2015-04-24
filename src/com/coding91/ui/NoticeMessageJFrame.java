@@ -51,6 +51,16 @@ public class NoticeMessageJFrame extends javax.swing.JFrame {
         Map<String, String> configMap = FileUtils.loadSetting("resources/data/setting.properties");
         dsParseConfjToolBar.setToolTipText(configMap.get("versionInfo"));
         bottomStatusjLabel.setText(configMap.get("versionInfo"));
+//        Timer timer = new Timer(true);
+//        timer.schedule(new TimerTask() {
+//            @Override
+//            public void run() {
+//                long totalFileCount = NoticeMessageJFrame.getTotalFileCount();
+//                if (totalFileCount > 0L && false) {//这个先不要显示
+//                    System.out.println("total:" + NoticeMessageJFrame.getCurrentProcessing() + "/" + totalFileCount + "######################################################");
+//                }
+//            }
+//        }, 0, 2000);//2s运行一次
         try {
             printer();
         } catch (IOException ex) {
