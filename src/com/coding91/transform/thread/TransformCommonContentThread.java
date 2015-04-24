@@ -39,8 +39,9 @@ public class TransformCommonContentThread extends Thread {
 
                 StringBuilder allContent = new StringBuilder();
                 allContent.append(" return array (\r\n");
+                NoticeMessageJFrame.setTotalFileCountMap(currentLang + ":" + fileName, commonContent.length - 1);
                 for (int i = 1; i < commonContent.length; i++) {
-//                    BuildConfigContent bcc = new BuildConfigContent();
+//                    NoticeMessageJFrame.setCurrentProcessing(1);
                     Map<String, String> singleRowInfo = BuildConfigContent.buildSingleRowString(commonContent[i], modelInfo, currentLang, idIndex, idField, extraParams);
                     String id = singleRowInfo.get(idField);
                     if (!id.isEmpty() && idField != null) {//空id 直接无视
@@ -76,7 +77,9 @@ public class TransformCommonContentThread extends Thread {
                 try {
                     if (idField != null) {
                         String descFile = BuildConfigLogic.buildSingleRowStoredPath(currentLang, "", outputPath, fileName, fileName);
+//                        NoticeMessageJFrame.setCurrentProcessing(1);
                         NoticeMessageJFrame.noticeMessage("语言：" + currentLang + "完成度:" + "100%|正在生成文件:" + descFile);
+                        System.out.println("######################################################" + fileName + "100%");
                         FileUtils.writeToFile("<?php\r\n" + allContent.toString() + "\r\n);", descFile, "UTF-8");
                     }
                 } catch (FileNotFoundException ex) {

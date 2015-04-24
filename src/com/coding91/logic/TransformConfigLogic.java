@@ -95,6 +95,7 @@ public class TransformConfigLogic {
                 allContent.append(" return array (\r\n");
                 int index = 0;
                 for (int i = 1; i < commonContent.length; i++) {
+//                    NoticeMessageJFrame.setCurrentProcessing(1);
                     Map<String, String> singleRowInfo = BuildConfigContent.buildMissionTriggerSingleRowStr(commonContent[i], index);
                     String id = singleRowInfo.get("id");
                     if (!id.isEmpty()) {//空id 直接无视
@@ -119,8 +120,10 @@ public class TransformConfigLogic {
                 }
                 try {
                     String descFile = BuildConfigLogic.buildSingleRowStoredPath(currentLang, "", outputPath, fileName, fileName);
+//                    NoticeMessageJFrame.setCurrentProcessing(1);
                     FileUtils.writeToFile("<?php\r\n" + allContent.toString() + "\r\n);", descFile, "UTF-8");
                     NoticeMessageJFrame.noticeMessage("语言：" + currentLang + "完成度:" + "100%|正在生成文件:" + descFile + "\r\n\r\n");
+                    System.out.println("######################################################" + fileName + "100%");
                 } catch (FileNotFoundException ex) {
                     NoticeMessageJFrame.noticeMessage(ex.getClass() + ":" + ex.getMessage());
                 } catch (IOException ex) {

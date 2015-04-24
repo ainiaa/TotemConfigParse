@@ -112,11 +112,7 @@ public class BuildConfigContent {
             } else if (extraParams.containsKey(currentField)) {
                 try {
                     Map parseFieldFunctionInfo = extraParams.get(currentField);
-
                     String parseFieldFunctionName = (String) parseFieldFunctionInfo.get("parseFunction");
-//                    parseFieldFunctionInfo.put("fieldName", currentField);//直接传递过去 放置错乱
-//                    parseFieldFunctionInfo.put("fieldValue", currentFieldContent);
-
                     Class[] parseFieldFunctionParam;
                     if (parseFieldFunctionInfo.containsKey("parseFunctionParam")) {
                         parseFieldFunctionParam = (Class[]) parseFieldFunctionInfo.get("parseFunctionParam");
@@ -134,13 +130,13 @@ public class BuildConfigContent {
                     parseFieldFunctionInfo.put("defaultValueMap", defaultValueMap);
                     parseFieldFunctionInfo.put("globalDefaultValueMap", globalDefaultValueMap);
 
-                    Method parseField = ParseConfigLogic.class.getDeclaredMethod(parseFieldFunctionName, parseFieldFunctionParam);//getMethod 方法 只能获取public 方法
+                    Method parseField = ParseConfigLogic.class.getDeclaredMethod(parseFieldFunctionName, parseFieldFunctionParam);
                     parseField.setAccessible(true);
 
                     String format = "%s'%s' => %s,\r\n";
-                    currentFieldSingleContent = String.format(format, leadingString, currentField, parseField.invoke(getInstance(), new Object[]{parseFieldFunctionInfo, currentField, currentFieldContent, false}));//todo 参数怎么传递
+                    currentFieldSingleContent = String.format(format, leadingString, currentField, parseField.invoke(getInstance(), new Object[]{parseFieldFunctionInfo, currentField, currentFieldContent, true}));//todo 参数怎么传递
                     if (isNeedAllRowsContent) {
-                        currentFieldAllRowsContent = String.format(format, doubleLeadingString, currentField, parseField.invoke(getInstance(), new Object[]{parseFieldFunctionInfo, currentField, currentFieldContent, true}));//todo 参数怎么传递
+                        currentFieldAllRowsContent = String.format(format, doubleLeadingString, currentField, parseField.invoke(getInstance(), new Object[]{parseFieldFunctionInfo, currentField, currentFieldContent, false}));//todo 参数怎么传递
                     }
                 } catch (IllegalAccessException | SecurityException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException ex) {
                     currentFieldSingleContent = "";

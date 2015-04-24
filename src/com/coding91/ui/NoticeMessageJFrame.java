@@ -3,7 +3,10 @@ package com.coding91.ui;
 import com.coding91.utils.FileUtils;
 import java.awt.Toolkit;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 import javax.swing.JOptionPane;
 
 /**
@@ -11,6 +14,34 @@ import javax.swing.JOptionPane;
  * @author Administrator
  */
 public class NoticeMessageJFrame extends javax.swing.JFrame {
+
+    private static final Map<String, Long> totalFileCountMap = new HashMap();
+    private static long currentProcessing = 0;
+
+    private static long updateTimes = 0;
+
+    public synchronized static void setCurrentProcessing(long offset) {
+//        System.out.println("setCurrentProcessing:" + updateTimes++);
+        currentProcessing += offset;
+    }
+
+    public static long getCurrentProcessing() {
+        return currentProcessing;
+    }
+
+    public static void setTotalFileCountMap(String key, long offset) {
+        totalFileCountMap.put(key, offset);
+    }
+
+    public static Map getTotalFileCountMap() {
+        return totalFileCountMap;
+    }
+
+    public static long getTotalFileCount() {
+        long finalFileCount = 0L;
+        finalFileCount = totalFileCountMap.keySet().stream().map((key) -> totalFileCountMap.get(key)).map((value) -> value).reduce(finalFileCount, (accumulator, _item) -> accumulator + _item);
+        return finalFileCount;
+    }
 
     public NoticeMessageJFrame() {
         this.setIconImage(Toolkit.getDefaultToolkit().getImage(
@@ -20,7 +51,6 @@ public class NoticeMessageJFrame extends javax.swing.JFrame {
         Map<String, String> configMap = FileUtils.loadSetting("resources/data/setting.properties");
         dsParseConfjToolBar.setToolTipText(configMap.get("versionInfo"));
         bottomStatusjLabel.setText(configMap.get("versionInfo"));
-
         try {
             printer();
         } catch (IOException ex) {
@@ -85,8 +115,8 @@ public class NoticeMessageJFrame extends javax.swing.JFrame {
 
         bottomStatusjLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         bottomStatusjLabel.setFocusable(false);
-        bottomStatusjLabel.setMaximumSize(new java.awt.Dimension(520, 20));
-        bottomStatusjLabel.setMinimumSize(new java.awt.Dimension(520, 20));
+        bottomStatusjLabel.setMaximumSize(new java.awt.Dimension(560, 20));
+        bottomStatusjLabel.setMinimumSize(new java.awt.Dimension(560, 20));
         bottomStatusjLabel.setName(""); // NOI18N
         dsParseConfjToolBar.add(bottomStatusjLabel);
 

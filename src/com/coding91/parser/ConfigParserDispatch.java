@@ -224,7 +224,6 @@ public class ConfigParserDispatch {
                 }
                 case "MISSION_INFO": {
                     //mission Info 
-
                     Map rewardDataParam = new HashMap();
                     rewardDataParam.put("contentKey", new String[]{});
                     rewardDataParam.put("contentSeparator", new String[]{",", ":"});

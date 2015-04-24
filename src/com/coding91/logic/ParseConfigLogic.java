@@ -5,6 +5,7 @@ import static com.coding91.parser.BuildConfigContent.getDefaultValue;
 import static com.coding91.parser.BuildConfigContent.isContentEmpty;
 import static com.coding91.parser.BuildConfigContent.leadingString;
 import static com.coding91.parser.BuildConfigContent.doubleLeadingString;
+import static com.coding91.parser.BuildConfigContent.tripleLeadingString;
 import static com.coding91.parser.BuildConfigContent.fourfoldLeadingString;
 import static com.coding91.parser.ConfigParser.getFieldIndexByFieldName;
 import com.coding91.utils.ArrayUtils;
@@ -126,51 +127,77 @@ public class ParseConfigLogic {
     }
 
     /**
-     * 
+     *
      * @param parseFunctionParam
      * @param field
      * @param content
      * @param isSingle
-     * @return 
+     * @return
      */
     public static String parseMissionInfoRewardData(Map parseFunctionParam, String field, String content, Boolean isSingle) {
         content = content.replaceAll("<br>", "\r\n");//将<br>替换为\r\n '11:6,2:31
         StringBuilder tmpContent = new StringBuilder();
         if (content.isEmpty() || content.equals("0")) {
-            tmpContent.append("    'reward_data' => \n"
-                    + "    array (\n"
-                    + "      0 => \n"
-                    + "      array (\n"
-                    + "        'reward_index' => '',\n"
-                    + "        'reward_item_type' => NULL,\n"
-                    + "        'reward_item_id' => NULL,\n"
-                    + "        'reward_item_num' => NULL,\n"
-                    + "      ),\n"
-                    + "    ),\n");
+            if (isSingle) {
+                tmpContent.append("    'reward_data' => \n"
+                        + "    array (\n"
+                        + "      0 => \n"
+                        + "      array (\n"
+                        + "        'reward_index' => '',\n"
+                        + "        'reward_item_type' => NULL,\n"
+                        + "        'reward_item_id' => NULL,\n"
+                        + "        'reward_item_num' => NULL,\n"
+                        + "      ),\n"
+                        + "    ),\n");
+            } else {
+                tmpContent.append("    'reward_data' => \n"
+                        + "    array (\n"
+                        + "      0 => \n"
+                        + "      array (\n"
+                        + "        'reward_index' => '',\n"
+                        + "        'reward_item_type' => NULL,\n"
+                        + "        'reward_item_id' => NULL,\n"
+                        + "        'reward_item_num' => NULL,\n"
+                        + "      ),\n"
+                        + "    ),\n");
+            }
+
         } else {
             String[] contentArray = content.split(",");//第一层
 
-            String leadingString2 = leadingString + leadingString;
-            String leadingString3 = leadingString + leadingString + leadingString;
-            String secondFloorContentFormat = "%s => \r\n    array (\r\n"
+            String secondFloorContentFormat = " => \r\n%sarray (\r\n"
                     + "%s'reward_index' => '%s',\r\n"
                     + "%s'reward_item_type' => '%s',\r\n"
                     + "%s'reward_item_id' => '%s',\r\n"
                     + "%s'reward_item_num' => '%s',\r\n"
                     + "%s),\r\n";
             if (!content.isEmpty()) {
-                tmpContent.append("\r\n      array (\r\n");
                 int firstFoolrIndex = 0;
-                for (String currentFirstFloorContent : contentArray) {
-                    if (!currentFirstFloorContent.isEmpty()) {
-                        String[] currentSecondFloorContentArray = currentFirstFloorContent.split(":");//第二层
-                        tmpContent.append(leadingString).append(leadingString).append(firstFoolrIndex).append(String.format(secondFloorContentFormat, leadingString2, leadingString3, currentSecondFloorContentArray[0], leadingString3, currentSecondFloorContentArray[1], leadingString3, currentSecondFloorContentArray[2], leadingString3, currentSecondFloorContentArray[3], leadingString2));
-                    } else {
-                        tmpContent.append(leadingString).append(leadingString).append(firstFoolrIndex).append(" => array(),\r\n");
+                if (isSingle) {
+                    tmpContent.append("\r\n  array (\r\n");
+                    for (String currentFirstFloorContent : contentArray) {
+                        if (!currentFirstFloorContent.isEmpty()) {
+                            String[] currentSecondFloorContentArray = currentFirstFloorContent.split(":");//第二层
+                            tmpContent.append(doubleLeadingString).append(firstFoolrIndex).append(String.format(secondFloorContentFormat, doubleLeadingString, tripleLeadingString, currentSecondFloorContentArray[0], tripleLeadingString, currentSecondFloorContentArray[1], tripleLeadingString, currentSecondFloorContentArray[2], tripleLeadingString, currentSecondFloorContentArray[3], doubleLeadingString));
+                        } else {
+                            tmpContent.append(doubleLeadingString).append(firstFoolrIndex).append(" => array(),\r\n");
+                        }
+                        firstFoolrIndex++;
                     }
-                    firstFoolrIndex++;
+                    tmpContent.append(leadingString).append(")");
+                } else {
+                    tmpContent.append("\r\n    array (\r\n");
+                    for (String currentFirstFloorContent : contentArray) {
+                        if (!currentFirstFloorContent.isEmpty()) {
+                            String[] currentSecondFloorContentArray = currentFirstFloorContent.split(":");//第二层
+                            tmpContent.append(tripleLeadingString).append(firstFoolrIndex).append(String.format(secondFloorContentFormat, tripleLeadingString, fourfoldLeadingString, currentSecondFloorContentArray[0], fourfoldLeadingString, currentSecondFloorContentArray[1], fourfoldLeadingString, currentSecondFloorContentArray[2], fourfoldLeadingString, currentSecondFloorContentArray[3], tripleLeadingString));
+                        } else {
+                            tmpContent.append(tripleLeadingString).append(firstFoolrIndex).append(" => array(),\r\n");
+                        }
+                        firstFoolrIndex++;
+                    }
+                    tmpContent.append(doubleLeadingString).append(")");
                 }
-                tmpContent.append(")");
             } else {
                 tmpContent.append("NULL");
             }
@@ -179,41 +206,59 @@ public class ParseConfigLogic {
     }
 
     /**
-     * 
+     *
      * @param parseFunctionParam
      * @param field
      * @param content
      * @param isSingle
-     * @return 
+     * @return
      */
     public static String parseMissionInfoMissionRequire(Map parseFunctionParam, String field, String content, Boolean isSingle) {
         String leadingString = "    ";
         content = content.replaceAll("<br>", "\r\n");//将<br>替换为\r\n '11:6,2:31   //fck 这个太恶心了，  content 只有9项内容，其他的内容再另一个content中，且 还需要进行分割。。。 坑爹啊。。
         String[] contentArray = content.split(MISSION_REQUIRE_FIRST_FLOOR);//第一层
         StringBuilder tmpContent = new StringBuilder();
-        String leadingString2 = leadingString + leadingString;
-        String leadingString3 = leadingString + leadingString + leadingString;
-        String secondFloorContentFormat = "%s%d => \r\n      array (\r\n"
-                + leadingString2 + "'require_index' => '%s',\r\n"
-                + leadingString2 + "'mission_require_icon' => '%s',\r\n"
-                + leadingString2 + "'mission_require_type' => '%s',\r\n"
-                + leadingString2 + "'require_item_id' => '%s',\r\n"
-                + leadingString2 + "'require_item_num' => '%s',\r\n"
-                + leadingString2 + "'require_type' => '%s',\r\n"
-                + leadingString2 + "'require_id' => '%s',\r\n"
-                + leadingString2 + "'is_skippable' => '%s',\r\n"
-                + leadingString2 + "'require_skip_cash' => '%s',\r\n"
-                + leadingString2 + "'mission_sub_require' => '%s',\r\n"
-                + leadingString2 + "'mission_sub_require_desc' => '%s',\r\n"
-                + leadingString2 + "'mission_sub_require_tips' => '%s',\r\n"
-                + "      ),\r\n";
+        String secondFloorContentFormat;
         if (!content.isEmpty()) {
-            tmpContent.append("\r\n    array (\r\n");
+            if (isSingle) {
+                tmpContent.append("\r\n  array (\r\n");
+                secondFloorContentFormat = doubleLeadingString + "%d => \r\n" + doubleLeadingString + "array (\r\n"
+                        + tripleLeadingString + "'require_index' => '%s',\r\n"
+                        + tripleLeadingString + "'mission_require_icon' => '%s',\r\n"
+                        + tripleLeadingString + "'mission_require_type' => '%s',\r\n"
+                        + tripleLeadingString + "'require_item_id' => '%s',\r\n"
+                        + tripleLeadingString + "'require_item_num' => '%s',\r\n"
+                        + tripleLeadingString + "'require_type' => '%s',\r\n"
+                        + tripleLeadingString + "'require_id' => '%s',\r\n"
+                        + tripleLeadingString + "'is_skippable' => '%s',\r\n"
+                        + tripleLeadingString + "'require_skip_cash' => '%s',\r\n"
+                        + tripleLeadingString + "'mission_sub_require' => '%s',\r\n"
+                        + tripleLeadingString + "'mission_sub_require_desc' => '%s',\r\n"
+                        + tripleLeadingString + "'mission_sub_require_tips' => '%s',\r\n"
+                        + doubleLeadingString + "),\r\n";
+            } else {
+                secondFloorContentFormat = tripleLeadingString + "%d => \r\n" + tripleLeadingString + "array (\r\n"
+                        + fourfoldLeadingString + "'require_index' => '%s',\r\n"
+                        + fourfoldLeadingString + "'mission_require_icon' => '%s',\r\n"
+                        + fourfoldLeadingString + "'mission_require_type' => '%s',\r\n"
+                        + fourfoldLeadingString + "'require_item_id' => '%s',\r\n"
+                        + fourfoldLeadingString + "'require_item_num' => '%s',\r\n"
+                        + fourfoldLeadingString + "'require_type' => '%s',\r\n"
+                        + fourfoldLeadingString + "'require_id' => '%s',\r\n"
+                        + fourfoldLeadingString + "'is_skippable' => '%s',\r\n"
+                        + fourfoldLeadingString + "'require_skip_cash' => '%s',\r\n"
+                        + fourfoldLeadingString + "'mission_sub_require' => '%s',\r\n"
+                        + fourfoldLeadingString + "'mission_sub_require_desc' => '%s',\r\n"
+                        + fourfoldLeadingString + "'mission_sub_require_tips' => '%s',\r\n"
+                        + tripleLeadingString + "),\r\n";
+                tmpContent.append("\r\n    array (\r\n");
+            }
+
             int firstFoolrIndex = 0;
             for (String currentFirstFloorContent : contentArray) {
                 if (!currentFirstFloorContent.isEmpty()) {
                     String[] currentSecondFloorContentArray = currentFirstFloorContent.split(MISSION_REQUIRE_SECOND_FLOOR);//第二层
-                    tmpContent.append(String.format(secondFloorContentFormat, "      ", firstFoolrIndex,
+                    tmpContent.append(String.format(secondFloorContentFormat, firstFoolrIndex,
                             currentSecondFloorContentArray[0],
                             currentSecondFloorContentArray[1],
                             currentSecondFloorContentArray[2],
@@ -232,7 +277,11 @@ public class ParseConfigLogic {
                 }
                 firstFoolrIndex++;
             }
-            tmpContent.append(")");
+            if (isSingle) {
+                tmpContent.append("  )");
+            } else {
+                tmpContent.append("    )");
+            }
         } else {
             tmpContent.append("NULL");
         }
@@ -262,7 +311,7 @@ public class ParseConfigLogic {
      */
     public static String parseCommonMultiple(String fieldName, String fieldValue, String[] contentSeparator, String[] contentKey, int index, Map parseFunctionParam, Boolean isSingle) {
         Map isContentNeedQuoteMap, defaultValueMap, globalDefaultValueMap;
-        int offset = -1;
+        int offset = 0;//-1
         if (isSingle) {
             offset = 0;
         }
@@ -528,27 +577,27 @@ public class ParseConfigLogic {
         String contentFormat, ouptputNumFormat;
         if (isSingle) {
             contentFormat = "\r\n  array (\r\n"
-                + "%s"
-                + "  )";
+                    + "%s"
+                    + "  )";
             ouptputNumFormat = "    %d => \r\n"
-                + "    array (\r\n"
-                + "      'index' => '%s',\r\n"
-                + "      'item_id' => '%s',\r\n"
-                + "      'num' => '%s',\r\n"
-                + "    ),\r\n";
+                    + "    array (\r\n"
+                    + "      'index' => '%s',\r\n"
+                    + "      'item_id' => '%s',\r\n"
+                    + "      'num' => '%s',\r\n"
+                    + "    ),\r\n";
         } else {
             contentFormat = "\r\n    array (\r\n"
-                + "%s"
-                + "    )";
+                    + "%s"
+                    + "    )";
             ouptputNumFormat = "      %d => \r\n"
-                + "      array (\r\n"
-                + "        'index' => '%s',\r\n"
-                + "        'item_id' => '%s',\r\n"
-                + "        'num' => '%s',\r\n"
-                + "      ),\r\n";
+                    + "      array (\r\n"
+                    + "        'index' => '%s',\r\n"
+                    + "        'item_id' => '%s',\r\n"
+                    + "        'num' => '%s',\r\n"
+                    + "      ),\r\n";
         }
         String[] singleContentFlagment = fieldValue.split(",");
-        
+
         StringBuilder ouptputNumContent = new StringBuilder();
         for (int i = 0; i < singleContentFlagment.length; i++) {
             String[] singleOuptputNum = singleContentFlagment[i].split(":");

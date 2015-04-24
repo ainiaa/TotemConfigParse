@@ -40,6 +40,7 @@ public class FileUtils {
      * @throws IOException
      */
     public static void writeToFile(String contents, String descFile, String encoding) throws FileNotFoundException, IOException {
+        NoticeMessageJFrame.setCurrentProcessing(1);
         File fileOutput = new File(descFile);
         writeToFile(contents, fileOutput, "UTF-8");
     }

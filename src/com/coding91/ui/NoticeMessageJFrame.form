@@ -81,10 +81,10 @@
                 <Property name="horizontalAlignment" type="int" value="4"/>
                 <Property name="focusable" type="boolean" value="false"/>
                 <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[520, 20]"/>
+                  <Dimension value="[560, 20]"/>
                 </Property>
                 <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[520, 20]"/>
+                  <Dimension value="[560, 20]"/>
                 </Property>
                 <Property name="name" type="java.lang.String" value="" noResource="true"/>
               </Properties>
